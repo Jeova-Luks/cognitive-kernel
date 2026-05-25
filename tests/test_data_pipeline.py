@@ -23,6 +23,7 @@ from scripts.data_pipeline.stage_5_fasttext_train import (
     format_label,
     write_training_lines,
 )
+from scripts.data_pipeline.stage_5_fasttext_apply import needs_classifier
 
 
 def test_targets_sum_to_10b():
@@ -175,3 +176,19 @@ def test_write_training_lines(tmp_path):
     lines = path.read_text().splitlines()
     assert lines[0] == "__label__high_quality good text"
     assert lines[1] == "__label__low_quality bad text"
+
+
+def test_needs_classifier_pre_filtered():
+    # Sources that are pre-filtered upstream should NOT be re-classified
+    assert needs_classifier("HuggingFaceFW/fineweb-edu") is False
+    assert needs_classifier("EleutherAI/proof-pile-2") is False
+    assert needs_classifier("wikimedia/wikipedia-en") is False
+    assert needs_classifier("wikimedia/wikipedia-pt") is False
+    assert needs_classifier("bigcode/python-edu") is False
+
+
+def test_needs_classifier_raw():
+    # Raw sources need our classifier
+    assert needs_classifier("cc100-pt") is True
+    assert needs_classifier("nilc-nlp/BrWac") is True
+    assert needs_classifier("bigcode/the-stack-v2-dedup-json") is True
