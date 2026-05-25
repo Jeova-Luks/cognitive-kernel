@@ -212,7 +212,9 @@ class Trainer:
         return ckpt_path
 
     def fit(self) -> None:
-        """Main loop with auto-resume from latest checkpoint + wandb logging."""
+        """Main loop with auto-resume + wandb logging + per-log-interval console
+        progress + metrics.jsonl for offline plotting."""
+        import json
         import wandb
         from resume import find_latest
 
@@ -230,26 +232,34 @@ class Trainer:
                 resume="allow",
             )
 
+        metrics_path = self.output_dir / "metrics.jsonl"
+
         try:
             while self.step < self.cfg.train.max_iters:
                 loss = self.train_step()
 
                 if self.step % self.cfg.log.log_interval == 0:
                     lr = self.optimizer.param_groups[0]["lr"]
-                    metrics = {"train_loss": loss, "lr": lr, "step": self.step}
+                    print(f"[{self.step:>5}] train_loss={loss:.4f} lr={lr:.2e}")
+                    metrics = {"step": self.step, "train_loss": loss, "lr": lr}
+                    with metrics_path.open("a") as f:
+                        f.write(json.dumps(metrics) + "\n")
                     if self.cfg.log.wandb_mode != "disabled":
                         wandb.log(metrics, step=self.step)
 
                 if self.step % self.cfg.train.eval_interval == 0:
                     evals = self.evaluate()
-                    print(f"[{self.step}] train_loss={loss:.4f} "
-                          f"val_loss={evals['val']:.4f}")
+                    print(f"[{self.step:>5}]  >> val_loss={evals['val']:.4f} "
+                          f"train_eval={evals['train']:.4f}")
                     if evals["val"] < self.best_val_loss:
                         self.best_val_loss = evals["val"]
+                    eval_metrics = {"step": self.step,
+                                    "val_loss": evals["val"],
+                                    "train_eval_loss": evals["train"]}
+                    with metrics_path.open("a") as f:
+                        f.write(json.dumps(eval_metrics) + "\n")
                     if self.cfg.log.wandb_mode != "disabled":
-                        wandb.log({"val_loss": evals["val"],
-                                   "train_eval_loss": evals["train"]},
-                                  step=self.step)
+                        wandb.log(eval_metrics, step=self.step)
 
                 if self.step % self.cfg.train.checkpoint_interval == 0:
                     self.save_checkpoint()
