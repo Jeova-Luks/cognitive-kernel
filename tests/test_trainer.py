@@ -49,3 +49,28 @@ def test_autocast_used_in_train_step(toy_shards, tmp_path, monkeypatch):
     monkeypatch.setattr(torch.amp, "autocast", tracking_autocast)
     trainer.train_step()
     assert autocast_calls["count"] >= 1, "torch.amp.autocast was not called"
+
+
+def test_optimizer_dispatch_adamw(tmp_path, toy_shards):
+    cfg = load_config(Path("configs/test_toy.yaml"))
+    cfg.train.optimizer = "adamw"
+    trainer = Trainer(cfg, output_dir=tmp_path / "out")
+    assert trainer.optimizer.__class__.__name__ == "AdamW"
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(),
+                    reason="bitsandbytes AdamW8bit requires CUDA")
+def test_optimizer_dispatch_adamw_8bit(tmp_path, toy_shards):
+    pytest.importorskip("bitsandbytes")
+    cfg = load_config(Path("configs/test_toy.yaml"))
+    cfg.train.optimizer = "adamw_8bit"
+    trainer = Trainer(cfg, output_dir=tmp_path / "out")
+    assert "8bit" in trainer.optimizer.__class__.__name__.lower() or \
+           "8bit" in repr(trainer.optimizer).lower()
+
+
+def test_optimizer_dispatch_unknown_raises(tmp_path, toy_shards):
+    cfg = load_config(Path("configs/test_toy.yaml"))
+    cfg.train.optimizer = "made_up"
+    with pytest.raises(ValueError, match="Unknown optimizer"):
+        Trainer(cfg, output_dir=tmp_path / "out")

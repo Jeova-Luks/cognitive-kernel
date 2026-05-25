@@ -54,13 +54,31 @@ class Trainer:
         )
 
     def _build_optimizer(self) -> torch.optim.Optimizer:
-        """Optimizer selection. Mixed precision and 8-bit added in later tasks."""
-        return torch.optim.AdamW(
-            self.model.parameters(),
-            lr=self.cfg.train.learning_rate,
-            betas=(0.9, 0.95),
-            weight_decay=self.cfg.train.weight_decay,
-        )
+        """Dispatch on cfg.train.optimizer: adamw | adamw_8bit | muon."""
+        cfg = self.cfg.train
+        if cfg.optimizer == "adamw":
+            return torch.optim.AdamW(
+                self.model.parameters(),
+                lr=cfg.learning_rate,
+                betas=(0.9, 0.95),
+                weight_decay=cfg.weight_decay,
+            )
+        elif cfg.optimizer == "adamw_8bit":
+            import bitsandbytes as bnb
+            return bnb.optim.AdamW8bit(
+                self.model.parameters(),
+                lr=cfg.learning_rate,
+                betas=(0.9, 0.95),
+                weight_decay=cfg.weight_decay,
+            )
+        elif cfg.optimizer == "muon":
+            # Implemented in a later task; not yet wired in.
+            raise NotImplementedError(
+                "Muon optimizer is opt-in and not yet implemented in Phase 0. "
+                "Set optimizer: adamw_8bit for now."
+            )
+        else:
+            raise ValueError(f"Unknown optimizer: {cfg.optimizer!r}")
 
     def _get_lr(self, it: int) -> float:
         cfg = self.cfg.train
