@@ -1,0 +1,39 @@
+# Smoke-test config for the 100M base model.
+# Runs 100 iterations with checkpoints every 25 steps so we can validate
+# the full Colab pipeline (Drive mount, resume across disconnects) end-to-end.
+#
+# NOT for real training — for that, use base_100m.yaml.
+model:
+  n_embd: 768
+  n_head: 12
+  n_kv_head: 4
+  n_layer: 12
+  max_seq_len: 2048
+  vocab_size: 32000
+  grad_checkpoint: true
+
+train:
+  batch_size: 4
+  grad_accum_steps: 4         # effective batch = 16
+  block_size: 2048
+  max_iters: 100
+  learning_rate: 3.0e-4
+  warmup_iters: 10
+  min_lr: 3.0e-5
+  weight_decay: 0.1
+  grad_clip: 1.0
+  eval_interval: 50
+  eval_iters: 5
+  checkpoint_interval: 25
+  optimizer: adamw_8bit
+
+data:
+  train_shards_glob: "data/shards/train_*.bin"
+  val_shards_glob: "data/shards/val_*.bin"
+  seed: 42
+
+log:
+  project: cognitive-kernel
+  run_name: smoke_100m
+  log_interval: 5
+  wandb_mode: offline
