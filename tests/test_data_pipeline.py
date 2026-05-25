@@ -19,6 +19,10 @@ from scripts.data_pipeline.stage_4_minhash import (
     build_signature,
     shingles_of,
 )
+from scripts.data_pipeline.stage_5_fasttext_train import (
+    format_label,
+    write_training_lines,
+)
 
 
 def test_targets_sum_to_10b():
@@ -151,3 +155,23 @@ def test_build_signature_similar_texts_have_close_jaccard():
     s_b = build_signature(text_b, num_perm=128)
     j = s_a.jaccard(s_b)
     assert j > 0.5, f"expected high Jaccard, got {j}"
+
+
+def test_format_label():
+    assert format_label("high_quality", "hello world") == "__label__high_quality hello world"
+
+
+def test_format_label_strips_newlines():
+    assert format_label("low_quality", "line1\nline2") == "__label__low_quality line1 line2"
+
+
+def test_write_training_lines(tmp_path):
+    path = tmp_path / "out.txt"
+    samples = [
+        ("high_quality", "good text"),
+        ("low_quality", "bad text"),
+    ]
+    write_training_lines(samples, path)
+    lines = path.read_text().splitlines()
+    assert lines[0] == "__label__high_quality good text"
+    assert lines[1] == "__label__low_quality bad text"
