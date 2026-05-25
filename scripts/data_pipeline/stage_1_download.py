@@ -5,6 +5,9 @@ target token count (so subsequent filter stages have headroom), and pushes
 the merged result to HF as ck-stage-1-raw.
 
 Run on Kaggle with HF_TOKEN exported. Idempotent: re-running re-uploads.
+
+Resilient: any single source failing (404, gate refused, network) is logged
+as a warning; the pipeline continues with other sources.
 """
 from __future__ import annotations
 import argparse
@@ -30,59 +33,75 @@ def target_bytes(category: str) -> int:
     return int(TARGETS[category] * RAW_MULTIPLIER * BYTES_PER_TOKEN)
 
 
+def safe_streaming(repo: str, *args, **kwargs):
+    """Open a streaming dataset; return None on any failure (logged)."""
+    try:
+        return load_dataset(repo, *args, split="train", streaming=True, **kwargs)
+    except Exception as e:
+        log.warning(f"SKIP source {repo}: {type(e).__name__}: {e}")
+        return None
+
+
+def safe_load(repo: str, *args, **kwargs):
+    """Load a full dataset (non-streaming); return None on any failure (logged)."""
+    try:
+        return load_dataset(repo, *args, **kwargs)
+    except Exception as e:
+        log.warning(f"SKIP source {repo}: {type(e).__name__}: {e}")
+        return None
+
+
 def iter_python() -> Iterator[DocRecord]:
-    """Pull from the_stack_v2_dedup (python), codeparrot_clean, python_edu."""
+    """Pull from the_stack_v2_dedup (python), codeparrot_clean."""
     quota = target_bytes("python")
     consumed = 0
     counter = 0
 
     # Source 1: The Stack v2 dedup, python only, stars >= 5
     log.info("python: streaming bigcode/the-stack-v2-dedup ...")
-    ds = load_dataset(
-        "bigcode/the-stack-v2-dedup",
-        split="train",
-        streaming=True,
-    )
-    for r in ds:
-        if r.get("language") != "Python":
-            continue
-        stars = r.get("revision_stars") or 0
-        if stars < 5:
-            continue
-        text = r.get("content") or ""
-        if not text:
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text,
-            category="python",
-            source="bigcode/the-stack-v2-dedup",
-            doc_id=f"python-stack-{counter:09d}",
-            n_chars=len(text),
-            metadata={"stars": stars, "repo": r.get("repo_name")},
-        )
-        if consumed >= quota * 0.85:    # 85% of quota from this source
-            break
+    ds = safe_streaming("bigcode/the-stack-v2-dedup")
+    if ds is not None:
+        for r in ds:
+            if r.get("language") != "Python":
+                continue
+            stars = r.get("revision_stars") or 0
+            if stars < 5:
+                continue
+            text = r.get("content") or ""
+            if not text:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text,
+                category="python",
+                source="bigcode/the-stack-v2-dedup",
+                doc_id=f"python-stack-{counter:09d}",
+                n_chars=len(text),
+                metadata={"stars": stars, "repo": r.get("repo_name")},
+            )
+            if consumed >= quota * 0.85:
+                break
 
     # Source 2: CodeParrot clean — fills the gap
     log.info("python: streaming codeparrot/codeparrot-clean ...")
-    ds = load_dataset("codeparrot/codeparrot-clean", split="train", streaming=True)
-    for r in ds:
-        if consumed >= quota:
-            break
-        text = r.get("content") or ""
-        if not text:
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text,
-            category="python",
-            source="codeparrot/codeparrot-clean",
-            doc_id=f"python-codeparrot-{counter:09d}",
-            n_chars=len(text),
-        )
+    ds = safe_streaming("codeparrot/codeparrot-clean")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota:
+                break
+            text = r.get("content") or ""
+            if not text:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text,
+                category="python",
+                source="codeparrot/codeparrot-clean",
+                doc_id=f"python-codeparrot-{counter:09d}",
+                n_chars=len(text),
+            )
 
     log.info(f"python: total {consumed:,} bytes in {counter:,} docs")
 
@@ -93,53 +112,57 @@ def iter_math() -> Iterator[DocRecord]:
     counter = 0
 
     log.info("math: streaming EleutherAI/proof-pile-2 ...")
-    ds = load_dataset("EleutherAI/proof-pile-2", split="train", streaming=True)
-    for r in ds:
-        if consumed >= quota * 0.6:
-            break
-        text = r.get("text") or ""
-        if not text:
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="math",
-            source="EleutherAI/proof-pile-2",
-            doc_id=f"math-proofpile-{counter:09d}",
-            n_chars=len(text),
-        )
+    ds = safe_streaming("EleutherAI/proof-pile-2")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota * 0.6:
+                break
+            text = r.get("text") or ""
+            if not text:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="math",
+                source="EleutherAI/proof-pile-2",
+                doc_id=f"math-proofpile-{counter:09d}",
+                n_chars=len(text),
+            )
 
     log.info("math: loading nvidia/OpenMathInstruct-1 ...")
-    ds = load_dataset("nvidia/OpenMathInstruct-1", split="train")
-    for r in ds:
-        if consumed >= quota * 0.9:
-            break
-        q = r.get("question") or ""
-        a = r.get("answer") or ""
-        text = f"Question: {q}\n\nSolution: {a}"
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="math",
-            source="nvidia/OpenMathInstruct-1",
-            doc_id=f"math-openmath-{counter:09d}",
-            n_chars=len(text),
-        )
+    ds = safe_load("nvidia/OpenMathInstruct-1", split="train")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota * 0.9:
+                break
+            q = r.get("question") or ""
+            a = r.get("answer") or ""
+            text = f"Question: {q}\n\nSolution: {a}"
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="math",
+                source="nvidia/OpenMathInstruct-1",
+                doc_id=f"math-openmath-{counter:09d}",
+                n_chars=len(text),
+            )
 
-    log.info("math: loading gsm8k ...")
-    ds = load_dataset("gsm8k", "main", split="train")
-    for r in ds:
-        if consumed >= quota:
-            break
-        text = f"Problem: {r['question']}\n\nSolution: {r['answer']}"
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="math",
-            source="gsm8k",
-            doc_id=f"math-gsm8k-{counter:09d}",
-            n_chars=len(text),
-        )
+    log.info("math: loading gsm8k (trying openai/gsm8k then bare gsm8k) ...")
+    ds = safe_load("openai/gsm8k", "main", split="train") \
+         or safe_load("gsm8k", "main", split="train")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota:
+                break
+            text = f"Problem: {r['question']}\n\nSolution: {r['answer']}"
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="math",
+                source="gsm8k",
+                doc_id=f"math-gsm8k-{counter:09d}",
+                n_chars=len(text),
+            )
 
     log.info(f"math: total {consumed:,} bytes in {counter:,} docs")
 
@@ -150,45 +173,43 @@ def iter_english_prose() -> Iterator[DocRecord]:
     counter = 0
 
     log.info("english: streaming HuggingFaceFW/fineweb-edu (sample-10BT) ...")
-    ds = load_dataset(
+    ds = safe_streaming(
         "HuggingFaceFW/fineweb-edu", name="sample-10BT",
-        split="train", streaming=True,
     )
-    for r in ds:
-        if consumed >= quota * 0.85:
-            break
-        text = r.get("text") or ""
-        if not text:
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="english_prose",
-            source="HuggingFaceFW/fineweb-edu",
-            doc_id=f"prose-fineweb-{counter:09d}",
-            n_chars=len(text),
-        )
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota * 0.85:
+                break
+            text = r.get("text") or ""
+            if not text:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="english_prose",
+                source="HuggingFaceFW/fineweb-edu",
+                doc_id=f"prose-fineweb-{counter:09d}",
+                n_chars=len(text),
+            )
 
     log.info("english: streaming wikimedia/wikipedia en ...")
-    ds = load_dataset(
-        "wikimedia/wikipedia", "20231101.en",
-        split="train", streaming=True,
-    )
-    for r in ds:
-        if consumed >= quota:
-            break
-        text = r.get("text") or ""
-        if len(text) < 500:    # skip stubs
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="english_prose",
-            source="wikimedia/wikipedia-en",
-            doc_id=f"prose-wiki-{counter:09d}",
-            n_chars=len(text),
-            metadata={"title": r.get("title")},
-        )
+    ds = safe_streaming("wikimedia/wikipedia", "20231101.en")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota:
+                break
+            text = r.get("text") or ""
+            if len(text) < 500:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="english_prose",
+                source="wikimedia/wikipedia-en",
+                doc_id=f"prose-wiki-{counter:09d}",
+                n_chars=len(text),
+                metadata={"title": r.get("title")},
+            )
     log.info(f"english_prose: total {consumed:,} bytes in {counter:,} docs")
 
 
@@ -199,86 +220,81 @@ def iter_sexp() -> Iterator[DocRecord]:
     LISP_LANGS = {"Common Lisp", "Scheme", "Racket", "Clojure"}
 
     log.info("sexp: streaming bigcode/the-stack-v2-dedup (lisp variants) ...")
-    ds = load_dataset(
-        "bigcode/the-stack-v2-dedup",
-        split="train", streaming=True,
-    )
-    for r in ds:
-        if consumed >= quota * 0.35:
-            break
-        if r.get("language") not in LISP_LANGS:
-            continue
-        text = r.get("content") or ""
-        if not text:
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="sexp",
-            source="bigcode/the-stack-v2-dedup",
-            doc_id=f"sexp-lisp-{counter:09d}",
-            n_chars=len(text),
-            metadata={"lang": r.get("language")},
-        )
+    ds = safe_streaming("bigcode/the-stack-v2-dedup")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota * 0.35:
+                break
+            if r.get("language") not in LISP_LANGS:
+                continue
+            text = r.get("content") or ""
+            if not text:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="sexp",
+                source="bigcode/the-stack-v2-dedup",
+                doc_id=f"sexp-lisp-{counter:09d}",
+                n_chars=len(text),
+                metadata={"lang": r.get("language")},
+            )
 
     log.info("sexp: streaming proof-pile-2 latex ...")
-    ds = load_dataset(
-        "EleutherAI/proof-pile-2", "arxiv",
-        split="train", streaming=True,
-    )
-    for r in ds:
-        if consumed >= quota * 0.75:
-            break
-        text = r.get("text") or ""
-        if not text:
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="sexp",
-            source="EleutherAI/proof-pile-2-arxiv",
-            doc_id=f"sexp-latex-{counter:09d}",
-            n_chars=len(text),
-        )
+    ds = safe_streaming("EleutherAI/proof-pile-2", "arxiv")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota * 0.75:
+                break
+            text = r.get("text") or ""
+            if not text:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="sexp",
+                source="EleutherAI/proof-pile-2-arxiv",
+                doc_id=f"sexp-latex-{counter:09d}",
+                n_chars=len(text),
+            )
 
     log.info("sexp: loading internlm/Lean-Workbook ...")
-    ds = load_dataset("internlm/Lean-Workbook", split="train")
-    for r in ds:
-        if consumed >= quota * 0.8:
-            break
-        text = r.get("formal_proof") or r.get("informal_proof") or ""
-        if not text:
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="sexp",
-            source="internlm/Lean-Workbook",
-            doc_id=f"sexp-lean-{counter:09d}",
-            n_chars=len(text),
-        )
+    ds = safe_load("internlm/Lean-Workbook", split="train")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota * 0.8:
+                break
+            text = r.get("formal_proof") or r.get("informal_proof") or ""
+            if not text:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="sexp",
+                source="internlm/Lean-Workbook",
+                doc_id=f"sexp-lean-{counter:09d}",
+                n_chars=len(text),
+            )
 
     log.info("sexp: streaming the-stack-v2-dedup json ...")
-    ds = load_dataset(
-        "bigcode/the-stack-v2-dedup",
-        split="train", streaming=True,
-    )
-    for r in ds:
-        if consumed >= quota:
-            break
-        if r.get("language") != "JSON":
-            continue
-        text = r.get("content") or ""
-        if not text or len(text) < 200 or len(text) > 50_000:
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="sexp",
-            source="bigcode/the-stack-v2-dedup-json",
-            doc_id=f"sexp-json-{counter:09d}",
-            n_chars=len(text),
-        )
+    ds = safe_streaming("bigcode/the-stack-v2-dedup")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota:
+                break
+            if r.get("language") != "JSON":
+                continue
+            text = r.get("content") or ""
+            if not text or len(text) < 200 or len(text) > 50_000:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="sexp",
+                source="bigcode/the-stack-v2-dedup-json",
+                doc_id=f"sexp-json-{counter:09d}",
+                n_chars=len(text),
+            )
     log.info(f"sexp: total {consumed:,} bytes in {counter:,} docs")
 
 
@@ -288,29 +304,27 @@ def iter_pt_br() -> Iterator[DocRecord]:
     counter = 0
 
     log.info("pt_br: streaming wikimedia/wikipedia pt ...")
-    ds = load_dataset(
-        "wikimedia/wikipedia", "20231101.pt",
-        split="train", streaming=True,
-    )
-    for r in ds:
-        if consumed >= quota * 0.7:
-            break
-        text = r.get("text") or ""
-        if len(text) < 500:
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="pt_br",
-            source="wikimedia/wikipedia-pt",
-            doc_id=f"ptbr-wiki-{counter:09d}",
-            n_chars=len(text),
-            metadata={"title": r.get("title")},
-        )
+    ds = safe_streaming("wikimedia/wikipedia", "20231101.pt")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota * 0.7:
+                break
+            text = r.get("text") or ""
+            if len(text) < 500:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="pt_br",
+                source="wikimedia/wikipedia-pt",
+                doc_id=f"ptbr-wiki-{counter:09d}",
+                n_chars=len(text),
+                metadata={"title": r.get("title")},
+            )
 
-    log.info("pt_br: loading nilc-nlp/BrWac ...")
-    try:
-        ds = load_dataset("nilc-nlp/BrWac", split="train", streaming=True)
+    log.info("pt_br: streaming nilc-nlp/BrWac (may 404 if removed) ...")
+    ds = safe_streaming("nilc-nlp/BrWac")
+    if ds is not None:
         for r in ds:
             if consumed >= quota * 0.9:
                 break
@@ -325,25 +339,24 @@ def iter_pt_br() -> Iterator[DocRecord]:
                 doc_id=f"ptbr-brwac-{counter:09d}",
                 n_chars=len(text),
             )
-    except Exception as e:
-        log.warning(f"BrWac unavailable ({e}); falling back to cc100.")
 
     log.info("pt_br: streaming cc100 pt ...")
-    ds = load_dataset("cc100", lang="pt", split="train", streaming=True)
-    for r in ds:
-        if consumed >= quota:
-            break
-        text = r.get("text") or ""
-        if len(text) < 300:
-            continue
-        consumed += len(text)
-        counter += 1
-        yield DocRecord(
-            text=text, category="pt_br",
-            source="cc100-pt",
-            doc_id=f"ptbr-cc100-{counter:09d}",
-            n_chars=len(text),
-        )
+    ds = safe_streaming("cc100", lang="pt")
+    if ds is not None:
+        for r in ds:
+            if consumed >= quota:
+                break
+            text = r.get("text") or ""
+            if len(text) < 300:
+                continue
+            consumed += len(text)
+            counter += 1
+            yield DocRecord(
+                text=text, category="pt_br",
+                source="cc100-pt",
+                doc_id=f"ptbr-cc100-{counter:09d}",
+                n_chars=len(text),
+            )
     log.info(f"pt_br: total {consumed:,} bytes in {counter:,} docs")
 
 
