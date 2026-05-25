@@ -6,6 +6,15 @@ from scripts.data_pipeline.stage_2_normalize import (
     strip_html,
     is_valid_length,
 )
+from scripts.data_pipeline.stage_3_heuristics import (
+    mean_line_length,
+    max_line_length,
+    ratio_special_chars,
+    ratio_whitespace,
+    unique_lines_ratio,
+    is_likely_python,
+    passes_heuristics,
+)
 
 
 def test_targets_sum_to_10b():
@@ -44,3 +53,58 @@ def test_is_valid_length():
     assert is_valid_length("x" * 49) is False
     assert is_valid_length("x" * 1_000_000) is True
     assert is_valid_length("x" * 1_000_001) is False
+
+
+def test_mean_line_length():
+    assert mean_line_length("aa\nbb\nccc") == pytest.approx(7 / 3)
+    assert mean_line_length("") == 0.0
+
+
+def test_max_line_length():
+    assert max_line_length("a\naaa\naa") == 3
+    assert max_line_length("") == 0
+
+
+def test_ratio_special_chars():
+    s = "abc!@#"
+    assert ratio_special_chars(s) == pytest.approx(0.5)
+    assert ratio_special_chars("aaaa") == 0.0
+
+
+def test_ratio_whitespace():
+    assert ratio_whitespace("a b c") == pytest.approx(2 / 5)
+    assert ratio_whitespace("abc") == 0.0
+
+
+def test_unique_lines_ratio():
+    text = "a\nb\na\nb\na"
+    assert unique_lines_ratio(text) == pytest.approx(2 / 5)
+
+
+def test_is_likely_python_positive():
+    code = "def foo():\n    return 42"
+    assert is_likely_python(code) is True
+
+
+def test_is_likely_python_negative():
+    prose = "The quick brown fox jumps over the lazy dog."
+    assert is_likely_python(prose) is False
+
+
+def test_passes_heuristics_python_pass():
+    doc = "def square(x):\n    return x * x\n\nprint(square(5))"
+    assert passes_heuristics(doc, "python") is True
+
+
+def test_passes_heuristics_too_short():
+    assert passes_heuristics("hi", "english_prose") is False
+
+
+def test_passes_heuristics_too_repetitive():
+    repeated = "spam\n" * 100
+    assert passes_heuristics(repeated, "english_prose") is False
+
+
+def test_passes_heuristics_python_not_python():
+    # A doc tagged "python" but with no Python markers should fail
+    assert passes_heuristics("just some prose here without any code keywords", "python") is False
