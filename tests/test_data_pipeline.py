@@ -15,6 +15,10 @@ from scripts.data_pipeline.stage_3_heuristics import (
     is_likely_python,
     passes_heuristics,
 )
+from scripts.data_pipeline.stage_4_minhash import (
+    build_signature,
+    shingles_of,
+)
 
 
 def test_targets_sum_to_10b():
@@ -114,3 +118,33 @@ def test_passes_heuristics_too_repetitive():
 def test_passes_heuristics_python_not_python():
     # A doc tagged "python" but with no Python markers should fail
     assert passes_heuristics("just some prose here without any code keywords", "python") is False
+
+
+def test_shingles_of_basic():
+    text = "the quick brown fox jumps over"
+    shing = list(shingles_of(text, k=3))
+    assert shing[0] == "the quick brown"
+    assert shing[-1] == "fox jumps over"
+    assert len(shing) == 4
+
+
+def test_shingles_short_text():
+    text = "two words"
+    shing = list(shingles_of(text, k=3))
+    assert shing == []
+
+
+def test_build_signature_deterministic():
+    text = "the quick brown fox jumps over the lazy dog"
+    s1 = build_signature(text, num_perm=64)
+    s2 = build_signature(text, num_perm=64)
+    assert s1.digest().tolist() == s2.digest().tolist()
+
+
+def test_build_signature_similar_texts_have_close_jaccard():
+    text_a = "the quick brown fox jumps over the lazy dog"
+    text_b = "the quick brown fox jumps over the lazy cat"
+    s_a = build_signature(text_a, num_perm=128)
+    s_b = build_signature(text_b, num_perm=128)
+    j = s_a.jaccard(s_b)
+    assert j > 0.7   # strong overlap because only one word changed
