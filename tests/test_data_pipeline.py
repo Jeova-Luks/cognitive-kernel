@@ -92,7 +92,13 @@ def test_is_likely_python_negative():
 
 
 def test_passes_heuristics_python_pass():
-    doc = "def square(x):\n    return x * x\n\nprint(square(5))"
+    doc = (
+        "def square(x):\n"
+        "    '''Return x squared.'''\n"
+        "    return x * x\n\n"
+        "print(square(5))"
+    )
+    assert len(doc) >= 50, f"Test fixture too short: {len(doc)}"
     assert passes_heuristics(doc, "python") is True
 
 
