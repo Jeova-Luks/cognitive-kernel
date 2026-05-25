@@ -2,7 +2,7 @@
 import math
 import torch
 import torch.nn.functional as F
-from model import CausalSelfAttention
+from model import CausalSelfAttention, GPTModel
 
 
 def test_flash_attention_parity_with_manual():
@@ -61,3 +61,29 @@ def test_gqa_forward_shape():
     with torch.no_grad():
         y = gqa(x)
     assert y.shape == (B, T, n_embd), f"Expected {(B, T, n_embd)}, got {y.shape}"
+
+
+def test_gradient_checkpointing_loss_equivalence():
+    """Forward with and without grad checkpointing must produce identical loss."""
+    torch.manual_seed(123)
+    V, B, T = 100, 2, 16
+    cfg = dict(vocab_size=V, n_embd=32, n_head=4, n_kv_head=2,
+               n_layer=3, max_seq_len=32)
+
+    model_no_ckpt = GPTModel(**cfg, grad_checkpoint=False)
+    model_ckpt = GPTModel(**cfg, grad_checkpoint=True)
+    # Copy weights so they're identical
+    model_ckpt.load_state_dict(model_no_ckpt.state_dict())
+
+    # Both in train mode so the checkpointing branch is exercised
+    model_no_ckpt.train()
+    model_ckpt.train()
+
+    x = torch.randint(0, V, (B, T))
+    y = torch.randint(0, V, (B, T))
+
+    _, loss_no_ckpt = model_no_ckpt(x, y)
+    _, loss_ckpt = model_ckpt(x, y)
+
+    assert torch.allclose(loss_no_ckpt, loss_ckpt, atol=1e-5), \
+        f"Loss differs: no_ckpt={loss_no_ckpt.item()}, ckpt={loss_ckpt.item()}"

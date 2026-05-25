@@ -163,10 +163,11 @@ class GPTModel(nn.Module):
     Combina embedding de tokens, múltiplos blocos Transformer e projeção de saída para logits.
     """
     def __init__(self, vocab_size, n_embd=256, n_head=8, n_kv_head=None,
-                 n_layer=6, max_seq_len=128):
+                 n_layer=6, max_seq_len=128, grad_checkpoint=False):
         super().__init__()
         self.vocab_size = vocab_size
         self.max_seq_len = max_seq_len
+        self.grad_checkpoint = grad_checkpoint
 
         # Camada de Embedding dos Tokens de entrada
         self.token_embeddings = nn.Embedding(vocab_size, n_embd)
@@ -207,24 +208,24 @@ class GPTModel(nn.Module):
 
     def forward(self, idx, targets=None):
         B, T = idx.size()
-        assert T <= self.max_seq_len, f"Tamanho da entrada ({T}) excede a janela de contexto configurada ({self.max_seq_len})."
-        
-        # Mapeia IDs para embeddings densos
-        x = self.token_embeddings(idx) # [B, T, n_embd]
-        
-        # Passa sequencialmente por todos os blocos do Transformer
+        assert T <= self.max_seq_len, \
+            f"Input length ({T}) exceeds configured context window ({self.max_seq_len})."
+
+        x = self.token_embeddings(idx)
+
         for block in self.blocks:
-            x = block(x)
-            
+            if self.grad_checkpoint and self.training:
+                x = torch.utils.checkpoint.checkpoint(block, x, use_reentrant=False)
+            else:
+                x = block(x)
+
         x = self.norm_f(x)
-        logits = self.lm_head(x) # [B, T, vocab_size]
-        
+        logits = self.lm_head(x)
+
         loss = None
         if targets is not None:
-            # Calcula CrossEntropyLoss ignorando o primeiro elemento se alinhado para treino
-            # logits: [B*T, vocab_size], targets: [B*T]
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
-            
+
         return logits, loss
 
     @torch.no_grad()
