@@ -20,9 +20,20 @@ class Trainer:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.dtype = (torch.bfloat16
-                      if torch.cuda.is_available() and torch.cuda.is_bf16_supported()
-                      else torch.float32)
+        # Choose the best mixed-precision dtype for this hardware:
+        # - Ampere+ (A100, H100, 3090, 4090): BF16 — same range as FP32, no scaler needed
+        # - Turing/Volta (T4, V100, 2080): FP16 — needs GradScaler against underflow
+        # - CPU: FP32 (autocast disabled via amp_enabled flag in train_step)
+        if torch.cuda.is_available():
+            if torch.cuda.is_bf16_supported():
+                self.dtype = torch.bfloat16
+            else:
+                self.dtype = torch.float16
+        else:
+            self.dtype = torch.float32
+        # GradScaler only when using FP16 (BF16 doesn't underflow at typical scales)
+        self.scaler = (torch.amp.GradScaler("cuda")
+                       if self.dtype == torch.float16 else None)
 
         self._seed_everything(cfg.data.seed)
         self.model = self._build_model().to(self.device)
@@ -91,12 +102,15 @@ class Trainer:
         return cfg.min_lr + coeff * (cfg.learning_rate - cfg.min_lr)
 
     def train_step(self) -> float:
-        """Run one optimizer step (with gradient accumulation). Returns mean loss."""
+        """Run one optimizer step (with gradient accumulation). Returns mean loss.
+
+        Uses GradScaler when dtype is float16 (T4/V100) to avoid gradient
+        underflow. BF16 (A100+) and FP32 paths don't need it.
+        """
         cfg = self.cfg.train
         self.model.train()
         self.optimizer.zero_grad(set_to_none=True)
         total_loss = 0.0
-        # BF16 autocast on supported GPUs; no-op on CPU/FP32 (enabled=False)
         amp_enabled = self.dtype != torch.float32
         for _ in range(cfg.grad_accum_steps):
             x, y = self.train_ds.get_batch(cfg.batch_size)
@@ -105,13 +119,23 @@ class Trainer:
                                     enabled=amp_enabled):
                 _, loss = self.model(x, y)
             loss = loss / cfg.grad_accum_steps
-            loss.backward()
+            if self.scaler is not None:
+                self.scaler.scale(loss).backward()
+            else:
+                loss.backward()
             total_loss += loss.item() * cfg.grad_accum_steps
         lr = self._get_lr(self.step)
         for pg in self.optimizer.param_groups:
             pg["lr"] = lr
-        torch.nn.utils.clip_grad_norm_(self.model.parameters(), cfg.grad_clip)
-        self.optimizer.step()
+        if self.scaler is not None:
+            # Unscale before clipping so grad norm is in the true scale
+            self.scaler.unscale_(self.optimizer)
+            torch.nn.utils.clip_grad_norm_(self.model.parameters(), cfg.grad_clip)
+            self.scaler.step(self.optimizer)
+            self.scaler.update()
+        else:
+            torch.nn.utils.clip_grad_norm_(self.model.parameters(), cfg.grad_clip)
+            self.optimizer.step()
         self.step += 1
         return total_loss / cfg.grad_accum_steps
 
@@ -147,6 +171,9 @@ class Trainer:
             torch.cuda.set_rng_state_all(payload["rng_cuda"])
         self.train_ds.load_state_dict(payload["train_ds_state"])
         self.val_ds.load_state_dict(payload["val_ds_state"])
+        # Scaler state (only present if both saved and current trainer use FP16)
+        if self.scaler is not None and payload.get("scaler_state") is not None:
+            self.scaler.load_state_dict(payload["scaler_state"])
 
     def _prune_old_checkpoints(self, keep: int = 3) -> None:
         """Keep only the `keep` most recent ckpt_step_*.pt files."""
@@ -174,6 +201,8 @@ class Trainer:
                          if torch.cuda.is_available() else None),
             "train_ds_state": self.train_ds.state_dict(),
             "val_ds_state": self.val_ds.state_dict(),
+            "scaler_state": (self.scaler.state_dict()
+                             if self.scaler is not None else None),
             "config": asdict(self.cfg),
         }
         torch.save(payload, ckpt_path)
