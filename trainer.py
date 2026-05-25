@@ -78,10 +78,14 @@ class Trainer:
         self.model.train()
         self.optimizer.zero_grad(set_to_none=True)
         total_loss = 0.0
+        # BF16 autocast on supported GPUs; no-op on CPU/FP32 (enabled=False)
+        amp_enabled = self.dtype != torch.float32
         for _ in range(cfg.grad_accum_steps):
             x, y = self.train_ds.get_batch(cfg.batch_size)
             x, y = x.to(self.device), y.to(self.device)
-            _, loss = self.model(x, y)
+            with torch.amp.autocast(device_type=self.device, dtype=self.dtype,
+                                    enabled=amp_enabled):
+                _, loss = self.model(x, y)
             loss = loss / cfg.grad_accum_steps
             loss.backward()
             total_loss += loss.item() * cfg.grad_accum_steps
@@ -97,13 +101,16 @@ class Trainer:
     def evaluate(self) -> dict[str, float]:
         cfg = self.cfg.train
         self.model.eval()
+        amp_enabled = self.dtype != torch.float32
         out = {}
         for split, ds in [("train", self.train_ds), ("val", self.val_ds)]:
             losses = []
             for _ in range(cfg.eval_iters):
                 x, y = ds.get_batch(cfg.batch_size)
                 x, y = x.to(self.device), y.to(self.device)
-                _, loss = self.model(x, y)
+                with torch.amp.autocast(device_type=self.device, dtype=self.dtype,
+                                        enabled=amp_enabled):
+                    _, loss = self.model(x, y)
                 losses.append(loss.item())
             out[split] = float(np.mean(losses))
         return out
