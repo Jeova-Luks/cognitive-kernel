@@ -142,9 +142,12 @@ def test_build_signature_deterministic():
 
 
 def test_build_signature_similar_texts_have_close_jaccard():
+    # Two 9-word sentences differing in one word produce 5-gram shingle sets
+    # with 4/6 overlap (true Jaccard ~0.667). MinHash should estimate close
+    # to this — clearly indicating high similarity vs unrelated text.
     text_a = "the quick brown fox jumps over the lazy dog"
     text_b = "the quick brown fox jumps over the lazy cat"
     s_a = build_signature(text_a, num_perm=128)
     s_b = build_signature(text_b, num_perm=128)
     j = s_a.jaccard(s_b)
-    assert j > 0.7   # strong overlap because only one word changed
+    assert j > 0.5, f"expected high Jaccard, got {j}"
