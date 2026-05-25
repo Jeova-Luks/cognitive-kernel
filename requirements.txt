@@ -14,3 +14,14 @@ websockets
 
 # Testing
 pytest>=7.4.0
+
+# Phase 1A data pipeline
+datasets>=2.18.0
+huggingface_hub>=0.21.0
+tokenizers>=0.15.0
+datasketch>=1.6.0
+fasttext>=0.9.2
+langdetect>=1.0.9
+beautifulsoup4>=4.12.0
+pyarrow>=14.0.0
+tqdm>=4.66.0
