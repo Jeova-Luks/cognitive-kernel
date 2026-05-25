@@ -96,3 +96,34 @@ def test_save_checkpoint_writes_complete_state(tmp_path, toy_shards):
     latest = trainer.output_dir / "latest.txt"
     assert latest.exists()
     assert latest.read_text().strip() == ckpt_path.name
+
+
+def test_resume_is_bit_identical(tmp_path, toy_shards):
+    """Train 10 steps uninterrupted; train 5 + checkpoint + load + 5 more.
+    Loss trajectory must be bit-identical. THIS IS THE PHASE 0 DEFINITION OF DONE."""
+    cfg = load_config(Path("configs/test_toy.yaml"))
+    cfg.train.max_iters = 10
+
+    # Run A: 10 uninterrupted steps
+    trainer_a = Trainer(cfg, output_dir=tmp_path / "a")
+    losses_a = []
+    for _ in range(10):
+        losses_a.append(trainer_a.train_step())
+
+    # Run B: 5 steps, checkpoint, NEW Trainer instance loads it, 5 more steps
+    trainer_b = Trainer(cfg, output_dir=tmp_path / "b")
+    losses_b = []
+    for _ in range(5):
+        losses_b.append(trainer_b.train_step())
+    ckpt_path = trainer_b.save_checkpoint()
+    del trainer_b
+
+    trainer_c = Trainer(cfg, output_dir=tmp_path / "b")
+    trainer_c.load_checkpoint(ckpt_path)
+    for _ in range(5):
+        losses_b.append(trainer_c.train_step())
+
+    # Every loss should match to floating-point equality
+    for i, (la, lb) in enumerate(zip(losses_a, losses_b)):
+        assert abs(la - lb) < 1e-6, \
+            f"Step {i}: uninterrupted={la}, resumed={lb}, diff={abs(la - lb)}"
