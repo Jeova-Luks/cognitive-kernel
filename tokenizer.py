@@ -8,11 +8,25 @@ além de codificar (encode) e decodificar (decode) strings.
 import json
 import os
 
+# Reserved IDs for structural / CDSL boundary tokens. Sit in a high band so they
+# never collide with byte tokens (0-255) or BPE merge IDs (256-onward).
+SPECIAL_TOKENS = {
+    "<|endoftext|>":   60000,
+    "<|cdsl_start|>":  60001,
+    "<|cdsl_end|>":    60002,
+    "<|tool_call|>":   60003,
+    "<|tool_result|>": 60004,
+}
+
+
 class BPETokenizer:
     def __init__(self, vocab_size=512):
         self.vocab_size = vocab_size
         # Inicializa o vocabulário básico com os 256 bytes individuais
         self.vocab = {i: bytes([i]) for i in range(256)}
+        # Reserva o bloco de tokens especiais (estruturais / CDSL)
+        for special, special_id in SPECIAL_TOKENS.items():
+            self.vocab[special_id] = special.encode("utf-8")
         self.merges = {}  # Mapeia (int, int) -> int (o novo token mesclado)
         self.inverse_vocab = {v: k for k, v in self.vocab.items()}
         
