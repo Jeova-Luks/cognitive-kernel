@@ -166,9 +166,13 @@ class Trainer:
         self.best_val_loss = payload["best_val_loss"]
         random.setstate(payload["rng_python"])
         np.random.set_state(payload["rng_numpy"])
-        torch.set_rng_state(payload["rng_torch"])
+        # RNG state tensors MUST be on CPU (torch.set_rng_state requires
+        # ByteTensor on CPU). map_location=device may have moved them to GPU,
+        # so force back to CPU here.
+        torch.set_rng_state(payload["rng_torch"].cpu())
         if payload["rng_cuda"] is not None and torch.cuda.is_available():
-            torch.cuda.set_rng_state_all(payload["rng_cuda"])
+            cuda_states = [s.cpu() for s in payload["rng_cuda"]]
+            torch.cuda.set_rng_state_all(cuda_states)
         self.train_ds.load_state_dict(payload["train_ds_state"])
         self.val_ds.load_state_dict(payload["val_ds_state"])
         # Scaler state (only present if both saved and current trainer use FP16)
