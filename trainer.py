@@ -133,6 +133,27 @@ class Trainer:
             out[split] = float(np.mean(losses))
         return out
 
+    def load_checkpoint(self, path: Path) -> None:
+        """Restore complete state from a checkpoint (bit-identical resume)."""
+        payload = torch.load(path, map_location=self.device, weights_only=False)
+        self.model.load_state_dict(payload["model_state"])
+        self.optimizer.load_state_dict(payload["optimizer_state"])
+        self.step = payload["step"]
+        self.best_val_loss = payload["best_val_loss"]
+        random.setstate(payload["rng_python"])
+        np.random.set_state(payload["rng_numpy"])
+        torch.set_rng_state(payload["rng_torch"])
+        if payload["rng_cuda"] is not None and torch.cuda.is_available():
+            torch.cuda.set_rng_state_all(payload["rng_cuda"])
+        self.train_ds.load_state_dict(payload["train_ds_state"])
+        self.val_ds.load_state_dict(payload["val_ds_state"])
+
+    def _prune_old_checkpoints(self, keep: int = 3) -> None:
+        """Keep only the `keep` most recent ckpt_step_*.pt files."""
+        ckpts = sorted(self.output_dir.glob("ckpt_step_*.pt"))
+        for old in ckpts[:-keep]:
+            old.unlink()
+
     def save_checkpoint(self) -> Path:
         """Save a complete, resumable checkpoint.
 
@@ -162,10 +183,21 @@ class Trainer:
         return ckpt_path
 
     def fit(self) -> None:
-        """Main loop. Checkpoint/resume and wandb added in Tasks 11-12."""
+        """Main loop with auto-resume from latest checkpoint. Wandb added in Task 12."""
+        from resume import find_latest
+        latest = find_latest(self.output_dir)
+        if latest is not None:
+            print(f"Resuming from {latest}")
+            self.load_checkpoint(latest)
+
         while self.step < self.cfg.train.max_iters:
             loss = self.train_step()
             if self.step % self.cfg.train.eval_interval == 0:
                 evals = self.evaluate()
                 print(f"[{self.step}] train_loss={loss:.4f} "
                       f"val_loss={evals['val']:.4f}")
+                if evals["val"] < self.best_val_loss:
+                    self.best_val_loss = evals["val"]
+            if self.step % self.cfg.train.checkpoint_interval == 0:
+                self.save_checkpoint()
+                self._prune_old_checkpoints(keep=3)
