@@ -183,21 +183,48 @@ class Trainer:
         return ckpt_path
 
     def fit(self) -> None:
-        """Main loop with auto-resume from latest checkpoint. Wandb added in Task 12."""
+        """Main loop with auto-resume from latest checkpoint + wandb logging."""
+        import wandb
         from resume import find_latest
+
         latest = find_latest(self.output_dir)
         if latest is not None:
             print(f"Resuming from {latest}")
             self.load_checkpoint(latest)
 
-        while self.step < self.cfg.train.max_iters:
-            loss = self.train_step()
-            if self.step % self.cfg.train.eval_interval == 0:
-                evals = self.evaluate()
-                print(f"[{self.step}] train_loss={loss:.4f} "
-                      f"val_loss={evals['val']:.4f}")
-                if evals["val"] < self.best_val_loss:
-                    self.best_val_loss = evals["val"]
-            if self.step % self.cfg.train.checkpoint_interval == 0:
-                self.save_checkpoint()
-                self._prune_old_checkpoints(keep=3)
+        if self.cfg.log.wandb_mode != "disabled":
+            wandb.init(
+                project=self.cfg.log.project,
+                name=self.cfg.log.run_name or None,
+                config=asdict(self.cfg),
+                mode=self.cfg.log.wandb_mode,
+                resume="allow",
+            )
+
+        try:
+            while self.step < self.cfg.train.max_iters:
+                loss = self.train_step()
+
+                if self.step % self.cfg.log.log_interval == 0:
+                    lr = self.optimizer.param_groups[0]["lr"]
+                    metrics = {"train_loss": loss, "lr": lr, "step": self.step}
+                    if self.cfg.log.wandb_mode != "disabled":
+                        wandb.log(metrics, step=self.step)
+
+                if self.step % self.cfg.train.eval_interval == 0:
+                    evals = self.evaluate()
+                    print(f"[{self.step}] train_loss={loss:.4f} "
+                          f"val_loss={evals['val']:.4f}")
+                    if evals["val"] < self.best_val_loss:
+                        self.best_val_loss = evals["val"]
+                    if self.cfg.log.wandb_mode != "disabled":
+                        wandb.log({"val_loss": evals["val"],
+                                   "train_eval_loss": evals["train"]},
+                                  step=self.step)
+
+                if self.step % self.cfg.train.checkpoint_interval == 0:
+                    self.save_checkpoint()
+                    self._prune_old_checkpoints(keep=3)
+        finally:
+            if self.cfg.log.wandb_mode != "disabled":
+                wandb.finish()

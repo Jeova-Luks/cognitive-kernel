@@ -98,6 +98,23 @@ def test_save_checkpoint_writes_complete_state(tmp_path, toy_shards):
     assert latest.read_text().strip() == ckpt_path.name
 
 
+def test_wandb_logs_loss_metrics(tmp_path, toy_shards, monkeypatch):
+    """When wandb_mode != 'disabled', trainer must call wandb.log with loss."""
+    import wandb
+    logged = []
+    monkeypatch.setattr(wandb, "init", lambda *a, **k: None)
+    monkeypatch.setattr(wandb, "log", lambda d, **k: logged.append(d))
+    monkeypatch.setattr(wandb, "finish", lambda *a, **k: None)
+
+    cfg = load_config(Path("configs/test_toy.yaml"))
+    cfg.log.wandb_mode = "online"
+    cfg.train.max_iters = 5
+    trainer = Trainer(cfg, output_dir=tmp_path / "out")
+    trainer.fit()
+    assert any("train_loss" in d for d in logged), \
+        f"No train_loss in logged dicts: {logged}"
+
+
 def test_resume_is_bit_identical(tmp_path, toy_shards):
     """Train 10 steps uninterrupted; train 5 + checkpoint + load + 5 more.
     Loss trajectory must be bit-identical. THIS IS THE PHASE 0 DEFINITION OF DONE."""
