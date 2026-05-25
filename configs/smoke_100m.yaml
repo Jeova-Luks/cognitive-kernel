@@ -16,7 +16,7 @@ train:
   batch_size: 4
   grad_accum_steps: 4         # effective batch = 16
   block_size: 2048
-  max_iters: 100
+  max_iters: 500
   learning_rate: 3.0e-4
   warmup_iters: 10
   min_lr: 3.0e-5
