@@ -96,31 +96,24 @@ class CausalSelfAttention(nn.Module):
         )
 
     def forward(self, x):
-        B, T, C = x.size() # batch_size, sequence_length, embedding_dim (n_embd)
-        
-        # Calcula Q, K, V e reorganiza em múltiplas cabeças
-        # Formato resultante: [B, n_head, T, head_dim]
+        B, T, C = x.size()
+
+        # Q, K, V projections; reshape to [B, n_head, T, head_dim]
         q = self.q_proj(x).view(B, T, self.n_head, self.head_dim).transpose(1, 2)
         k = self.k_proj(x).view(B, T, self.n_head, self.head_dim).transpose(1, 2)
         v = self.v_proj(x).view(B, T, self.n_head, self.head_dim).transpose(1, 2)
-        
-        # Aplica o Rotary Position Embedding nos vetores de Q e K
+
+        # Rotary position embedding on Q and K
         q = self.rope(q, T)
         k = self.rope(k, T)
-        
-        # Calcula as pontuações de atenção: Q * K^T / sqrt(head_dim)
-        att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(self.head_dim))
-        
-        # Aplica a máscara causal para impedir o modelo de olhar para o futuro
-        att = att.masked_fill(self.bias[:, :, :T, :T] == 0, float('-inf'))
-        
-        # Softmax nas pontuações de atenção para criar a distribuição de probabilidade
-        att = F.softmax(att, dim=-1)
-        
-        # Multiplica a atenção pelos valores (V)
-        y = att @ v # [B, n_head, T, head_dim]
-        
-        # Concatena as cabeças de volta e aplica a projeção de saída
+
+        # Flash Attention 2 when available; falls back to math on CPU.
+        # is_causal=True applies the causal mask internally (no allocation).
+        y = torch.nn.functional.scaled_dot_product_attention(
+            q, k, v, is_causal=True
+        )
+
+        # Concatenate heads and project out
         y = y.transpose(1, 2).contiguous().view(B, T, C)
         return self.out_proj(y)
 
