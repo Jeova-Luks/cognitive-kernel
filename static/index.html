@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Pessoal - Workbench do Zero</title>
+    <!-- Google Fonts: Inter para interface e JetBrains Mono para código -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chart.js para o gráfico de perda em tempo real -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome para ícones premium -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <div class="glow-bg-secondary"></div>
+    
+    <div class="app-container">
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="header-logo">
+                <div class="logo-icon"><i class="fa-solid fa-brain"></i></div>
+                <div class="logo-text">
+                    <h1>LLM Pessoal</h1>
+                    <span class="logo-subtitle">Workbench do Zero</span>
+                </div>
+            </div>
+            <div class="header-status">
+                <div class="status-badge" id="ws-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Conectando...</span>
+                </div>
+                <div class="version-tag">v1.0 • PURE PYTHON & PYTORCH</div>
+            </div>
+        </header>
+
+        <!-- NAVEGAÇÃO POR ABAS -->
+        <nav class="app-nav">
+            <button class="nav-tab active" data-tab="config"><i class="fa-solid fa-sliders"></i> Configuração & Vocab</button>
+            <button class="nav-tab" data-tab="train"><i class="fa-solid fa-circle-play"></i> Painel de Treino</button>
+            <button class="nav-tab" data-tab="chat" id="tab-chat-btn"><i class="fa-solid fa-comments"></i> Playground / Chat</button>
+        </nav>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="app-content">
+            
+            <!-- ABA 1: CONFIGURAÇÃO & TOKENIZADOR -->
+            <section class="tab-pane active" id="pane-config">
+                <div class="grid-2col">
+                    <!-- Configurações do Modelo -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-microchip"></i> Arquitetura do Transformer</h2>
+                            <p>Hiperparâmetros do modelo que será construído em PyTorch.</p>
+                        </div>
+                        <form id="config-form" class="config-form">
+                            <div class="form-group-grid">
+                                <div class="form-group">
+                                    <label for="n_embd">Dimensão do Embedding (d_model)</label>
+                                    <select id="n_embd" name="n_embd">
+                                        <option value="64">64 (Ultra Rápido / Educacional)</option>
+                                        <option value="128" selected>128 (Equilibrado)</option>
+                                        <option value="256">256 (Médio)</option>
+                                        <option value="512">512 (Pesado para CPU)</option>
+                                    </select>
+                                    <span class="help-text">Largura vetorial de representação interna de cada token.</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="n_head">Cabeças de Atenção (n_head)</label>
+                                    <select id="n_head" name="n_head">
+                                        <option value="2">2 Cabeças</option>
+                                        <option value="4" selected>4 Cabeças</option>
+                                        <option value="8">8 Cabeças</option>
+                                    </select>
+                                    <span class="help-text">Divisões do mecanismo de self-attention paralelos.</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="n_layer">Camadas Transformer (n_layer)</label>
+                                    <select id="n_layer" name="n_layer">
+                                        <option value="2">2 Camadas</option>
+                                        <option value="4" selected>4 Camadas</option>
+                                        <option value="6">6 Camadas</option>
+                                        <option value="8">8 Camadas</option>
+                                    </select>
+                                    <span class="help-text">Profundidade da rede (pilha de blocos Decoder).</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="vocab_size">Tamanho do Vocabulário (BPE)</label>
+                                    <select id="vocab_size" name="vocab_size">
+                                        <option value="512">512 Tokens</option>
+                                        <option value="1024" selected>1024 Tokens</option>
+                                        <option value="2048">2048 Tokens</option>
+                                        <option value="4096">4096 Tokens</option>
+                                    </select>
+                                    <span class="help-text">Quantidade de tokens gerados no treino do Tokenizador BPE.</span>
+                                </div>
+                                <div class="form-group" style="grid-column: span 2;">
+                                    <label for="output_dir"><i class="fa-brands fa-google-drive"></i> Pasta de Destino / Google Drive (Opcional)</label>
+                                    <input type="text" id="output_dir" name="output_dir" placeholder="Ex: G:\Meu Drive\LLMPessoal (Deixe em branco para pasta local)">
+                                    <span class="help-text">Diretório absoluto para salvar checkpoints, dataset e tokenizador (evita encher seu disco local).</span>
+                                </div>
+                            </div>
+
+                            <h3 class="section-title"><i class="fa-solid fa-graduation-cap"></i> Parâmetros de Treinamento</h3>
+                            <div class="form-group-grid">
+                                <div class="form-group">
+                                    <label for="learning_rate">Taxa de Aprendizado (Learning Rate)</label>
+                                    <input type="number" id="learning_rate" name="learning_rate" value="0.001" step="0.0001" min="0.0001" max="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label for="batch_size">Tamanho do Lote (Batch Size)</label>
+                                    <input type="number" id="batch_size" name="batch_size" value="32" min="8" max="128">
+                                </div>
+                                <div class="form-group">
+                                    <label for="block_size">Contexto Máximo (Block Size)</label>
+                                    <input type="number" id="block_size" name="block_size" value="64" min="16" max="256">
+                                </div>
+                                <div class="form-group">
+                                    <label for="max_iters">Passos Totais (Iterations)</label>
+                                    <input type="number" id="max_iters" name="max_iters" value="1000" step="100" min="100" max="10000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="eval_interval">Intervalo de Avaliação</label>
+                                    <input type="number" id="eval_interval" name="eval_interval" value="100" step="50" min="10">
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary btn-block" id="save-config-btn">
+                                <i class="fa-solid fa-circle-check"></i> Inicializar Modelo e Carregar Dataset
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Tokenizador Interativo -->
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-scissors"></i> Visualizador do Tokenizador BPE</h2>
+                            <p>Digite qualquer frase abaixo para ver como o algoritmo de Byte-Pair Encoding (BPE) decompõe o texto em tokens numéricos em tempo real.</p>
+                        </div>
+                        <div class="tokenizer-area">
+                            <textarea id="tokenizer-input" placeholder="Digite seu texto aqui..."></textarea>
+                            <div class="tokenizer-stats">
+                                <div><i class="fa-solid fa-hash"></i> Total de Tokens: <span id="token-count" class="badge">0</span></div>
+                            </div>
+                            <div class="tokenizer-output-container">
+                                <label>Visualização de Divisão de Tokens:</label>
+                                <div id="tokenizer-visual-output" class="tokenizer-visual-box">
+                                    Aguardando digitação... (Configure o modelo primeiro para carregar o tokenizador)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABA 2: PAINEL DE TREINAMENTO -->
+            <section class="tab-pane" id="pane-train">
+                <!-- Controles do Treino -->
+                <div class="training-controls-bar glass-card">
+                    <div class="control-status-info">
+                        <div class="spinning-loader" id="train-spinner" style="display: none;"><i class="fa-solid fa-spinner fa-spin"></i></div>
+                        <div>
+                            <h3 id="train-state-title">Treinamento Não Iniciado</h3>
+                            <p id="train-state-desc">Configure os hiperparâmetros e inicie a otimização dos pesos.</p>
+                        </div>
+                    </div>
+                    <div class="control-buttons">
+                        <button class="btn btn-success" id="start-train-btn"><i class="fa-solid fa-play"></i> Iniciar Treino</button>
+                        <button class="btn btn-warning" id="pause-train-btn" disabled><i class="fa-solid fa-pause"></i> Pausar</button>
+                        <button class="btn btn-danger" id="stop-train-btn" disabled><i class="fa-solid fa-stop"></i> Interromper</button>
+                    </div>
+                </div>
+
+                <!-- Métricas -->
+                <div class="metrics-grid">
+                    <div class="metric-card glass-card">
+                        <span class="metric-label">Perda Treino (Train Loss)</span>
+                        <span class="metric-value" id="val-train-loss">-</span>
+                        <i class="fa-solid fa-chart-line metric-icon text-purple"></i>
+                    </div>
+                    <div class="metric-card glass-card">
+                        <span class="metric-label">Perda Validação (Val Loss)</span>
+                        <span class="metric-value" id="val-val-loss">-</span>
+                        <i class="fa-solid fa-vial-circle-check metric-icon text-cyan"></i>
+                    </div>
+                    <div class="metric-card glass-card">
+                        <span class="metric-label">Velocidade do Processamento</span>
+                        <span class="metric-value" id="val-speed">- <span class="unit">tok/s</span></span>
+                        <i class="fa-solid fa-gauge-high metric-icon text-green"></i>
+                    </div>
+                    <div class="metric-card glass-card">
+                        <span class="metric-label">Passo Atual / Total</span>
+                        <span class="metric-value" id="val-step">-</span>
+                        <i class="fa-solid fa-list-ol metric-icon text-orange"></i>
+                    </div>
+                </div>
+
+                <div class="grid-2col">
+                    <!-- Gráfico da Curva de Loss -->
+                    <div class="card glass-card chart-container-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-chart-area"></i> Curva de Aprendizado (Loss)</h2>
+                            <p>Queda da perda (erro) conforme o modelo aprende o vocabulário e a gramática.</p>
+                        </div>
+                        <div class="chart-wrapper">
+                            <canvas id="lossChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Amostras Geradas ao Vivo -->
+                    <div class="card glass-card preview-card">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-eye"></i> Validação ao Vivo (Amostra Gerada)</h2>
+                            <p>O que o modelo consegue gerar a partir de uma frase padrão a cada avaliação:</p>
+                        </div>
+                        <div class="live-sample-box" id="live-sample-output">
+                            [Amostras aparecerão aqui durante o treinamento. Você verá o modelo evoluir de letras aleatórias até palavras e sentenças completas em português!]
+                        </div>
+                        
+                        <div class="terminal-log-wrapper">
+                            <div class="terminal-header">
+                                <span class="terminal-dot red"></span>
+                                <span class="terminal-dot yellow"></span>
+                                <span class="terminal-dot green"></span>
+                                <span class="terminal-title">Python training_console.log</span>
+                            </div>
+                            <div class="terminal-body" id="terminal-logs">
+                                [Aguardando início do treinamento...]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ABA 3: PLAYGROUND / CHAT -->
+            <section class="tab-pane" id="pane-chat">
+                <div class="playground-layout">
+                    <!-- Sidebar de Hiperparâmetros de Geração -->
+                    <div class="playground-sidebar glass-card">
+                        <h3>Configurações de Geração</h3>
+                        
+                        <div class="control-group">
+                            <div class="control-label-val">
+                                <label for="gen-temperature">Temperatura</label>
+                                <span id="val-temp">0.8</span>
+                            </div>
+                            <input type="range" id="gen-temperature" min="0" max="2" step="0.1" value="0.8">
+                            <span class="help-text">Valores baixos criam respostas previsíveis. Valores altos aumentam a criatividade/aleatoriedade.</span>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label-val">
+                                <label for="gen-topk">Top-K Filtering</label>
+                                <span id="val-topk">10</span>
+                            </div>
+                            <input type="range" id="gen-topk" min="0" max="100" step="1" value="10">
+                            <span class="help-text">Limita as escolhas de palavras às K palavras mais prováveis.</span>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label-val">
+                                <label for="gen-topp">Top-P (Nucleus)</label>
+                                <span id="val-topp">0.90</span>
+                            </div>
+                            <input type="range" id="gen-topp" min="0" max="1" step="0.05" value="0.90">
+                            <span class="help-text">Seleciona apenas tokens cuja probabilidade acumulada atinja P.</span>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="control-label-val">
+                                <label for="gen-tokens">Máximo de Novos Tokens</label>
+                                <span id="val-tokens">50</span>
+                            </div>
+                            <input type="range" id="gen-tokens" min="10" max="300" step="10" value="50">
+                            <span class="help-text">Tamanho máximo do texto gerado por resposta.</span>
+                        </div>
+                    </div>
+
+                    <!-- Chat Principal -->
+                    <div class="playground-chat-container glass-card">
+                        <div class="chat-header">
+                            <div class="chat-model-info">
+                                <i class="fa-solid fa-comments"></i>
+                                <div>
+                                    <h4>Meu LLM Pessoal</h4>
+                                    <span id="chat-model-status">Modelo não carregado. Treine o modelo primeiro!</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-secondary btn-sm" id="clear-chat-btn"><i class="fa-solid fa-trash"></i> Limpar Chat</button>
+                        </div>
+                        
+                        <div class="chat-messages" id="chat-messages-box">
+                            <div class="chat-message system">
+                                <div class="msg-avatar"><i class="fa-solid fa-circle-info"></i></div>
+                                <div class="msg-content">
+                                    <p>Bem-vindo ao Playground do seu LLM Pessoal! Assim que treinar o modelo na aba "Painel de Treino", você poderá testá-lo aqui digitando um prompt inicial de texto. O modelo continuará a frase de forma autoregressiva token-a-token baseado no que aprendeu do livro Dom Casmurro!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-area">
+                            <textarea id="chat-input" placeholder="Digite uma frase inicial de prompt (Ex: 'Capitu era...')" rows="2"></textarea>
+                            <button class="btn btn-primary" id="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    
+    <script src="/static/app.js"></script>
+</body>
+</html>
