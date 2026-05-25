@@ -74,3 +74,25 @@ def test_optimizer_dispatch_unknown_raises(tmp_path, toy_shards):
     cfg.train.optimizer = "made_up"
     with pytest.raises(ValueError, match="Unknown optimizer"):
         Trainer(cfg, output_dir=tmp_path / "out")
+
+
+def test_save_checkpoint_writes_complete_state(tmp_path, toy_shards):
+    cfg = load_config(Path("configs/test_toy.yaml"))
+    trainer = Trainer(cfg, output_dir=tmp_path / "out")
+    trainer.train_step()
+    trainer.train_step()
+
+    ckpt_path = trainer.save_checkpoint()
+    assert ckpt_path.exists()
+
+    payload = torch.load(ckpt_path, map_location="cpu", weights_only=False)
+    required = {"model_state", "optimizer_state", "step", "best_val_loss",
+                "rng_python", "rng_numpy", "rng_torch", "rng_cuda",
+                "train_ds_state", "val_ds_state", "config"}
+    missing = required - set(payload.keys())
+    assert not missing, f"Checkpoint missing keys: {missing}"
+    assert payload["step"] == 2
+    # latest.txt pointer should exist and reference this checkpoint
+    latest = trainer.output_dir / "latest.txt"
+    assert latest.exists()
+    assert latest.read_text().strip() == ckpt_path.name

@@ -133,8 +133,36 @@ class Trainer:
             out[split] = float(np.mean(losses))
         return out
 
+    def save_checkpoint(self) -> Path:
+        """Save a complete, resumable checkpoint.
+
+        Captures: weights, optimizer state, step counter, best val loss,
+        Python/NumPy/Torch/CUDA RNG states, dataset RNG states, and full Config.
+        Writes ckpt_step_NNNNNNN.pt and a latest.txt pointer for resume detection.
+        """
+        ckpt_path = self.output_dir / f"ckpt_step_{self.step:07d}.pt"
+        payload = {
+            "model_state": self.model.state_dict(),
+            "optimizer_state": self.optimizer.state_dict(),
+            "step": self.step,
+            "best_val_loss": self.best_val_loss,
+            "rng_python": random.getstate(),
+            "rng_numpy": np.random.get_state(),
+            "rng_torch": torch.get_rng_state(),
+            "rng_cuda": (torch.cuda.get_rng_state_all()
+                         if torch.cuda.is_available() else None),
+            "train_ds_state": self.train_ds.state_dict(),
+            "val_ds_state": self.val_ds.state_dict(),
+            "config": asdict(self.cfg),
+        }
+        torch.save(payload, ckpt_path)
+        # Pointer to "latest" for resume detection in the next session
+        latest = self.output_dir / "latest.txt"
+        latest.write_text(ckpt_path.name)
+        return ckpt_path
+
     def fit(self) -> None:
-        """Main loop. Checkpoint/resume and wandb added in Tasks 10-12."""
+        """Main loop. Checkpoint/resume and wandb added in Tasks 11-12."""
         while self.step < self.cfg.train.max_iters:
             loss = self.train_step()
             if self.step % self.cfg.train.eval_interval == 0:
