@@ -69,51 +69,46 @@ class CausalSelfAttention(nn.Module):
     Mecanismo de Multi-Head Causal Self-Attention com suporte a RoPE.
     Garante que o modelo apenas preste atenção em tokens passados (máscara causal).
     """
-    def __init__(self, n_embd, n_head, max_seq_len):
+    def __init__(self, n_embd, n_head, max_seq_len, n_kv_head=None):
         super().__init__()
-        assert n_embd % n_head == 0, "A dimensão de embedding deve ser divisível pelo número de cabeças."
-        
+        assert n_embd % n_head == 0, "n_embd must be divisible by n_head"
+
         self.n_head = n_head
+        self.n_kv_head = n_kv_head if n_kv_head is not None else n_head
+        assert n_head % self.n_kv_head == 0, "n_head must be divisible by n_kv_head"
         self.head_dim = n_embd // n_head
         self.max_seq_len = max_seq_len
-        
-        # Projeções lineares para Query, Key e Value
+        self.kv_dim = self.head_dim * self.n_kv_head  # smaller K/V projection when GQA
+
+        # Q is full-size; K and V are reduced when n_kv_head < n_head
         self.q_proj = nn.Linear(n_embd, n_embd, bias=False)
-        self.k_proj = nn.Linear(n_embd, n_embd, bias=False)
-        self.v_proj = nn.Linear(n_embd, n_embd, bias=False)
-        
-        # Projeção de saída
+        self.k_proj = nn.Linear(n_embd, self.kv_dim, bias=False)
+        self.v_proj = nn.Linear(n_embd, self.kv_dim, bias=False)
         self.out_proj = nn.Linear(n_embd, n_embd, bias=False)
-        
-        # Inicialização do RoPE
+
         self.rope = RotaryEmbedding(dim=self.head_dim, max_seq_len=max_seq_len)
-        
-        # Máscara causal pré-computada para economizar tempo
-        self.register_buffer(
-            "bias", 
-            torch.tril(torch.ones(max_seq_len, max_seq_len)).view(1, 1, max_seq_len, max_seq_len),
-            persistent=False
-        )
 
     def forward(self, x):
         B, T, C = x.size()
 
-        # Q, K, V projections; reshape to [B, n_head, T, head_dim]
+        # Q is [B, n_head, T, head_dim]; K/V are [B, n_kv_head, T, head_dim]
         q = self.q_proj(x).view(B, T, self.n_head, self.head_dim).transpose(1, 2)
-        k = self.k_proj(x).view(B, T, self.n_head, self.head_dim).transpose(1, 2)
-        v = self.v_proj(x).view(B, T, self.n_head, self.head_dim).transpose(1, 2)
+        k = self.k_proj(x).view(B, T, self.n_kv_head, self.head_dim).transpose(1, 2)
+        v = self.v_proj(x).view(B, T, self.n_kv_head, self.head_dim).transpose(1, 2)
 
-        # Rotary position embedding on Q and K
+        # Rotary position embedding on Q and K (same RoPE works for both)
         q = self.rope(q, T)
         k = self.rope(k, T)
 
-        # Flash Attention 2 when available; falls back to math on CPU.
-        # is_causal=True applies the causal mask internally (no allocation).
-        y = torch.nn.functional.scaled_dot_product_attention(
-            q, k, v, is_causal=True
-        )
+        # Expand K/V so each query group sees the right K/V head
+        if self.n_kv_head < self.n_head:
+            n_repeat = self.n_head // self.n_kv_head
+            k = k.repeat_interleave(n_repeat, dim=1)
+            v = v.repeat_interleave(n_repeat, dim=1)
 
-        # Concatenate heads and project out
+        # Flash Attention 2 when available; falls back to math on CPU.
+        y = torch.nn.functional.scaled_dot_product_attention(q, k, v, is_causal=True)
+
         y = y.transpose(1, 2).contiguous().view(B, T, C)
         return self.out_proj(y)
 
@@ -147,11 +142,11 @@ class TransformerBlock(nn.Module):
     Bloco clássico do Transformer contendo Self Attention e MLP (SwiGLU) com RMSNorm.
     Usa arquitetura Pre-LN (Normalização antes das operações) para maior estabilidade.
     """
-    def __init__(self, n_embd, n_head, max_seq_len):
+    def __init__(self, n_embd, n_head, max_seq_len, n_kv_head=None):
         super().__init__()
         self.attn_norm = RMSNorm(n_embd)
-        self.attn = CausalSelfAttention(n_embd, n_head, max_seq_len)
-        
+        self.attn = CausalSelfAttention(n_embd, n_head, max_seq_len, n_kv_head=n_kv_head)
+
         self.mlp_norm = RMSNorm(n_embd)
         self.mlp = SwiGLUMLP(n_embd)
 
@@ -167,17 +162,19 @@ class GPTModel(nn.Module):
     Modelo GPT Decoder-only completo parametrizado.
     Combina embedding de tokens, múltiplos blocos Transformer e projeção de saída para logits.
     """
-    def __init__(self, vocab_size, n_embd=256, n_head=8, n_layer=6, max_seq_len=128):
+    def __init__(self, vocab_size, n_embd=256, n_head=8, n_kv_head=None,
+                 n_layer=6, max_seq_len=128):
         super().__init__()
         self.vocab_size = vocab_size
         self.max_seq_len = max_seq_len
-        
+
         # Camada de Embedding dos Tokens de entrada
         self.token_embeddings = nn.Embedding(vocab_size, n_embd)
-        
+
         # Pilha de blocos Transformer
         self.blocks = nn.ModuleList([
-            TransformerBlock(n_embd, n_head, max_seq_len) for _ in range(n_layer)
+            TransformerBlock(n_embd, n_head, max_seq_len, n_kv_head=n_kv_head)
+            for _ in range(n_layer)
         ])
         
         # Normalização final
