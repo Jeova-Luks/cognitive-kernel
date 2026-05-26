@@ -1,10 +1,14 @@
 """Stage 1: Download raw documents from upstream HuggingFace datasets.
 
-Pulls each source listed in the spec, samples enough docs to hit ~6x the
+Pulls each source listed in the spec, samples enough docs to hit ~3x the
 target token count (so subsequent filter stages have headroom), and pushes
-the merged result to HF as ck-stage-1-raw.
+ONE DATASET PER CATEGORY to HF Hub as ck-stage-1-raw-{category}.
 
-Run on Kaggle with HF_TOKEN exported. Idempotent: re-running re-uploads.
+Per-category checkpointing means if Kaggle kills the session at 12h, the
+categories that already finished are saved. Re-run the script and it skips
+categories already on HF (resume logic) unless --force is passed.
+
+Run on Kaggle with HF login active. Idempotent.
 
 Resilient: any single source failing (404, gate refused, network) is logged
 as a warning; the pipeline continues with other sources.
@@ -16,14 +20,16 @@ from typing import Iterator
 from datasets import load_dataset
 
 from .common import (
-    DocRecord, docs_to_dataset, push_dataset, stage_repo, get_logger, TARGETS,
+    DocRecord, dataset_exists, docs_to_dataset, push_dataset, stage_repo,
+    get_logger, TARGETS,
 )
 
 log = get_logger("stage1")
 
-# How much raw text to ingest per category, given a ~60-70% expected loss
-# through filters: take ~6x the final target.
-RAW_MULTIPLIER = 6.0
+# Lowered from 6.0 -> 3.0 after first Kaggle session hit 12h timeout. 3x still
+# gives plenty of headroom for filter losses (heuristics + dedup + quality
+# typically retain ~45-50%); 3.0 / 0.45 ≈ 1.35x target after filtering.
+RAW_MULTIPLIER = 3.0
 
 # Average bytes per token across our domain (empirical estimate; refined later)
 BYTES_PER_TOKEN = 4.0
@@ -57,7 +63,6 @@ def iter_python() -> Iterator[DocRecord]:
     consumed = 0
     counter = 0
 
-    # Source 1: The Stack v2 dedup, python only, stars >= 5
     log.info("python: streaming bigcode/the-stack-v2-dedup ...")
     ds = safe_streaming("bigcode/the-stack-v2-dedup")
     if ds is not None:
@@ -83,7 +88,6 @@ def iter_python() -> Iterator[DocRecord]:
             if consumed >= quota * 0.85:
                 break
 
-    # Source 2: CodeParrot clean — fills the gap
     log.info("python: streaming codeparrot/codeparrot-clean ...")
     ds = safe_streaming("codeparrot/codeparrot-clean")
     if ds is not None:
@@ -369,36 +373,61 @@ CATEGORY_ITERATORS = {
 }
 
 
+def process_category(category: str, force: bool = False, dry_run: bool = False) -> None:
+    """Collect all docs of a category and push them as a single HF dataset.
+
+    Each category becomes its own dataset (ck-stage-1-raw-{category}).
+    This way Kaggle killing the session at 12h only loses the in-progress
+    category — completed ones stay safe.
+    """
+    repo = stage_repo(1, f"raw-{category}")
+
+    if not force and dataset_exists(repo):
+        log.info(f"category {category}: dataset {repo} already exists; SKIP (use --force to re-push)")
+        return
+
+    log.info(f"=== Downloading category: {category} ===")
+    docs: list[DocRecord] = list(CATEGORY_ITERATORS[category]())
+    log.info(f"category {category}: collected {len(docs):,} docs")
+
+    if not docs:
+        log.warning(f"category {category}: zero docs collected; skipping push")
+        return
+
+    if dry_run:
+        log.info(f"dry-run: would push {len(docs):,} docs to {repo}")
+        return
+
+    ds = docs_to_dataset(docs)
+    log.info(f"pushing to {repo} ...")
+    push_dataset(ds, repo)
+    log.info(f"category {category}: pushed ({len(ds):,} docs)")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--categories", nargs="+",
         default=list(TARGETS.keys()),
-        help="Subset of categories to download (default: all)",
+        help="Subset of categories to download (default: all 5)",
     )
     parser.add_argument("--dry-run", action="store_true",
                         help="Don't push to HF; just iterate to verify access")
+    parser.add_argument("--force", action="store_true",
+                        help="Re-push categories that already exist on HF")
     args = parser.parse_args()
 
-    all_docs: list[DocRecord] = []
     for cat in args.categories:
         if cat not in CATEGORY_ITERATORS:
             log.error(f"unknown category: {cat}")
             continue
-        log.info(f"=== Downloading category: {cat} ===")
-        for doc in CATEGORY_ITERATORS[cat]():
-            all_docs.append(doc)
+        try:
+            process_category(cat, force=args.force, dry_run=args.dry_run)
+        except Exception as e:
+            log.error(f"category {cat} FAILED: {type(e).__name__}: {e}")
+            log.error("continuing to next category...")
 
-    log.info(f"total docs collected: {len(all_docs):,}")
-    if args.dry_run:
-        log.info("dry-run: skipping HF push")
-        return
-
-    ds = docs_to_dataset(all_docs)
-    repo = stage_repo(1, "raw")
-    log.info(f"pushing to {repo} ...")
-    push_dataset(ds, repo)
-    log.info("done")
+    log.info("stage 1 main() done")
 
 
 if __name__ == "__main__":

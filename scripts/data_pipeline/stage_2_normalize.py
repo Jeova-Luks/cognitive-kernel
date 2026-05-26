@@ -1,6 +1,8 @@
 """Stage 2: Normalize Unicode, strip HTML, drop docs outside length bounds.
 
-Reads ck-stage-1-raw, writes ck-stage-2-normalized.
+Reads the 5 per-category datasets produced by Stage 1
+(ck-stage-1-raw-{category}), concatenates them, and writes a single
+ck-stage-2-normalized.
 
 Pure functions are unit-tested. The main() orchestration runs on Kaggle.
 """
@@ -9,10 +11,10 @@ import argparse
 import unicodedata
 
 from bs4 import BeautifulSoup
-from datasets import Dataset
+from datasets import concatenate_datasets
 
 from .common import (
-    DocRecord, docs_to_dataset, pull_dataset, push_dataset, stage_repo, get_logger,
+    pull_dataset, push_dataset, stage_repo, get_logger, TARGETS,
 )
 
 log = get_logger("stage2")
@@ -59,16 +61,28 @@ def normalize_doc(rec: dict) -> dict | None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input-repo",
-                        default=stage_repo(1, "raw"))
     parser.add_argument("--output-repo",
                         default=stage_repo(2, "normalized"))
     parser.add_argument("--num-proc", type=int, default=4)
     args = parser.parse_args()
 
-    log.info(f"pulling {args.input_repo} ...")
-    ds = pull_dataset(args.input_repo)
-    log.info(f"loaded {len(ds):,} docs")
+    # Read each per-category Stage 1 output and concatenate
+    parts = []
+    for cat in TARGETS:
+        repo = stage_repo(1, f"raw-{cat}")
+        try:
+            ds = pull_dataset(repo)
+            log.info(f"loaded {repo}: {len(ds):,} docs")
+            parts.append(ds)
+        except Exception as e:
+            log.warning(f"skipping {repo}: {type(e).__name__}: {e}")
+
+    if not parts:
+        raise RuntimeError("no Stage 1 per-category datasets found; "
+                           "run stage_1_download first")
+
+    ds = concatenate_datasets(parts)
+    log.info(f"concatenated total: {len(ds):,} docs")
 
     log.info("normalizing ...")
     normalized = ds.map(

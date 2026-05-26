@@ -9,11 +9,11 @@ from __future__ import annotations
 import logging
 import os
 from dataclasses import dataclass
-from pathlib import Path
+from functools import lru_cache
 from typing import Iterable
 
 from datasets import Dataset, load_dataset
-from huggingface_hub import HfApi
+from huggingface_hub import dataset_info, whoami
 
 # Mix C — Generalist with focus. Tokens per category (target, billions).
 TARGETS = {
@@ -25,12 +25,39 @@ TARGETS = {
 }
 TOTAL_TARGET = sum(TARGETS.values())   # 10.0e9
 
-HF_USER = os.environ.get("HF_USER", "Jeova-Luks")
 STAGE_REPO_PREFIX = "ck-stage"
 
+
+@lru_cache(maxsize=1)
+def get_hf_user() -> str:
+    """Resolve the HuggingFace username.
+
+    Priority:
+    1. HF_USER env var (manual override)
+    2. huggingface_hub.whoami() (asks HF directly using login token)
+
+    Caching ensures we only call whoami() once per process.
+    """
+    explicit = os.environ.get("HF_USER")
+    if explicit:
+        return explicit
+    info = whoami()
+    return info["name"]
+
+
 def stage_repo(stage: int, suffix: str) -> str:
-    """e.g. stage_repo(3, 'filtered') -> 'Jeova-Luks/ck-stage-3-filtered'."""
-    return f"{HF_USER}/{STAGE_REPO_PREFIX}-{stage}-{suffix}"
+    """e.g. stage_repo(1, 'raw-python') -> '<user>/ck-stage-1-raw-python'."""
+    return f"{get_hf_user()}/{STAGE_REPO_PREFIX}-{stage}-{suffix}"
+
+
+def dataset_exists(repo_id: str) -> bool:
+    """Check if a HF dataset repo exists (for resume logic)."""
+    try:
+        dataset_info(repo_id)
+        return True
+    except Exception:
+        return False
+
 
 def get_logger(name: str) -> logging.Logger:
     logging.basicConfig(
@@ -40,13 +67,16 @@ def get_logger(name: str) -> logging.Logger:
     )
     return logging.getLogger(name)
 
+
 def push_dataset(ds: Dataset, repo: str, private: bool = True) -> None:
     """Push a Dataset to HF Hub under our naming convention."""
     ds.push_to_hub(repo, private=private)
 
+
 def pull_dataset(repo: str, split: str = "train") -> Dataset:
     """Pull a Dataset from HF Hub by repo name."""
     return load_dataset(repo, split=split)
+
 
 @dataclass
 class DocRecord:
@@ -57,6 +87,7 @@ class DocRecord:
     doc_id: str         # unique id per doc; we generate sequential ones
     n_chars: int        # convenience: len(text)
     metadata: dict | None = None   # optional source-specific fields
+
 
 def docs_to_dataset(docs: Iterable[DocRecord]) -> Dataset:
     """Materialize an iterable of DocRecord into a HF Dataset."""
