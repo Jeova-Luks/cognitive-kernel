@@ -25,3 +25,6 @@ langdetect>=1.0.9
 beautifulsoup4>=4.12.0
 pyarrow>=14.0.0
 tqdm>=4.66.0
+
+# Cognitive Units MVP (LLM distillation experiment)
+anthropic>=0.40.0
