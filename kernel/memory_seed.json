@@ -1,0 +1,31 @@
+{
+  "factual": [
+    "There are 60 minutes in an hour and 60 seconds in a minute.",
+    "There are 24 hours in a day, 7 days in a week and 52 weeks in a year.",
+    "A year has 12 months and 365 days (366 in a leap year).",
+    "A dozen is 12 items; half a dozen is 6.",
+    "There are 100 cents in a dollar; a quarter is 25 cents, a dime 10 cents, a nickel 5 cents.",
+    "There are 12 inches in a foot, 3 feet in a yard and 5280 feet in a mile.",
+    "There are 16 ounces in a pound and 1000 grams in a kilogram.",
+    "There are 4 quarts in a gallon and 1000 milliliters in a liter.",
+    "A week has 5 weekdays and 2 weekend days."
+  ],
+  "procedural": [
+    "Percent of a quantity: part = whole * percent / 100.",
+    "Increase by p percent: new = old * (1 + p / 100). Decrease by p percent: new = old * (1 - p / 100).",
+    "Profit = revenue - cost; revenue = price per unit * units sold.",
+    "Average = sum of the values / number of values.",
+    "Rate problems: distance = speed * time; total work = rate * time.",
+    "'k times as many as x' means k * x; 'k more than x' means x + k; 'k fewer than x' means x - k.",
+    "Half of x is x / 2; a third of x is x / 3; a fraction a/b of x is x * a / b.",
+    "To split a total evenly into groups: per group = total / groups; leftover = total % groups.",
+    "Total cost of several items = sum of (quantity * unit price) for each item.",
+    "Work backwards: if after an operation the result is known, apply the inverse operations in reverse order."
+  ],
+  "causal": [
+    "Buying more items at a fixed unit price increases the total cost proportionally.",
+    "If something is given away, eaten, sold or lost, the remaining amount decreases by that quantity.",
+    "Earning money or receiving items increases the amount a person has.",
+    "A discount reduces the price paid; tax or a tip increases the amount paid."
+  ]
+}
