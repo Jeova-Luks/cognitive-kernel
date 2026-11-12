@@ -500,3 +500,27 @@ def test_default_pipeline_disagreement_uses_the_rule_and_is_low_confidence():
     res = kernel.solve("Ana has 3 apples and buys 4 more. How many apples?")
     assert res.program_answer == 7 and res.answer == 9 and res.confidence == "low"
     assert res.arbitration.source == "rule:cot" and not llm.referee_prompts and not res.confirmed
+
+
+# ------------------------------------------------------------------------ audit
+
+def test_audit_redoes_arithmetic_and_carries_exact_values_forward():
+    from kernel.audit import audited_answer, equations
+    text = ("She sells 4,238,123 x 3 = 12,714,360 eggs.\n"       # false: it is 12714369
+            "Then 12714360 - 9 = 12714351 are left.\n#### 12714351")
+    assert [e[2] for e in equations(text)] == [12714369, 12714360]
+    assert audited_answer(text, 12714351.0) == 12714360
+    assert audited_answer("There are 5 apples. #### 5", 5.0) is None
+    assert audited_answer("Half is 10 / 4 = 2.5, and 10 / 0 = 3", 2.5) == 2.5
+
+
+def test_arbiter_audit_confirms_a_program_that_matches_the_recomputed_cot():
+    problem = "Ana has 3 apples and buys 4816523 more."
+    cot = CotResult("3 + 4 = 8\n#### 8", 8.0, 0.0, 1)                 # right reading, wrong sum
+    plain = Arbiter(RefereeLLM("unused")).decide(problem, _kernel_result(GOOD), cot)
+    assert (plain.source, plain.confidence) == ("rule:cdsl", "low")
+    audited = Arbiter(RefereeLLM("unused"), audit=True).decide(problem, _kernel_result(GOOD), cot)
+    assert (audited.answer, audited.source, audited.confidence) == (7, "agree:audited", "high")
+    other = CotResult("3 * 4 = 12\n#### 12", 12.0, 0.0, 1)             # a different reading
+    assert Arbiter(RefereeLLM("unused"), audit=True).decide(
+        problem, _kernel_result(GOOD), other).source == "rule:cdsl"
