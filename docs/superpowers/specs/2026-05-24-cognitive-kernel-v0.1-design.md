@@ -1,21 +1,21 @@
-# Cognitive Kernel v0.1 — Design Document
+# Cognitive Kernel v0.1 - Design Document
 
-**Status:** DRAFT — awaiting user review
+**Status:** DRAFT - awaiting user review
 **Date:** 2026-05-24
-**Author (vision):** User (Brazilian undergraduate, federal university AI student) — articulated during brainstorming. *Replace with your name when publishing.*
+**Author (vision):** User (Brazilian undergraduate, federal university AI student) - articulated during brainstorming. *Replace with your name when publishing.*
 **Author (technical scaffolding):** drafted with Claude Opus 4.7
 **Target environment:** Free Colab/Kaggle + 5 TB Google Drive + local PC as editor
-**Estimated timeline:** 5–6 months solo, ~10–15 h/week
+**Estimated timeline:** 5-6 months solo, ~10-15 h/week
 
 ---
 
-## 1. Vision (multi-year program — context, not scope)
+## 1. Vision (multi-year program - context, not scope)
 
-This project is the **first concrete contribution** to a multi-year personal research program — informally named **Cognitive Kernel** — whose long-term thesis is:
+This project is the **first concrete contribution** to a multi-year personal research program - informally named **Cognitive Kernel** - whose long-term thesis is:
 
-> Parameter count measures internal raw capacity, but **does not measure cognitive efficiency of a system that knows how to convert ambiguous natural language into verifiable state**. Comparing brains alone — ignoring paper, calculator, language, laboratory, code, tools and feedback — has never been a fair measure of practical intelligence. The Cognitive Kernel applies this idea to small language models, treating them as **controllers of an externalized cognitive architecture** rather than as encyclopedias compressed into weights.
+> Parameter count measures internal raw capacity, but **does not measure cognitive efficiency of a system that knows how to convert ambiguous natural language into verifiable state**. Comparing brains alone - ignoring paper, calculator, language, laboratory, code, tools and feedback - has never been a fair measure of practical intelligence. The Cognitive Kernel applies this idea to small language models, treating them as **controllers of an externalized cognitive architecture** rather than as encyclopedias compressed into weights.
 
-The full Cognitive Kernel vision includes, at minimum, the following principles (each backed by active research in 2024–2026):
+The full Cognitive Kernel vision includes, at minimum, the following principles (each backed by active research in 2024-2026):
 
 - **Externalized memory of multiple semantic types** (factual, procedural, episodic, causal, structural, error history) instead of monolithic parametric memory.
 - **Explicit planning and decomposition** before generation.
@@ -24,9 +24,9 @@ The full Cognitive Kernel vision includes, at minimum, the following principles 
 - **Internal simulable model of the problem** rather than text-only reasoning.
 - **Native verification** (self-critique, tool execution, contradiction search).
 - **Continual learning via memory updates** rather than retraining all weights.
-- **Intermediate executable representation** (NL → DSL/AST/graph → execution → text) — *structure as source of truth, text as projection*.
+- **Intermediate executable representation** (NL → DSL/AST/graph → execution → text) - *structure as source of truth, text as projection*.
 
-**The full system is a research program likely spanning 5–10 years and multiple people.** This document scopes a single tractable first project that establishes a foundation and tests the **single sharpest sub-claim** of the program empirically.
+**The full system is a research program likely spanning 5-10 years and multiple people.** This document scopes a single tractable first project that establishes a foundation and tests the **single sharpest sub-claim** of the program empirically.
 
 ---
 
@@ -34,15 +34,15 @@ The full Cognitive Kernel vision includes, at minimum, the following principles 
 
 ### What this project IS
 
-A **vertical slice** of the Cognitive Kernel — every architectural component exists in **minimum viable form**, end-to-end, runnable — combined with **deep development of one component** (the **Compiler NL → CDSL**, see §5) which becomes the empirical centerpiece and the primary publishable contribution.
+A **vertical slice** of the Cognitive Kernel - every architectural component exists in **minimum viable form**, end-to-end, runnable - combined with **deep development of one component** (the **Compiler NL → CDSL**, see §5) which becomes the empirical centerpiece and the primary publishable contribution.
 
 ### What this project is NOT
 
 - ❌ NOT a general-purpose conversational LLM.
 - ❌ NOT a claim that a small model is "more intelligent" than GPT-4 / Claude / Gemini in any general sense. **The frontier trillion-parameter models dominate in world knowledge, fluency, multilingualism, creativity, breadth of transfer, and robustness, and we make no contrary claim.**
-- ❌ NOT a fine-tune of an existing open-weights model (e.g. Llama, Qwen, Mistral). The base model is trained from scratch — this is a methodological commitment to keep the experiment "pure" and the contribution clearly architectural.
+- ❌ NOT a fine-tune of an existing open-weights model (e.g. Llama, Qwen, Mistral). The base model is trained from scratch - this is a methodological commitment to keep the experiment "pure" and the contribution clearly architectural.
 - ❌ NOT a claim resolved by "we added tools to a small model". Adding tools to a small model is well established. The contribution is the **intermediate executable representation** (the CDSL) that makes verification cheap and correction structured; tools are downstream of that representation, not the headline.
-- ❌ NOT the full Cognitive Kernel. The other 5–6 components beyond the Compiler exist in "cru" form only and are explicitly out of scope for deep optimization in this project.
+- ❌ NOT the full Cognitive Kernel. The other 5-6 components beyond the Compiler exist in "cru" form only and are explicitly out of scope for deep optimization in this project.
 
 ### Domain of demonstration
 
@@ -115,11 +115,11 @@ This is the framing used in the abstract and throughout the project's communicat
 | 5 | Verifier | cru | ~300 | new |
 | 6 | Reviser | cru | ~150 | new |
 | 7 | Episode log | cru | ~150 | new |
-| — | Eval harness | minimal | ~400 | new |
-| — | Notebook / training scripts | — | ~500 | new |
-| — | Web demo (existing UI) | refactor | ~150 modifications | ✅ `server.py` + `static/` |
+| - | Eval harness | minimal | ~400 | new |
+| - | Notebook / training scripts | - | ~500 | new |
+| - | Web demo (existing UI) | refactor | ~150 modifications | ✅ `server.py` + `static/` |
 
-**Total new code: ~4000 LOC** over 5–6 months. Existing `model.py`, `tokenizer.py`, `trainer.py`, `server.py` are extended, not replaced.
+**Total new code: ~4000 LOC** over 5-6 months. Existing `model.py`, `tokenizer.py`, `trainer.py`, `server.py` are extended, not replaced.
 
 ---
 
@@ -129,7 +129,7 @@ This is the framing used in the abstract and throughout the project's communicat
 
 Reuse [model.py](../../../model.py) as-is (modern LLaMA-style: RMSNorm + RoPE + SwiGLU + weight-tied embedding) with 4 surgical modifications:
 
-1. **Flash Attention**: replace manual attention computation (lines 112–121) with `F.scaled_dot_product_attention(q, k, v, is_causal=True)`. Mathematically identical; ~40% VRAM savings on T4 / A100.
+1. **Flash Attention**: replace manual attention computation (lines 112-121) with `F.scaled_dot_product_attention(q, k, v, is_causal=True)`. Mathematically identical; ~40% VRAM savings on T4 / A100.
 2. **Optional Grouped-Query Attention (GQA)**: parameterizable `n_kv_head < n_head`, default `n_kv_head = n_head // 4`. Reduces KV cache memory in inference (relevant for the verifier loop with many rollouts).
 3. **Gradient checkpointing hook**: wrap each `TransformerBlock` forward in `torch.utils.checkpoint.checkpoint` when `config.grad_checkpoint = True`.
 4. **`<|endoftext|>`, `<|cdsl_start|>`, `<|cdsl_end|>`, `<|tool_call|>`, `<|tool_result|>`** added as special tokens for structured outputs.
@@ -157,7 +157,7 @@ Hybrid strategy:
 
 ---
 
-## 5. The Cognitive DSL (CDSL) — the deep component
+## 5. The Cognitive DSL (CDSL) - the deep component
 
 This is the project's empirical centerpiece and primary publishable contribution. **The thesis-testing artifact.**
 
@@ -165,12 +165,12 @@ This is the project's empirical centerpiece and primary publishable contribution
 
 CDSL is a small, typed, functional-with-effects intermediate language that the base model **emits** in place of natural-language chains-of-thought. Programs in CDSL are:
 
-- **Deterministic when executed** — no randomness in the language itself; randomness only in the *generation* by the model.
-- **Verifiable by construction** — every primitive has explicit pre/post conditions that the verifier can check.
-- **Composable** — programs can call other programs (recursion bounded by depth limit).
-- **Reflectable** — the program AST is itself first-class data, so the reviser can edit a generated program without regenerating from scratch.
+- **Deterministic when executed** - no randomness in the language itself; randomness only in the *generation* by the model.
+- **Verifiable by construction** - every primitive has explicit pre/post conditions that the verifier can check.
+- **Composable** - programs can call other programs (recursion bounded by depth limit).
+- **Reflectable** - the program AST is itself first-class data, so the reviser can edit a generated program without regenerating from scratch.
 
-### 5.2 Primitives (v0.1 — to be ablated, see §7)
+### 5.2 Primitives (v0.1 - to be ablated, see §7)
 
 ```
 (program  :type <category> <body>)
@@ -216,27 +216,27 @@ Runtime executes deterministically. Verifier confirms `count > 0` and that the v
 
 ### 5.4 Compiler training pipeline (the deep work)
 
-**Stage 1 — Pre-train base model** (no CDSL yet)
+**Stage 1 - Pre-train base model** (no CDSL yet)
 - Pre-train the 100 M base on a curated mix focused on Python + math + structured text.
 - Token budget: ~5 B tokens (Chinchilla-relaxed for 100 M).
 - Mix: 35% Python (The Stack v2, filtered), 20% math/reasoning (GSM8K-expanded + MATH + synthetic), 20% English technical prose, 15% Lisp/Scheme/sexp-style text (so model gets used to bracket-heavy syntax), 10% misc.
 - Output: a coherent base model that can predict tokens reasonably in code + math contexts but knows nothing about CDSL specifically.
 
-**Stage 2 — Hand-bootstrap CDSL** (supervised)
+**Stage 2 - Hand-bootstrap CDSL** (supervised)
 - Construct ~5 000 hand-curated pairs `(problem_NL, program_CDSL)` semi-automatically:
   - Take problems from GSM8K, MBPP, HumanEval, ARC.
   - Use a free-tier API (Gemini, OpenRouter free models) as a **drafting assistant** to propose CDSL programs from NL problems.
   - **Human-curate** the drafts (manual quality control on at least 1 000; automated execution-based filter on the rest).
-- Fine-tune the base model on this set with standard supervised loss. Output: a model that can emit syntactically valid CDSL programs ~30–60% of the time and semantically correct programs ~10–25% of the time on held-out problems.
+- Fine-tune the base model on this set with standard supervised loss. Output: a model that can emit syntactically valid CDSL programs ~30-60% of the time and semantically correct programs ~10-25% of the time on held-out problems.
 
-**Stage 3 — Self-bootstrap by execution feedback** (the AlphaZero-style loop)
+**Stage 3 - Self-bootstrap by execution feedback** (the AlphaZero-style loop)
 - For each problem in a large unlabeled pool: model emits N candidate programs (N = 64), runtime executes all, verifier filters those that pass.
 - Successful programs → new training data.
 - Re-train (fine-tune) the model on the union of original Stage-2 data and harvested successes.
 - Iterate ~10 rounds.
 - Risks (with mitigations) explicitly tracked: difficulty collapse, mode collapse, regression on original distribution. See §10.
 
-**Stage 4 — DSL expressiveness ablation** (the headline experiment)
+**Stage 4 - DSL expressiveness ablation** (the headline experiment)
 - Train three compiler variants on three DSL sizes:
   - **CDSL-mini**: 8 primitives (minimal)
   - **CDSL-mid**: 15 primitives (baseline)
@@ -253,12 +253,12 @@ Each gets a **minimum-viable** implementation. Out of scope for deep optimizatio
 ### 6.1 Classifier (cru)
 Single linear probe on top of frozen base model embeddings of the input. 4 classes: `math`, `code`, `logic`, `mixed`. Trained on ~500 hand-labeled examples from benchmarks. Used to bias the prompt template passed to the compiler.
 
-### 6.2 Memory — typed (cru)
+### 6.2 Memory - typed (cru)
 4 banks of FAISS vector indices over `sentence-transformers/all-MiniLM-L6-v2` embeddings (frozen, ~22 M parameters, used only for retrieval):
-- **factual** — populated with key facts extracted from base-model pretraining corpus (snippets of fact-rich text).
-- **procedural** — populated with "how-to" snippets (idioms, recipes, algorithmic patterns).
-- **causal** — populated with cause-effect statements mined heuristically from text.
-- **episodic** — initially empty; populated by component 7 as the system runs.
+- **factual** - populated with key facts extracted from base-model pretraining corpus (snippets of fact-rich text).
+- **procedural** - populated with "how-to" snippets (idioms, recipes, algorithmic patterns).
+- **causal** - populated with cause-effect statements mined heuristically from text.
+- **episodic** - initially empty; populated by component 7 as the system runs.
 
 CDSL `(lookup <type> <query>)` calls the appropriate index. Returns top-k snippets joined into the compiler's context.
 
@@ -272,10 +272,10 @@ A small Python interpreter for CDSL. Each primitive maps to a Python implementat
 
 ### 6.4 Verifier (cru)
 Set of deterministic checkers:
-- `exec_passes(program, test_cases)` — runs program against test cases.
-- `output_matches(actual, expected, op)` — equality with tolerance.
-- `type_correct(value, type)` — runtime type check.
-- `constraint_satisfied(assertion)` — eval boolean assertion.
+- `exec_passes(program, test_cases)` - runs program against test cases.
+- `output_matches(actual, expected, op)` - equality with tolerance.
+- `type_correct(value, type)` - runtime type check.
+- `constraint_satisfied(assertion)` - eval boolean assertion.
 
 Returns `(passed: bool, error_trace: str | None)`. The error trace is used by the reviser to construct a corrective prompt.
 
@@ -324,9 +324,9 @@ Data lives on Google Drive. Pre-processing pipeline (dedupe → filter → token
 - **Code editor:** local PC (228 MB free on C: is enough for editing + git; everything heavy lives in Drive or Colab).
 - **Training:** Colab Free (T4, primary) + Kaggle (P100, backup + parallel eval) + Lightning AI Studio Free (prototyping).
 - **Persistence:** Google Drive 5 TB.
-  - `MyDrive/cognitive-kernel/checkpoints/` — model checkpoints (2–3 GB each, keep last 3 + best).
-  - `MyDrive/cognitive-kernel/data/` — preprocessed shards.
-  - `MyDrive/cognitive-kernel/logs/` — training logs.
+  - `MyDrive/cognitive-kernel/checkpoints/` - model checkpoints (2-3 GB each, keep last 3 + best).
+  - `MyDrive/cognitive-kernel/data/` - preprocessed shards.
+  - `MyDrive/cognitive-kernel/logs/` - training logs.
 - **Cross-session resume:** trainer saves complete state (weights + optimizer + scheduler + RNG + step) every 500 steps. Next session detects and resumes bit-identically.
 - **Live monitoring:** existing [server.py](../../../server.py) runs locally; Colab notebook opens an ngrok / Cloudflare Tunnel to its training-side WebSocket; local browser connects.
 - **Metrics:** Weights & Biases (free tier for academic use) for all standard logging.
@@ -341,7 +341,7 @@ Data lives on Google Drive. Pre-processing pipeline (dedupe → filter → token
 
 ### 7.6 Optimizer
 
-AdamW as default (proven stable). **Muon optimizer** (Keller Jordan, 2024) as opt-in flag for 2-D matrices (attention + MLP weights), keeping AdamW for embeddings and normalizations. Expected ~25–35 % wall-clock speed-up if it works on this scale; falls back to AdamW on instability.
+AdamW as default (proven stable). **Muon optimizer** (Keller Jordan, 2024) as opt-in flag for 2-D matrices (attention + MLP weights), keeping AdamW for embeddings and normalizations. Expected ~25-35 % wall-clock speed-up if it works on this scale; falls back to AdamW on instability.
 
 ---
 
@@ -354,7 +354,7 @@ AdamW as default (proven stable). **Muon optimizer** (Keller Jordan, 2024) as op
 | **HumanEval** (pass@1, pass@10 with N=64) | Python code generation correctness | Primary code metric, most-cited |
 | **MBPP** (pass@1) | Basic Python correctness | Secondary, broader Python distribution |
 | **GSM8K** (accuracy with N=64 rollouts) | Grade-school math reasoning | Primary math metric |
-| **MATH** subset (level 1–3) | Harder math | Stretch goal |
+| **MATH** subset (level 1-3) | Harder math | Stretch goal |
 | **ARC-AGI** small subset | Abstract reasoning | Tests transfer, low expectations |
 | **Custom CDSL parse rate** | % of emitted programs that parse | Compiler health |
 | **Custom CDSL exec rate** | % that execute without error | Pipeline health |
@@ -364,9 +364,9 @@ AdamW as default (proven stable). **Muon optimizer** (Keller Jordan, 2024) as op
 
 For every benchmark, report **at least three baselines** alongside the Cognitive Kernel:
 
-1. **CoT vanilla on base model** — same 100 M model, plain chain-of-thought, no CDSL.
-2. **PoT (Program-of-Thought) on base model** — same model, emits Python directly (no CDSL).
-3. **CoT on GPT-3.5 / GPT-4o / Claude Haiku** (via free or cheap API quotas) — to anchor scale comparison.
+1. **CoT vanilla on base model** - same 100 M model, plain chain-of-thought, no CDSL.
+2. **PoT (Program-of-Thought) on base model** - same model, emits Python directly (no CDSL).
+3. **CoT on GPT-3.5 / GPT-4o / Claude Haiku** (via free or cheap API quotas) - to anchor scale comparison.
 
 The headline plots compare **(base model + CDSL pipeline)** to **(GPT-3.5/4o vanilla CoT)**.
 
@@ -409,15 +409,15 @@ The point throughout: **claims should be defensible against a hostile reviewer i
 
 | Phase | Weeks | Goal | Definition of done |
 |---|---|---|---|
-| **Phase 0 — Foundation hardening** | 1–2 | Make trainer survive Colab + add mixed precision + checkpoint/resume + wandb + Drive integration | Train [model.py](../../../model.py) at 100 M for 1 000 steps across 3 simulated Colab disconnects with bit-identical resume |
-| **Phase 1 — Pre-train base 100 M** | 3–6 | Train base model from scratch on the data mix | Base model evals: perplexity ≤ 4.0 on held-out Python; coherent generation in code + math contexts |
-| **Phase 2 — Vertical slice (cru, all 7 components)** | 7–10 | Build every Cognitive Kernel component in minimal form; end-to-end runs | Demo notebook: input GSM8K problem → 7-stage pipeline → answer (any quality) |
-| **Phase 3 — Compiler deep dive: Stage 2 supervised bootstrap** | 11–14 | Hand-bootstrap dataset of ~5 000 pairs; fine-tune compiler | Parse rate ≥ 50 %, exec rate ≥ 20 % on held-out problems |
-| **Phase 4 — Compiler deep dive: Stage 3 self-bootstrap** | 15–20 | 10 rounds of self-improvement | Exec rate doubles from Stage 2; no mode collapse |
-| **Phase 5 — DSL ablation experiments** | 21–22 | Train 8/15/25-primitive variants | Three trained variants + comparative table |
-| **Phase 6 — Full evaluation and writeup** | 23–24 | Run all benchmarks; write technical report | Report (~15–25 pages) + public GitHub repo + Hugging Face Spaces demo |
+| **Phase 0 - Foundation hardening** | 1-2 | Make trainer survive Colab + add mixed precision + checkpoint/resume + wandb + Drive integration | Train [model.py](../../../model.py) at 100 M for 1 000 steps across 3 simulated Colab disconnects with bit-identical resume |
+| **Phase 1 - Pre-train base 100 M** | 3-6 | Train base model from scratch on the data mix | Base model evals: perplexity ≤ 4.0 on held-out Python; coherent generation in code + math contexts |
+| **Phase 2 - Vertical slice (cru, all 7 components)** | 7-10 | Build every Cognitive Kernel component in minimal form; end-to-end runs | Demo notebook: input GSM8K problem → 7-stage pipeline → answer (any quality) |
+| **Phase 3 - Compiler deep dive: Stage 2 supervised bootstrap** | 11-14 | Hand-bootstrap dataset of ~5 000 pairs; fine-tune compiler | Parse rate ≥ 50 %, exec rate ≥ 20 % on held-out problems |
+| **Phase 4 - Compiler deep dive: Stage 3 self-bootstrap** | 15-20 | 10 rounds of self-improvement | Exec rate doubles from Stage 2; no mode collapse |
+| **Phase 5 - DSL ablation experiments** | 21-22 | Train 8/15/25-primitive variants | Three trained variants + comparative table |
+| **Phase 6 - Full evaluation and writeup** | 23-24 | Run all benchmarks; write technical report | Report (~15-25 pages) + public GitHub repo + Hugging Face Spaces demo |
 
-**Total: ~24 weeks (~6 months) at 10–15 h/week.**
+**Total: ~24 weeks (~6 months) at 10-15 h/week.**
 
 ---
 
@@ -426,13 +426,13 @@ The point throughout: **claims should be defensible against a hostile reviewer i
 | Risk | Likelihood | Severity | Mitigation |
 |---|---|---|---|
 | **Self-bootstrap collapses to easy problems** (compiler-generator generates only trivial programs because they succeed easily) | 40 % | High | Explicit difficulty-stratified curriculum in self-bootstrap pool; require difficulty diversification per round; track and reject if entropy of program AST shapes drops below threshold |
-| **Base model too weak after 5 B tokens** (100 M is small; not enough capacity to even emit syntactically valid CDSL reliably) | 30 % | High | Stage 2 hand-bootstrap mitigates; if parse rate < 30 % after Stage 2 → escalate base model to 175–200 M (3 weeks added, fits on T4 with stricter optimizations) |
+| **Base model too weak after 5 B tokens** (100 M is small; not enough capacity to even emit syntactically valid CDSL reliably) | 30 % | High | Stage 2 hand-bootstrap mitigates; if parse rate < 30 % after Stage 2 → escalate base model to 175-200 M (3 weeks added, fits on T4 with stricter optimizations) |
 | **Self-bootstrap diverges / mode collapse** (model converges to one program template that "always passes" trivially) | 25 % | Medium | Keep original Stage-2 distribution as anchor in every round; diversity penalty in selection of harvested data |
 | **DSL design needs iteration** (initial 15 primitives turn out to be wrong; some are dead weight, others are missing) | 70 % | Low | Iteration is expected and planned. Ablation in Stage 4 IS the iteration framed as an experiment |
 | **Free-tier compute gives out** (Colab Free repeatedly disconnects mid-session; Kaggle quota exhausted) | 25 % | Medium | Lightning AI Studio (third backup); strategically schedule heavy runs for late-night UTC (Colab availability higher); checkpoint every 500 steps means lost work is bounded |
 | **Free API quota for synthetic data exhausted** (Gemini free, OpenRouter free run out during Stage 2 drafting) | 50 % | Low | Spread across multiple free accounts (within ToS); use only as drafting aid (human curation is mandatory anyway); fall back to fully manual curation for smaller dataset |
 | **Drive bandwidth bottleneck during training data load** | 15 % | Low | Pre-shard data into ~256 MB chunks; sequential streaming is bandwidth-OK for Drive (this only fails for random small reads, which our DataLoader doesn't do) |
-| **Project loses momentum / pivots midway** | 50 % | (Personal — meta-risk) | Each phase produces a self-contained artifact: even abandoning at end of Phase 1 leaves a usable 100 M base model + lessons. Phase boundaries are natural pause points |
+| **Project loses momentum / pivots midway** | 50 % | (Personal - meta-risk) | Each phase produces a self-contained artifact: even abandoning at end of Phase 1 leaves a usable 100 M base model + lessons. Phase boundaries are natural pause points |
 
 ---
 
@@ -517,7 +517,7 @@ Each of these is candidate material for the **next** project in the program (Cog
 
 Papers, blog posts, and systems the design draws from. Not exhaustive; will grow during execution.
 
-- LeCun, Y. (2022–2025). *A Path Towards Autonomous Machine Intelligence* (JEPA position paper and subsequent talks).
+- LeCun, Y. (2022-2025). *A Path Towards Autonomous Machine Intelligence* (JEPA position paper and subsequent talks).
 - Kojima et al. (2022). *Large Language Models are Zero-Shot Reasoners* (CoT baseline).
 - Chen et al. (2022). *Program of Thoughts Prompting* (PoT baseline).
 - Yao et al. (2023). *ReAct: Synergizing Reasoning and Acting* (tool-augmented baseline).

@@ -1,11 +1,11 @@
-# Phase 1A — Data Pipeline Design Document
+# Phase 1A - Data Pipeline Design Document
 
-**Status:** DRAFT — awaiting user review
+**Status:** DRAFT - awaiting user review
 **Date:** 2026-05-25
 **Author:** User (Brazilian undergraduate, federal university AI student). *Replace with your name when publishing.*
-**Parent project:** [Cognitive Kernel v0.1](2026-05-24-cognitive-kernel-v0.1-design.md) — this is the data half of Phase 1.
-**Predecessor:** [Phase 0 — Foundation Hardening](../plans/2026-05-24-phase-0-foundation-hardening.md) (complete, tag `phase-0-complete`)
-**Successor:** Phase 1B — Pre-training the 100M base model (separate spec, to be written after 1A complete)
+**Parent project:** [Cognitive Kernel v0.1](2026-05-24-cognitive-kernel-v0.1-design.md) - this is the data half of Phase 1.
+**Predecessor:** [Phase 0 - Foundation Hardening](../plans/2026-05-24-phase-0-foundation-hardening.md) (complete, tag `phase-0-complete`)
+**Successor:** Phase 1B - Pre-training the 100M base model (separate spec, to be written after 1A complete)
 **Target environment:** GitHub Codespaces (dev) + Kaggle Notebooks (heavy lift) + HuggingFace Datasets (intermediate storage) + Google Drive 5 TB (final shards)
 **Estimated timeline:** 1-2 weeks calendar, ~30-50 h hands-on
 
@@ -54,14 +54,14 @@ Each stage is checkpoint-able via HuggingFace Datasets (private), so a failed Ka
 ### Token budget and mix (decided)
 
 - **Total:** ~10 billion tokens (Phi-style 100:1 ratio for the 100M base model)
-- **Mix C — Generalist with focus:**
+- **Mix C - Generalist with focus:**
   - 30% Python idiomatic code (~3.0 B)
   - 20% Math and step-by-step reasoning (~2.0 B)
   - 30% English technical prose (~3.0 B)
   - 10% S-expressions / structured text (~1.0 B)
   - 10% Portuguese (~1.0 B)
 
-The rationale for skewing toward English prose (30%) over Python (30%) is that the Cognitive Kernel's bottleneck in Phase 3 will be natural-language understanding of inputs to compile into CDSL — not code generation per se. A model that reads English well is more valuable than one that writes more Python.
+The rationale for skewing toward English prose (30%) over Python (30%) is that the Cognitive Kernel's bottleneck in Phase 3 will be natural-language understanding of inputs to compile into CDSL - not code generation per se. A model that reads English well is more valuable than one that writes more Python.
 
 ### Central claim (carry-over from parent spec)
 
@@ -71,7 +71,7 @@ This data pipeline does not, by itself, validate any thesis. It is the necessary
 
 ---
 
-## 3. Architecture — Seven-Stage Pipeline
+## 3. Architecture - Seven-Stage Pipeline
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -143,7 +143,7 @@ This data pipeline does not, by itself, validate any thesis. It is the necessary
 
 ## 4. Data sources (specific HuggingFace datasets)
 
-### Python — 3.0 B target
+### Python - 3.0 B target
 
 | Dataset | HuggingFace ID | Raw size | Take |
 |---|---|---|---|
@@ -153,7 +153,7 @@ This data pipeline does not, by itself, validate any thesis. It is the necessary
 
 Extra filter for The Stack: `stars >= 5`, `lines >= 10`, drop docs containing markers of AI-generated code (`# AI-generated`, `# Copilot`, etc.).
 
-### Math — 2.0 B target
+### Math - 2.0 B target
 
 | Dataset | HuggingFace ID | Take |
 |---|---|---|
@@ -161,14 +161,14 @@ Extra filter for The Stack: `stars >= 5`, `lines >= 10`, drop docs containing ma
 | OpenMathInstruct | `nvidia/OpenMathInstruct-1` | 0.5 B |
 | GSM8K + MetaMath augmentations | `gsm8k` + `meta-math/MetaMathQA` | 0.3 B |
 
-### English technical prose — 3.0 B target
+### English technical prose - 3.0 B target
 
 | Dataset | HuggingFace ID | Take |
 |---|---|---|
 | FineWeb-Edu (already classifier-filtered) | `HuggingFaceFW/fineweb-edu` (10 BT sample) | 2.5 B |
 | Wikipedia STEM articles | `wikimedia/wikipedia` (en, category-filtered) | 0.5 B |
 
-### S-expressions / structured — 1.0 B target
+### S-expressions / structured - 1.0 B target
 
 | Dataset | HuggingFace ID | Take |
 |---|---|---|
@@ -177,7 +177,7 @@ Extra filter for The Stack: `stars >= 5`, `lines >= 10`, drop docs containing ma
 | Lean theorem prover workbook | `internlm/Lean-Workbook` | 0.05 B |
 | Curated JSON config (high-signal subset) | `bigcode/the-stack-v2-dedup` (lang=json, filtered) | 0.25 B |
 
-### Portuguese — 1.0 B target
+### Portuguese - 1.0 B target
 
 | Dataset | HuggingFace ID | Take |
 |---|---|---|
@@ -252,13 +252,13 @@ Add `tests/test_tokenizer_fast.py` with:
 
 1. **Roundtrip:** encode → decode on ~100 strings per category equals the original
 2. **Special tokens:** the five CDSL markers tokenize as single token IDs in the 60 000 band as expected by the model config
-3. **Compression ratio:** measure bytes/token on a held-out validation slice. Target ~3.5-4.0 on Python. If >5.0, the BPE training sample was poorly chosen — re-balance.
+3. **Compression ratio:** measure bytes/token on a held-out validation slice. Target ~3.5-4.0 on Python. If >5.0, the BPE training sample was poorly chosen - re-balance.
 
 ---
 
 ## 6. Filters (L1 + L2 + L3)
 
-### Stage 3 — L1 heuristics
+### Stage 3 - L1 heuristics
 
 Applied per document, parallelized via `multiprocessing.Pool`. Reference implementation:
 
@@ -304,7 +304,7 @@ Plus exact deduplication via MD5 hash of the entire document.
 
 Expected survival rate: ~70%.
 
-### Stage 4 — L2 MinHash near-dedup
+### Stage 4 - L2 MinHash near-dedup
 
 Library: `datasketch.MinHashLSH`. Parameters:
 - `threshold=0.85` (Jaccard similarity above which two docs are considered "near-duplicates")
@@ -317,7 +317,7 @@ For each cluster of near-duplicates, retain the **longest** document (proxy for 
 
 Expected survival rate: ~70% (varies by source; FineWeb-Edu loses ~5%, raw CC loses ~50%).
 
-### Stage 5 — L3 FastText quality classifier
+### Stage 5 - L3 FastText quality classifier
 
 **Selective application** (hybrid approach):
 
@@ -344,7 +344,7 @@ Expected survival rate on the non-pre-filtered fraction: ~85%.
 
 | Stage | Input | Survival | Output cumulative |
 |---|---|---|---|
-| 1. Download | — | — | ~60 GB raw |
+| 1. Download | - | - | ~60 GB raw |
 | 2. Normalize | 60 GB | ~95% | ~57 GB |
 | 3. L1 heuristics | 57 GB | ~70% | ~40 GB |
 | 4. L2 MinHash | 40 GB | ~70% | ~28 GB |
@@ -422,7 +422,7 @@ Phase 1A is complete when **all** of the following are true:
 3. ✅ ~95 train shards + ~5 val shards present in `MyDrive/cognitive-kernel/data/shards/`
 4. ✅ **Sanity smoke test:** load three random shards, decode ten random samples each, confirm visually that text is coherent (not corrupted bytes or repeating garbage)
 5. ✅ **Loader smoke test:** instantiate `ShardedTokenDataset` (from Phase 0) pointing at the production shards; verify batches have correct shapes and seed-determinism still works
-6. ✅ **Signal validation:** train a tiny 10 M-parameter model (using a modified `configs/test_toy.yaml` pointing at the production shards) for 2 000 steps. **Loss must fall from ~10 to ≤7.** This proves the data contains learnable signal — contrast with Phase 0's smoke test where loss stayed at 10.4 on random data.
+6. ✅ **Signal validation:** train a tiny 10 M-parameter model (using a modified `configs/test_toy.yaml` pointing at the production shards) for 2 000 steps. **Loss must fall from ~10 to ≤7.** This proves the data contains learnable signal - contrast with Phase 0's smoke test where loss stayed at 10.4 on random data.
 7. ✅ Pipeline scripts versioned in `scripts/data_pipeline/` and committed
 8. ✅ README updated to reflect Phase 1A completion and link to manifest
 
@@ -456,7 +456,7 @@ Phase 1A is complete when **all** of the following are true:
 | Stage 5 lets junk PT-BR through | 25% | Low | If validation set looks bad, halve PT-BR allocation to 0.5 B |
 | Final corpus < 10 B (filters too aggressive) | 25% | Medium | Plan B: ingest additional ~20 GB upstream (FineWeb-Edu has 1.3 T to spare) |
 | Disk on Kaggle fills during Stage 4 | 15% | Medium | Process in 5 GB chunks; clean intermediate before next chunk |
-| Tokenization produces a different total than 10 B | 50% | Low | Acceptable — anywhere 8-12 B is fine; manifest reflects actual count |
+| Tokenization produces a different total than 10 B | 50% | Low | Acceptable - anywhere 8-12 B is fine; manifest reflects actual count |
 | Drive upload from Colab is slow (~10 MB/s) | 60% | Low | Upload final shards is ~20 GB → ~30-40 min. Acceptable. |
 | Some dataset requires HF access approval that's slow | 40% | Low | Pre-apply to all gated datasets on Day 1; check approvals on Day 3 |
 
@@ -528,15 +528,15 @@ Explicitly **deferred**, not abandoned:
 
 ## 13. References
 
-- HuggingFace `datasets` library — https://huggingface.co/docs/datasets
-- HuggingFace `tokenizers` library — https://github.com/huggingface/tokenizers
-- `datasketch` (MinHash LSH) — https://ekzhu.com/datasketch/
-- `fasttext` — https://fasttext.cc/
-- The Stack v2 paper — Lozhkov et al., 2024
-- FineWeb-Edu — HuggingFace Smol team, 2024
-- Proof-Pile-2 — Azerbayev et al., 2023
-- Phi-1 — Gunasekar et al., 2023, *Textbooks Are All You Need*
-- nanoGPT (data format reference) — Karpathy, 2023
+- HuggingFace `datasets` library - https://huggingface.co/docs/datasets
+- HuggingFace `tokenizers` library - https://github.com/huggingface/tokenizers
+- `datasketch` (MinHash LSH) - https://ekzhu.com/datasketch/
+- `fasttext` - https://fasttext.cc/
+- The Stack v2 paper - Lozhkov et al., 2024
+- FineWeb-Edu - HuggingFace Smol team, 2024
+- Proof-Pile-2 - Azerbayev et al., 2023
+- Phi-1 - Gunasekar et al., 2023, *Textbooks Are All You Need*
+- nanoGPT (data format reference) - Karpathy, 2023
 
 ---
 

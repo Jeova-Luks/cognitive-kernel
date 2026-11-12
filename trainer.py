@@ -21,8 +21,8 @@ class Trainer:
 
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         # Choose the best mixed-precision dtype for this hardware:
-        # - Ampere+ (A100, H100, 3090, 4090): BF16 — same range as FP32, no scaler needed
-        # - Turing/Volta (T4, V100, 2080): FP16 — needs GradScaler against underflow
+        # - Ampere+ (A100, H100, 3090, 4090): BF16 - same range as FP32, no scaler needed
+        # - Turing/Volta (T4, V100, 2080): FP16 - needs GradScaler against underflow
         # - CPU: FP32 (autocast disabled via amp_enabled flag in train_step)
         if torch.cuda.is_available():
             if torch.cuda.is_bf16_supported():

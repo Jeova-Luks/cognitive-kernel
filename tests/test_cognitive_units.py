@@ -8,7 +8,7 @@ Covers what we CAN test without network/API:
 The distillation loop itself is not unit-tested here (requires Claude API).
 It's smoke-tested via the run_mvp.py script when the user invokes it.
 
-NOTE: this test file contains string literals like "eval(" and "exec(" — those
+NOTE: this test file contains string literals like "eval(" and "exec(" - those
 are TEST INPUTS being fed to (sandboxed) lambdas to verify the rules match the
 substring inside text. There is no actual eval()/exec() call in this file.
 """

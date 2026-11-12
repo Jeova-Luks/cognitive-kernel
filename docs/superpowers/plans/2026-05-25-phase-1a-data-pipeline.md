@@ -1,4 +1,4 @@
-# Phase 1A — Data Pipeline Implementation Plan
+# Phase 1A - Data Pipeline Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. **Tasks 11-13 require manual execution outside subagent reach (HuggingFace auth, Kaggle session, Drive mount). Subagent-doable tasks are 0-10.**
 
@@ -104,7 +104,7 @@ from typing import Iterable
 from datasets import Dataset, load_dataset
 from huggingface_hub import HfApi
 
-# Mix C — Generalist with focus. Tokens per category (target, billions).
+# Mix C - Generalist with focus. Tokens per category (target, billions).
 TARGETS = {
     "python":        3.0e9,
     "math":          2.0e9,
@@ -163,7 +163,7 @@ git push
 
 ---
 
-## Task 1: Stage 1 — Download raw datasets
+## Task 1: Stage 1 - Download raw datasets
 
 **Files:**
 - Create: `scripts/data_pipeline/stage_1_download.py`
@@ -269,7 +269,7 @@ def iter_python() -> Iterator[DocRecord]:
         if consumed >= quota * 0.85:    # 85% of quota from this source
             break
 
-    # Source 2: CodeParrot clean — fills the gap
+    # Source 2: CodeParrot clean - fills the gap
     log.info("python: streaming codeparrot/codeparrot-clean ...")
     ds = load_dataset("codeparrot/codeparrot-clean", split="train", streaming=True)
     for r in ds:
@@ -614,13 +614,13 @@ Expected:
 
 ```bash
 git add scripts/data_pipeline/stage_1_download.py tests/test_data_pipeline.py
-git -c user.email="j.eudesmdm@hotmail.com" -c user.name="LLMPessoal" commit -m "feat(phase-1a): stage 1 download script — pulls all 5 categories from HF"
+git -c user.email="j.eudesmdm@hotmail.com" -c user.name="LLMPessoal" commit -m "feat(phase-1a): stage 1 download script - pulls all 5 categories from HF"
 git push
 ```
 
 ---
 
-## Task 2: Stage 2 — Normalize
+## Task 2: Stage 2 - Normalize
 
 **Files:**
 - Create: `scripts/data_pipeline/stage_2_normalize.py`
@@ -653,7 +653,7 @@ def test_strip_html_basic():
 
 def test_strip_html_preserves_code():
     # Code blocks shouldn't have their content stripped to plain text
-    # (we treat them as plain text — no special preservation here)
+    # (we treat them as plain text - no special preservation here)
     text = "plain text without html"
     assert strip_html(text) == text
 
@@ -772,13 +772,13 @@ Expected: 6 PASSED (2 from Task 1 + 4 from Task 2).
 
 ```bash
 git add scripts/data_pipeline/stage_2_normalize.py tests/test_data_pipeline.py
-git -c user.email="j.eudesmdm@hotmail.com" -c user.name="LLMPessoal" commit -m "feat(phase-1a): stage 2 normalize — Unicode NFC + HTML strip + length filter"
+git -c user.email="j.eudesmdm@hotmail.com" -c user.name="LLMPessoal" commit -m "feat(phase-1a): stage 2 normalize - Unicode NFC + HTML strip + length filter"
 git push
 ```
 
 ---
 
-## Task 3: Stage 3 — L1 Heuristic filters
+## Task 3: Stage 3 - L1 Heuristic filters
 
 **Files:**
 - Create: `scripts/data_pipeline/stage_3_heuristics.py`
@@ -1025,7 +1025,7 @@ git push
 
 ---
 
-## Task 4: Stage 4 — L2 MinHash near-deduplication
+## Task 4: Stage 4 - L2 MinHash near-deduplication
 
 **Files:**
 - Create: `scripts/data_pipeline/stage_4_minhash.py`
@@ -1182,7 +1182,7 @@ git push
 
 ---
 
-## Task 5: Stage 5a — FastText classifier training
+## Task 5: Stage 5a - FastText classifier training
 
 **Files:**
 - Create: `scripts/data_pipeline/stage_5_fasttext_train.py`
@@ -1394,7 +1394,7 @@ git push
 
 ---
 
-## Task 6: Stage 5b — Apply classifier to docs
+## Task 6: Stage 5b - Apply classifier to docs
 
 **Files:**
 - Create: `scripts/data_pipeline/stage_5_fasttext_apply.py`
@@ -1738,7 +1738,7 @@ git push
 
 ---
 
-## Task 8: Stage 6b — Tokenize the corpus
+## Task 8: Stage 6b - Tokenize the corpus
 
 **Files:**
 - Create: `scripts/data_pipeline/stage_6b_tokenize.py`
@@ -1808,7 +1808,7 @@ git push
 
 ---
 
-## Task 9: Stage 7 — Shard + upload to Drive
+## Task 9: Stage 7 - Shard + upload to Drive
 
 **Files:**
 - Create: `scripts/data_pipeline/stage_7_shard_upload.py`
@@ -2077,13 +2077,13 @@ git push
 
 ## Task 11: Execute the pipeline (manual, multi-session)
 
-**This task is the user's runbook. No subagent can do this — it requires HuggingFace login, Kaggle session, Colab session, and Drive auth.** Instructions below are precise so you can execute them one session at a time.
+**This task is the user's runbook. No subagent can do this - it requires HuggingFace login, Kaggle session, Colab session, and Drive auth.** Instructions below are precise so you can execute them one session at a time.
 
 - [ ] **Step 11.1: HuggingFace setup**
 
 In any browser:
-1. https://huggingface.co/join — create account if needed, verify email
-2. https://huggingface.co/settings/tokens — create **WRITE** token, save it
+1. https://huggingface.co/join - create account if needed, verify email
+2. https://huggingface.co/settings/tokens - create **WRITE** token, save it
 3. Apply for access (one-click "Agree") to each gated dataset (some may be ungated):
    - bigcode/the-stack-v2-dedup
    - HuggingFaceFW/fineweb-edu
@@ -2091,7 +2091,7 @@ In any browser:
    - cc100
    - Others as needed
 
-- [ ] **Step 11.2: Kaggle Session 1 — Stages 1, 2, 3**
+- [ ] **Step 11.2: Kaggle Session 1 - Stages 1, 2, 3**
 
 In Kaggle Notebooks:
 ```python
@@ -2114,7 +2114,7 @@ os.environ["HF_TOKEN"] = "hf_xxxYOURTOKENxxx"
 
 Expected: ~10h. End state: `Jeova-Luks/ck-stage-3-filtered` exists on HF Hub.
 
-- [ ] **Step 11.3: Kaggle Session 2 — Stage 4 (MinHash)**
+- [ ] **Step 11.3: Kaggle Session 2 - Stage 4 (MinHash)**
 
 ```python
 !git clone https://github.com/Jeova-Luks/cognitive-kernel.git
@@ -2127,7 +2127,7 @@ import os; os.environ["HF_USER"]="Jeova-Luks"; os.environ["HF_TOKEN"]="hf_..."
 
 Expected: ~8h. End state: `Jeova-Luks/ck-stage-4-deduped`.
 
-- [ ] **Step 11.4: Codespaces Session — Stage 5 (FastText train + apply)**
+- [ ] **Step 11.4: Codespaces Session - Stage 5 (FastText train + apply)**
 
 In your Codespace terminal:
 ```bash
@@ -2142,7 +2142,7 @@ python -m scripts.data_pipeline.stage_5_fasttext_apply --model ./artifacts/quali
 
 Expected: ~3h. End state: `Jeova-Luks/ck-stage-5-quality`.
 
-- [ ] **Step 11.5: Codespaces Session — Stage 6a (train tokenizer)**
+- [ ] **Step 11.5: Codespaces Session - Stage 6a (train tokenizer)**
 
 ```bash
 python -m scripts.data_pipeline.stage_6a_train_tokenizer
@@ -2159,7 +2159,7 @@ git commit -m "data(phase-1a): trained tokenizer_fast.json (vocab 32k)"
 git push
 ```
 
-- [ ] **Step 11.6: Kaggle Session 3 — Stage 6b (tokenize)**
+- [ ] **Step 11.6: Kaggle Session 3 - Stage 6b (tokenize)**
 
 ```python
 !git pull
@@ -2168,7 +2168,7 @@ git push
 
 Expected: ~6h. End state: `Jeova-Luks/ck-stage-6-tokenized`.
 
-- [ ] **Step 11.7: Colab Session — Stage 7 (shard + upload)**
+- [ ] **Step 11.7: Colab Session - Stage 7 (shard + upload)**
 
 In a new Colab notebook (GPU not needed):
 ```python
@@ -2230,7 +2230,7 @@ trainer.fit()
 
 Expected: model has ~10M params, trains for 2000 steps, **final train_loss ≤ 7.0**.
 
-If loss does not drop below 7.0 by step 2000, the data has insufficient signal — investigate the manifest or sample more docs from un-filtered sources.
+If loss does not drop below 7.0 by step 2000, the data has insufficient signal - investigate the manifest or sample more docs from un-filtered sources.
 
 - [ ] **Step 12.3: Commit the manifest.json contents in the repo for posterity**
 
@@ -2254,17 +2254,17 @@ git push
 
 - [ ] **Step 13.1: Update README**
 
-Edit `README.md`. Find the line `🟡 **Phase 1** — Pre-train 100M base on curated data` and replace it with:
+Edit `README.md`. Find the line `🟡 **Phase 1** - Pre-train 100M base on curated data` and replace it with:
 
 ```markdown
-- ✅ **Phase 1A** — Data pipeline complete; ~10 B tokens shard on Drive
-- 🟡 **Phase 1B** — Pre-train 100M base (next; spec TBD)
+- ✅ **Phase 1A** - Data pipeline complete; ~10 B tokens shard on Drive
+- 🟡 **Phase 1B** - Pre-train 100M base (next; spec TBD)
 ```
 
 Also add a "Phase 1A status" section:
 
 ```markdown
-## Phase 1A — Data Pipeline Status
+## Phase 1A - Data Pipeline Status
 
 Manifest: [data/manifest.json](data/manifest.json)
 
@@ -2294,16 +2294,16 @@ git push --tags
 
 All 8 criteria from the spec, mapped to tasks:
 
-1. ✅ `tokenizer_fast.json` committed + tests passing — Task 7 + Task 11.5
-2. ✅ `data/manifest.json` documents counts — Task 12.3
-3. ✅ ~95 train + ~5 val shards on Drive — Task 11.7
-4. ✅ Sanity decode samples coherent — Task 12.1 DoD #4
-5. ✅ `ShardedTokenDataset` loads production shards — Task 12.1 DoD #5
-6. ✅ 10M model train_loss ≤ 7.0 within 2 000 steps — Task 12.2
-7. ✅ Pipeline scripts in `scripts/data_pipeline/` — Tasks 0-10
-8. ✅ README updated — Task 13.1
+1. ✅ `tokenizer_fast.json` committed + tests passing - Task 7 + Task 11.5
+2. ✅ `data/manifest.json` documents counts - Task 12.3
+3. ✅ ~95 train + ~5 val shards on Drive - Task 11.7
+4. ✅ Sanity decode samples coherent - Task 12.1 DoD #4
+5. ✅ `ShardedTokenDataset` loads production shards - Task 12.1 DoD #5
+6. ✅ 10M model train_loss ≤ 7.0 within 2 000 steps - Task 12.2
+7. ✅ Pipeline scripts in `scripts/data_pipeline/` - Tasks 0-10
+8. ✅ README updated - Task 13.1
 
-**Next:** Phase 1B plan — pre-training the 100M base model. Separate spec and plan to be written when Phase 1A is complete.
+**Next:** Phase 1B plan - pre-training the 100M base model. Separate spec and plan to be written when Phase 1A is complete.
 
 ---
 

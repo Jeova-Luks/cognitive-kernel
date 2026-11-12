@@ -1,70 +1,79 @@
 # Cognitive Kernel
 
-First subproject of a multi-year personal research program. See
-[docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md](docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md)
-for the full design and central thesis.
+This is the first project of a personal research program I plan to work on
+for several years. The full design and the thesis behind it are in
+[docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md](docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md).
 
-> The claim is not that a small model is globally more capable than a
-> trillion-parameter frontier model. The claim is that, for verifiable
-> domains, cognitive efficiency should be measured at the system level
-> rather than the parameter level. A small model coupled to an intermediate
-> executable representation, typed memory, tool runtime, and verification
-> loop can outperform much larger vanilla models because the architecture
-> converts ambiguous natural language into structured states where search,
-> execution, and correction are cheap.
+The idea in one paragraph: I am not claiming that a small model is more
+capable than a huge frontier model. The claim is that, in domains where
+answers can be checked, efficiency should be measured for the whole system
+and not only by parameter count. A small model that writes an executable
+intermediate program, and has memory, tools and a verification loop around
+it, can beat much larger models used on their own, because the program turns
+vague natural language into something that can be executed, checked and
+corrected cheaply.
 
-## Phase 0 - Foundation Hardening (done)
+## Phase 0 - Foundation hardening (done)
 
-Trainer that survives Google Colab session disconnects with bit-identical
-checkpoint resume. Modern 100M-parameter Transformer base (RMSNorm + RoPE
-+ SwiGLU + Flash Attention + Grouped-Query Attention + gradient
-checkpointing). YAML-backed config, streaming Drive-friendly data loader,
-8-bit AdamW, Weights & Biases logging.
+A trainer that survives Google Colab disconnects and resumes from a
+checkpoint with exactly the same results. The base is a 100M-parameter
+Transformer with RMSNorm, RoPE, SwiGLU, Flash Attention, Grouped-Query
+Attention and gradient checkpointing. It also has a YAML config, a streaming
+data loader that works from Google Drive, 8-bit AdamW and Weights & Biases
+logging.
 
-See [docs/superpowers/plans/2026-05-24-phase-0-foundation-hardening.md](docs/superpowers/plans/2026-05-24-phase-0-foundation-hardening.md)
-for the implementation plan and acceptance criteria.
+The implementation plan and acceptance criteria are in
+[docs/superpowers/plans/2026-05-24-phase-0-foundation-hardening.md](docs/superpowers/plans/2026-05-24-phase-0-foundation-hardening.md).
 
-## Run the tests
+## Running the tests
 
-In a Python env with deps installed (GitHub Codespaces is the easiest):
+In a Python environment with the dependencies installed (GitHub Codespaces is
+the easiest way):
 
 ```bash
 pip install -r requirements.txt
 python -m pytest -v
 ```
 
-The critical Phase 0 test is `tests/test_trainer.py::test_resume_is_bit_identical`,
-training N steps uninterrupted must produce a bit-identical loss trajectory
-to training N/2 steps + checkpoint + load + N/2 more steps in a fresh process.
+The most important Phase 0 test is
+`tests/test_trainer.py::test_resume_is_bit_identical`. It trains N steps
+without interruption, then trains N/2 steps, saves, loads in a new process
+and trains the other N/2. The two loss curves must be identical bit for bit.
 
-## Smoke-test the full pipeline in Colab
+## Smoke test of the training pipeline in Colab
 
 1. Open [scripts/train_colab.ipynb](scripts/train_colab.ipynb) in Google Colab.
 2. In Cell 5, set `CONFIG = 'configs/smoke_100m.yaml'`.
-3. Before Cell 6, add a cell: `!python scripts/make_smoke_shards.py`
-4. Run all cells. The first checkpoint appears in
+3. Before Cell 6, add a cell with `!python scripts/make_smoke_shards.py`.
+4. Run all cells. The first checkpoint shows up in
    `/content/drive/MyDrive/cognitive-kernel/checkpoints/smoke_100m/` after step 25.
-5. Force-disconnect the Colab runtime, reconnect, re-run all cells. Training
-   should print `Resuming from ckpt_step_NNNNN.pt` and continue without error.
+5. Disconnect the Colab runtime on purpose, reconnect and run all cells again.
+   Training should print `Resuming from ckpt_step_NNNNN.pt` and continue.
 
-## Phase 2 - Vertical slice with a local stand-in LLM
+## Phase 2 - Vertical slice with a local LLM as stand-in
 
-All 7 components exist in cru form: `kernel/` (classifier, typed memory,
-reader/planner, compiler, verifier, reviser, arbiter, episode log, pipeline)
-and `cdsl/` (parser, runtime, tools). Until the Phase 1 base model is trained,
-a local OpenAI-compatible LLM stands in as classifier, reader and compiler
-(default: LM Studio with Llama 3.1 8B Instruct; memory uses its nomic
-embedding model).
+All 7 components exist in a minimal form. The pipeline is in `kernel/`
+(classifier, typed memory, reader/planner, compiler, verifier, reviser,
+arbiter, episode log) and the language is in `cdsl/` (parser, runtime, tools).
+
+The 100M base model from Phase 1 is not trained yet. Until it is, a local LLM
+with an OpenAI-compatible API plays the roles of classifier, reader and
+compiler. By default that is Llama 3.1 8B Instruct running in LM Studio, and
+the memory uses LM Studio's nomic embedding model.
+
+How one problem flows through the system:
 
 ```
 problem -> [1] classifier -> [3] memory -> [2a] reader writes a plan (no arithmetic)
-        -> [2b] compiler renders the plan as a CDSL program -> [4] runtime executes it
-        -> [5a] structural verifier -> [6] reviser (repairs syntax/runtime errors, max 3 tries)
-        -> [5b] cross-check against an independent chain-of-thought answer
-               agree: confidence "high" | disagree: a referee picks one, confidence "low"
-               (default referee is a rule: trust the program if the numbers are large, else CoT)
+        -> [2b] compiler turns the plan into a CDSL program -> [4] runtime executes it
+        -> [5a] structural verifier -> [6] reviser (fixes syntax/runtime errors, up to 3 tries)
+        -> [5b] cross-check against a separate chain-of-thought answer
+               same answer: confidence "high" | different: a referee picks one, confidence "low"
+               (the default referee is a rule: trust the program if the numbers are large, else CoT)
         -> [7] episode log (confirmed episodes become worked examples)
 ```
+
+How to run it:
 
 ```bash
 lms server start
@@ -78,76 +87,93 @@ python -m pytest tests/test_kernel.py                                    # offli
 ```
 
 `phase2_eval.py` runs four systems on the same problems with the same LLM:
-plain chain-of-thought (`cot`), plan -> CDSL (`cdsl`), the same plan compiled
-to Python (`python`), and the full kernel (`arbiter`: the CDSL answer
-cross-checked against CoT, with a referee on disagreement). Ablation switches:
-`--no-plan`, `--self-checks`, `--max-attempts`, `--referee choose|resolve`,
-`--no-episodic`. Splits are fixed in `eval/gsm8k.py`: tune on `dev`, report on
-`heldout` / `paired`, and draw a fresh split after looking at either.
 
-Deviations from the spec, all explained in module docstrings: the classifier
-prompts the LLM (no linear probe yet); memory uses brute-force cosine instead
-of FAISS; the runtime adds arithmetic builtins and does not implement
-`decompose`, `solve`, `loop`, `case`, `simulate`, `prove` or `request_input`;
-a natural-language plan precedes the CDSL program (the spec has CDSL replace
-natural-language reasoning; the plan may not contain arithmetic, and
-`--no-plan` measures what it buys); and "verified" means agreement with an
-independent derivation, not the program's own `assert` / `verify`.
-`python_exec` runs model-written code in a `python -I` subprocess with a
-timeout: crash and loop containment, not a security sandbox.
+- `cot`: plain chain-of-thought, no program
+- `cdsl`: plan, then a CDSL program
+- `python`: the same plan compiled to Python
+- `arbiter`: the full kernel, where the CDSL answer is cross-checked against
+  CoT and a referee decides when they disagree
+
+There are switches to turn parts off and measure what each one is worth:
+`--no-plan`, `--self-checks`, `--max-attempts`, `--referee choose|resolve`
+and `--no-episodic`. The splits are fixed in `eval/gsm8k.py`. I tune on `dev`
+and report on `heldout` or `paired`. Once a split has been looked at, new
+claims need a fresh one.
+
+Where this differs from the design document (each point is explained in the
+docstring of the module):
+
+- The classifier is a prompt to the LLM. There is no linear probe yet.
+- Memory uses brute-force cosine similarity instead of FAISS.
+- The runtime has arithmetic builtins and does not implement `decompose`,
+  `solve`, `loop`, `case`, `simulate`, `prove` or `request_input`.
+- A plan in natural language comes before the CDSL program. In the design,
+  CDSL replaces natural-language reasoning. The plan is not allowed to do
+  arithmetic, and `--no-plan` measures how much it helps.
+- "Verified" means the answer matches a separate derivation. It does not mean
+  the program passed its own `assert` or `verify`.
+- `python_exec` runs code written by the model in a `python -I` subprocess
+  with a timeout. That contains crashes and infinite loops. It is not a
+  security sandbox.
 
 ### Phase 2 results with the stand-in LLM (2026-11-11)
 
-Llama 3.1 8B Instruct (Q4, LM Studio), 200 held-out problems (`paired` split),
-each evaluated twice: as in GSM8K, and as its GSM-Hard twin (same text, one
-number replaced by a large one). Accuracy with 95% Wilson intervals.
+Model: Llama 3.1 8B Instruct (Q4, LM Studio). I used 200 held-out problems
+(the `paired` split) and evaluated each one twice: as it appears in GSM8K,
+and as its GSM-Hard twin, which has the same text with one number replaced by
+a large one. The table shows accuracy with 95% Wilson intervals.
 
 | System | GSM8K | GSM-Hard | Both (400) | Tokens/problem |
 |---|---|---|---|---|
 | CoT (no program) | 86.5% [81.1, 90.5] | 26.0% [20.4, 32.5] | 56.2% | 242 / 309 |
-| Plan -> CDSL | 72.5% [65.9, 78.2] | 60.5% [53.6, 67.0] | 66.5% | 267 / 278 |
-| Plan -> Python | 75.0% [68.6, 80.5] | 63.0% [56.1, 69.4] | 69.0% | 244 / 256 |
-| Full kernel (CDSL + cross-check + rule referee) | 86.5% [81.1, 90.5] | 60.0% [53.1, 66.5] | 73.2% | 509 / 586 |
+| Plan to CDSL | 72.5% [65.9, 78.2] | 60.5% [53.6, 67.0] | 66.5% | 267 / 278 |
+| Plan to Python | 75.0% [68.6, 80.5] | 63.0% [56.1, 69.4] | 69.0% | 244 / 256 |
+| Full kernel (CDSL, cross-check, rule referee) | 86.5% [81.1, 90.5] | 60.0% [53.1, 66.5] | 73.2% | 509 / 586 |
 
-What these numbers do and do not show:
+What I take from these numbers, and what I do not:
 
-- With small numbers the bottleneck is reading the problem, and plain CoT reads
-  better than plan -> program (McNemar p = 0.0001 for CDSL). With large numbers
-  the bottleneck is arithmetic, and executed programs win (p < 0.0001).
-- The full kernel is the only system that holds up in both regimes, but part of
-  that is by construction: its referee trusts the program when the problem has
-  a number with 5+ significant digits, which is exactly what separates the two
-  benchmarks. On GSM8K it never beats CoT; it only matches it.
-- Agreement between the program and CoT is a strong confidence signal: correct
-  in 134/136 cases on GSM8K and 41/45 on GSM-Hard (175/181 = 97% overall),
-  against 61% and 51% when they disagree.
-- CDSL and Python are statistically indistinguishable as targets (p = 0.23 and
-  0.18). With an untrained compiler the DSL buys nothing over Python; whether a
-  compiler trained on CDSL changes that is the question for Phases 3-5.
-- GSM-Hard labels are noisy (11 of these 200 targets are below 0.001 where the
-  answer should be in the millions), so absolute GSM-Hard numbers are
-  underestimates; the noise is the same for every system.
-- GSM8K test is public since 2021 and may be in the LLM's training data, which
-  favours the CoT baseline.
+- With small numbers the hard part is reading the problem, and plain CoT
+  reads better than plan plus program (McNemar p = 0.0001 for CDSL). With
+  large numbers the hard part is the arithmetic, and executed programs win
+  (p < 0.0001).
+- The full kernel is the only system that does well in both cases. Part of
+  that is by construction: its referee trusts the program when the problem
+  has a number with 5 or more significant digits, and number size is exactly
+  what separates the two benchmarks. On GSM8K it never beats CoT, it only
+  ties.
+- When the program and CoT agree, the answer is very likely right: 134 of 136
+  on GSM8K and 41 of 45 on GSM-Hard (175 of 181, or 97%). When they disagree,
+  accuracy is 61% and 51%.
+- CDSL and Python give statistically the same results (p = 0.23 and 0.18).
+  With a compiler that was never trained on CDSL, the DSL adds nothing over
+  Python. Whether a compiler trained on CDSL changes this is the question for
+  Phases 3 to 5.
+- GSM-Hard has wrong labels. In these 200 problems, 11 targets are below
+  0.001 where the answer should be in the millions. So the absolute GSM-Hard
+  numbers are too low, but equally so for every system.
+- The GSM8K test set has been public since 2021 and may be in the LLM's
+  training data. That helps the CoT baseline.
 
-Earlier version of the pipeline (no plan, self-written assert/verify, up to 5
-repair attempts, LLM referee that re-solves), on a different set of 200
-held-out GSM8K problems (`heldout` split): CoT 79.0%, CDSL 61.5%, Python
-65.0%, arbitration 75.5%. Relative to CoT on the same problems, the plan
-narrowed the CDSL gap from 17.5 to 14.0 points, raised first-attempt execution
-from 88% to 98% and cut attempts per problem from 2.16 to 1.03. The gain is
-smaller than on the 50 development problems (64% -> 76%), as expected of
-anything tuned on a development set.
+I also evaluated an earlier version of the pipeline (no plan, checks written
+by the program itself, up to 5 repair attempts, and an LLM referee that
+solves the problem again) on a different set of 200 held-out GSM8K problems,
+the `heldout` split. It got CoT 79.0%, CDSL 61.5%, Python 65.0% and
+arbitration 75.5%. Compared with CoT on the same problems, adding the plan
+reduced the CDSL gap from 17.5 to 14.0 points, raised first-attempt execution
+from 88% to 98%, and cut attempts per problem from 2.16 to 1.03. The gain is
+smaller than what I saw on the 50 development problems (64% to 76%), which is
+normal for anything tuned on a development set.
 
-Raw outputs are in `results/phase2/` (git-ignored): one `results.jsonl` with
-every plan, program, trace and error per problem, plus `summary.json`.
+The raw outputs are in `results/phase2/`, which is git-ignored. Each run has
+a `results.jsonl` with the plan, program, trace and error of every problem,
+and a `summary.json`.
 
-## Roadmap (multi-year program)
+## Roadmap
 
-- ✅ **Phase 0** - Foundation hardening
-- 🟡 **Phase 1** - Pre-train 100M base on curated data
-- 🟡 **Phase 2** - Build the 7-component Cognitive Kernel pipeline (cru) - runs end to end with a stand-in LLM
-- ⚪ **Phase 3** - Compiler NL → CDSL (deep dive, supervised bootstrap)
-- ⚪ **Phase 4** - Compiler self-bootstrap via execution feedback
-- ⚪ **Phase 5** - DSL expressiveness ablation
-- ⚪ **Phase 6** - Full evaluation, ablations, technical report
+- Phase 0: foundation hardening (done)
+- Phase 1: pre-train the 100M base on curated data (in progress)
+- Phase 2: the 7-component pipeline in minimal form (runs end to end with a stand-in LLM)
+- Phase 3: compiler from natural language to CDSL, supervised bootstrap
+- Phase 4: compiler self-bootstrap from execution feedback
+- Phase 5: DSL expressiveness ablation
+- Phase 6: full evaluation, ablations and technical report

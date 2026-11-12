@@ -2,7 +2,7 @@
 # Runs 100 iterations with checkpoints every 25 steps so we can validate
 # the full Colab pipeline (Drive mount, resume across disconnects) end-to-end.
 #
-# NOT for real training — for that, use base_100m.yaml.
+# NOT for real training - for that, use base_100m.yaml.
 model:
   n_embd: 768
   n_head: 12

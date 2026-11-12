@@ -1,11 +1,11 @@
 """Generate (and load) a labelled dataset of 200 code snippets for the
-security classification task — used as the test bed for the MVP experiment.
+security classification task - used as the test bed for the MVP experiment.
 
 NOTE TO READERS / LINTERS: this file contains string literals that describe
 dangerous Python constructs (eval, exec, os.system, shell=True, ...). Those
 are PROMPT TEXT sent to an LLM so it can generate training examples of
 vulnerable code patterns. Nothing in this module actually executes any of
-those constructs — there is no eval/exec/os.system call site here.
+those constructs - there is no eval/exec/os.system call site here.
 
 Generation strategy: ask Claude Haiku to produce a balanced set with 6
 labels (5 risks + 1 CLEAN). We then save to a JSON file so subsequent runs
@@ -77,7 +77,7 @@ def _build_user_prompt(label: str, n: int) -> str:
         ),
         "AUTH_CONTEXT": (
             "Code discussing authentication, login flows, JWT, sessions, CSRF, "
-            "or related security primitives — not necessarily vulnerable, just AUTH-related."
+            "or related security primitives - not necessarily vulnerable, just AUTH-related."
         ),
         "PATH_TRAVERSAL_RISK": (
             "Code that opens or reads files using a path constructed from user input "

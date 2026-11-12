@@ -15,7 +15,7 @@ from typing import Iterable
 from datasets import Dataset, load_dataset
 from huggingface_hub import dataset_info, whoami
 
-# Mix C — Generalist with focus. Tokens per category (target, billions).
+# Mix C - Generalist with focus. Tokens per category (target, billions).
 TARGETS = {
     "python":        3.0e9,
     "math":          2.0e9,
