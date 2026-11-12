@@ -24,6 +24,12 @@
    separates GSM8K from GSM-Hard, so the rule's robustness across those two
    benchmarks is partly by construction.
 
+Optional audit (``audit=True``, see audit.py): before the referee is called,
+the machine redoes the arithmetic the CoT wrote down. If the program's answer
+equals the audited CoT answer, the two derivations read the problem the same
+way and differ only in a slip of arithmetic, so the answer is confirmed with
+source ``agree:audited``. No LLM call.
+
 The two solvers fail differently, which is what makes a disagreement
 informative: the program has exact arithmetic but may misread the problem;
 CoT reads the problem more freely but can slip on arithmetic.
@@ -33,6 +39,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from .audit import audited_answer
 from .verifier import is_number
 
 COT_PROMPT = ("Solve the following math problem step by step. At the end, write the final answer "
@@ -92,15 +99,15 @@ class CotResult:
 @dataclass
 class Arbitration:
     answer: object
-    # agree | rule:cdsl | rule:cot | referee:cdsl | referee:cot | referee:new | cot-default
-    # | cot-only | cdsl-only | unchecked | none
+    # agree | agree:audited | rule:cdsl | rule:cot | referee:cdsl | referee:cot | referee:new
+    # | cot-default | cot-only | cdsl-only | unchecked | none
     source: str
     referee: CotResult | None = None
 
     @property
     def confidence(self) -> str:
         """high: two independent derivations agree. low: one derivation, or a referee's pick."""
-        if self.source == "agree":
+        if self.source in ("agree", "agree:audited"):
             return "high"
         return "none" if self.source == "none" else "low"
 
@@ -147,11 +154,12 @@ def solve_cot(llm, problem: str, temperature: float = 0.0, seed: int | None = 0)
 
 
 class Arbiter:
-    def __init__(self, llm, mode: str = "rule"):
+    def __init__(self, llm, mode: str = "rule", audit: bool = False):
         if mode not in ("rule", "choose", "resolve"):
             raise ValueError("arbiter mode must be 'rule', 'choose' or 'resolve'")
         self.llm = llm
         self.mode = mode
+        self.audit = audit
 
     def decide(self, problem: str, kernel_result, cot: CotResult, referee: bool = True) -> Arbitration:
         """``referee=False`` only cross-checks: on disagreement the program's answer stands."""
@@ -162,6 +170,8 @@ class Arbiter:
             return Arbitration(None, "none")
         if not is_number(a):
             return Arbitration(b, "cot-only")      # nothing to arbitrate
+        if self.audit and numbers_match(a, audited_answer(cot.text, b)):
+            return Arbitration(a, "agree:audited")
         if not is_number(b):
             return Arbitration(a, "cdsl-only")
         if not referee:
