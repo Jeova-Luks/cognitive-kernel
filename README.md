@@ -148,9 +148,24 @@ What I take from these numbers, and what I do not:
   With a compiler that was never trained on CDSL, the DSL adds nothing over
   Python. Whether a compiler trained on CDSL changes this is the question for
   Phases 3 to 5.
-- GSM-Hard has wrong labels. In these 200 problems, 11 targets are below
-  0.001 where the answer should be in the millions. So the absolute GSM-Hard
-  numbers are too low, but equally so for every system.
+- Some GSM-Hard labels do not match their text. The twins were made by text
+  replacement, so in 13 of these 200 problems the new number also landed
+  inside another number, and in others the reference program had only one of
+  two uses of the number replaced. The label is safe in 159 of the 200: one
+  number changed, and its value occurs once in the text and once in the
+  reference program. On those 159:
+
+  | System | GSM8K | GSM-Hard |
+  |---|---|---|
+  | CoT (no program) | 86.8% | 31.4% |
+  | Plan to CDSL | 70.4% | 70.4% |
+  | Plan to Python | 73.0% | 74.2% |
+  | Full kernel | 86.8% | 69.8% |
+
+  So the drop of the program systems in the first table (72.5% to 60.5% for
+  CDSL) comes from the labels, not from the size of the numbers. A program
+  that reads the problem right gives the right answer at any size. The CoT
+  drop is real.
 - The GSM8K test set has been public since 2021 and may be in the LLM's
   training data. That helps the CoT baseline.
 
