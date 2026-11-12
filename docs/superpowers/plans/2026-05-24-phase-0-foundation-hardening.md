@@ -1,7 +1,5 @@
 # Phase 0 - Foundation Hardening Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** Make the existing trainer survive Colab Free's session disconnects, enable training a ~100M-parameter model on a single T4 GPU via mixed precision + gradient checkpointing + 8-bit AdamW, and prove bit-identical checkpoint/resume across simulated session breaks.
 
 **Architecture:** Extend the existing `model.py`, `trainer.py`, and `tokenizer.py` (do not rewrite). Add three new modules: streaming `dataset.py` for Drive-hosted shards, `optim_muon.py` (optional), and `resume.py` for cross-session state detection. Tests run in any Python environment with PyTorch (Colab, Codespaces, or local CPU); the bit-identical resume test uses CPU and a 2 M-parameter toy model so it's reproducible anywhere.

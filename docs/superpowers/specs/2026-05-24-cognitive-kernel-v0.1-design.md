@@ -2,8 +2,7 @@
 
 **Status:** DRAFT - awaiting user review
 **Date:** 2026-05-24
-**Author (vision):** User (Brazilian undergraduate, federal university AI student) - articulated during brainstorming. *Replace with your name when publishing.*
-**Author (technical scaffolding):** drafted with Claude Opus 4.7
+**Author:** Jeova-Luks (undergraduate student in Artificial Intelligence, UFC)
 **Target environment:** Free Colab/Kaggle + 5 TB Google Drive + local PC as editor
 **Estimated timeline:** 5-6 months solo, ~10-15 h/week
 
@@ -534,7 +533,7 @@ Papers, blog posts, and systems the design draws from. Not exhaustive; will grow
 
 ## 14. Acknowledgements
 
-The vision in §1 and the precise framing of the central claim in §2 (verbatim adopted) are entirely the user's articulation, developed during brainstorming. The technical scaffolding is a joint product of that vision with engineering structure proposed by the AI assistant. This is a personal research project; no institutional affiliation is claimed.
+The vision in §1 and the central claim in §2 are my own. This is a personal research project; no institutional affiliation is claimed.
 
 ---
 

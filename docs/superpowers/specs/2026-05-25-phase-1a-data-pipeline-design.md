@@ -2,7 +2,7 @@
 
 **Status:** DRAFT - awaiting user review
 **Date:** 2026-05-25
-**Author:** User (Brazilian undergraduate, federal university AI student). *Replace with your name when publishing.*
+**Author:** Jeova-Luks (undergraduate student in Artificial Intelligence, UFC)
 **Parent project:** [Cognitive Kernel v0.1](2026-05-24-cognitive-kernel-v0.1-design.md) - this is the data half of Phase 1.
 **Predecessor:** [Phase 0 - Foundation Hardening](../plans/2026-05-24-phase-0-foundation-hardening.md) (complete, tag `phase-0-complete`)
 **Successor:** Phase 1B - Pre-training the 100M base model (separate spec, to be written after 1A complete)
@@ -542,7 +542,7 @@ Explicitly **deferred**, not abandoned:
 
 ## 14. Acknowledgements
 
-Pipeline design and stage decomposition by [User] in dialog with Claude. Quality filter strategy follows Phi-1 with adaptations for the project's data sources and budget. The token mix proportions and corpus targets are project-specific and reflect Mix C (Generalist with focus) selected during brainstorming.
+Quality filter strategy follows Phi-1 with adaptations for the project's data sources and budget. The token mix proportions and corpus targets are project-specific and reflect Mix C (Generalist with focus) selected during brainstorming.
 
 ---
 

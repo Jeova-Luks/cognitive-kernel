@@ -1,6 +1,6 @@
 # Phase 1A - Data Pipeline Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking. **Tasks 11-13 require manual execution outside subagent reach (HuggingFace auth, Kaggle session, Drive mount). Subagent-doable tasks are 0-10.**
+> **Note:** Tasks 11-13 require manual execution (HuggingFace auth, Kaggle session, Drive mount).
 
 **Goal:** Build the 7-stage data pipeline (scripts + tests) and then execute it across Kaggle/Codespaces/Colab to produce ~10 B clean tokens in nanoGPT-format `.bin` shards on Google Drive, ready for Phase 1B pre-training.
 
@@ -2077,7 +2077,7 @@ git push
 
 ## Task 11: Execute the pipeline (manual, multi-session)
 
-**This task is the user's runbook. No subagent can do this - it requires HuggingFace login, Kaggle session, Colab session, and Drive auth.** Instructions below are precise so you can execute them one session at a time.
+**This task is a manual runbook. It requires HuggingFace login, Kaggle session, Colab session, and Drive auth.** Instructions below are precise so you can execute them one session at a time.
 
 - [ ] **Step 11.1: HuggingFace setup**
 
