@@ -13,7 +13,7 @@ for the full design and central thesis.
 > converts ambiguous natural language into structured states where search,
 > execution, and correction are cheap.
 
-## Phase 0 - Foundation Hardening (current)
+## Phase 0 - Foundation Hardening (done)
 
 Trainer that survives Google Colab session disconnects with bit-identical
 checkpoint resume. Modern 100M-parameter Transformer base (RMSNorm + RoPE
@@ -144,7 +144,7 @@ every plan, program, trace and error per problem, plus `summary.json`.
 
 ## Roadmap (multi-year program)
 
-- ✅ **Phase 0** - Foundation hardening (this branch)
+- ✅ **Phase 0** - Foundation hardening
 - 🟡 **Phase 1** - Pre-train 100M base on curated data
 - 🟡 **Phase 2** - Build the 7-component Cognitive Kernel pipeline (cru) - runs end to end with a stand-in LLM
 - ⚪ **Phase 3** - Compiler NL → CDSL (deep dive, supervised bootstrap)
