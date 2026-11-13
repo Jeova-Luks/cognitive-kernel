@@ -1,0 +1,440 @@
+[
+ {
+  "id": 457,
+  "answer": 10283479.5,
+  "exact": 10283479.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "katelyn + katelyn/2 - flew_away",
+  "note": "not whole: fairies that joined, fairies remaining"
+ },
+ {
+  "id": 108,
+  "answer": 2909086.5,
+  "exact": 2909086.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(final_count + dropped - extra_baked) / 2",
+  "note": "not whole: cookies last year"
+ },
+ {
+  "id": 1270,
+  "answer": 3313620.688,
+  "exact": 3313620.688,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "price * (1 - 0.30) * (1 - 0.30) * (1 - 0.20)",
+  "note": "each yearly % taken of the value at the start of that year; the alt takes all three % of the purchase price; alt=1690622.8"
+ },
+ {
+  "id": 651,
+  "answer": 12797043,
+  "exact": 12797043,
+  "flags": [],
+  "method": "(red + 2*red) + 3/4 * (red + 2*red)",
+  "note": ""
+ },
+ {
+  "id": 311,
+  "answer": 85889195,
+  "exact": 85889195,
+  "flags": [],
+  "method": "(3 people * 3 eggs + (family - 3) * 2 eggs) * 7 days",
+  "note": ""
+ },
+ {
+  "id": 1234,
+  "answer": 12274570.666666666,
+  "exact": 12274570.666666666,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "novels_last_year / (3/4)",
+  "note": "not whole: novels this year"
+ },
+ {
+  "id": 204,
+  "answer": 8400992,
+  "exact": 8400992,
+  "flags": [],
+  "method": "green + yellow + blue_bags*9 + red_bags*6",
+  "note": ""
+ },
+ {
+  "id": 1153,
+  "answer": 6927628.333333333,
+  "exact": 6927628.333333333,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(jim + (jim - 5) + (jim - 5)/2) / 3",
+  "note": "not whole: seashells per person"
+ },
+ {
+  "id": 1300,
+  "answer": 143104600,
+  "exact": 143104600,
+  "flags": [],
+  "method": "cars_per_day * pay_per_car * (7 - 2 closed days) * 2 weeks",
+  "note": ""
+ },
+ {
+  "id": 249,
+  "answer": 501667000,
+  "exact": 501667000,
+  "flags": [],
+  "method": "((4*sis_mon + 2*sis_tue) - (sis_mon + sis_tue)) * calories_per_cookie",
+  "note": ""
+ },
+ {
+  "id": 876,
+  "answer": 6282701.8,
+  "exact": 6282701.8,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "0.80*mc*1 + 0.90*tf*1 + 0.60*long*5",
+  "note": "not whole: multiple-choice answered right"
+ },
+ {
+  "id": 425,
+  "answer": 48169758,
+  "exact": 48169758,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "3*(per_feeder + 10) + 3*per_feeder",
+  "note": "stated figure read as the store-bought rate; the alt keeps it as the per-feeder figure for all 6 (total unchanged); alt=48169728"
+ },
+ {
+  "id": 141,
+  "answer": 875904,
+  "exact": 875904,
+  "flags": [],
+  "method": "bees * 4 / (1 + 2 + 4)",
+  "note": ""
+ },
+ {
+  "id": 480,
+  "answer": 4710109,
+  "exact": 4710109,
+  "flags": [],
+  "method": "ben_blue/2 + 3*ben_yellow",
+  "note": ""
+ },
+ {
+  "id": 1254,
+  "answer": 6485885,
+  "exact": 6485885,
+  "flags": [],
+  "method": "paintings*new_minutes - paintings*old_minutes",
+  "note": "minutes; drying times counted per painting"
+ },
+ {
+  "id": 349,
+  "answer": 85398528,
+  "exact": 85398528,
+  "flags": [],
+  "method": "12 * (food_per_week*4 + treats_per_month + medicine_per_month)",
+  "note": ""
+ },
+ {
+  "id": 940,
+  "answer": 348340440,
+  "exact": 348340440,
+  "flags": [],
+  "method": "per_row * rows_per_school * schools",
+  "note": ""
+ },
+ {
+  "id": 1007,
+  "answer": 28329208,
+  "exact": 28329208,
+  "flags": [],
+  "method": "red + (red + 5) + (red + 5 - 3)",
+  "note": ""
+ },
+ {
+  "id": 500,
+  "answer": 716608.5,
+  "exact": 716608.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(total - 7)/4 + 7   [david = (total - 7)/4]",
+  "note": "not whole: David, Lily"
+ },
+ {
+  "id": 88,
+  "answer": 0.020782155307880548,
+  "exact": 0.020782155307880548,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "combined / (ratio + 1)",
+  "note": "not whole: Harald copies, Marilyn copies"
+ },
+ {
+  "id": 318,
+  "answer": 35951202.6,
+  "exact": 35951202.6,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "boys + 3*boys + boys/10",
+  "note": "not whole: nongendered children, children"
+ },
+ {
+  "id": 233,
+  "answer": 98836.33333333333,
+  "exact": 98836.33333333333,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "penguins - penguins/3 - penguins/3",
+  "note": "not whole: swimming, in cave, sunbathing"
+ },
+ {
+  "id": 1238,
+  "answer": 992662372,
+  "exact": 992662372,
+  "flags": [],
+  "method": "52 weeks * (pasta + cheddar + 2*cheddar)",
+  "note": ""
+ },
+ {
+  "id": 1188,
+  "answer": 2243046.5,
+  "exact": 2243046.5,
+  "flags": [],
+  "method": "(john_now - 20)/2 + 20",
+  "note": "an age, so a half year is kept as is"
+ },
+ {
+  "id": 528,
+  "answer": 30756332,
+  "exact": 30756332,
+  "flags": [],
+  "method": "o_sofas + (o_sofas + 2) + 3*(o_sofas + 2) + (3*(o_sofas + 2) - 2)",
+  "note": ""
+ },
+ {
+  "id": 512,
+  "answer": 114558960,
+  "exact": 114558960,
+  "flags": [],
+  "method": "laps * km_per_lap * ml_per_km",
+  "note": ""
+ },
+ {
+  "id": 1263,
+  "answer": 37973996,
+  "exact": 37973996,
+  "flags": [],
+  "method": "day1 + (day1 + 20) + 2*(day1 + 20) + (7 - 3)*60",
+  "note": ""
+ },
+ {
+  "id": 941,
+  "answer": 34812023,
+  "exact": 34812023,
+  "flags": [],
+  "method": "coupons*bottles_per_coupon - pupils*bottles_per_pupil",
+  "note": ""
+ },
+ {
+  "id": 456,
+  "answer": 14563406,
+  "exact": 14563406,
+  "flags": [],
+  "method": "red + 1.6*red + (red + 1.6*red)",
+  "note": ""
+ },
+ {
+  "id": 339,
+  "answer": 14332909.333333334,
+  "exact": 14332909.333333334,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "4*(animals/3) + 2*(2*animals/3)",
+  "note": "not whole: cows, chickens, legs"
+ },
+ {
+  "id": 469,
+  "answer": 2409778,
+  "exact": 2409778,
+  "flags": [],
+  "method": "jars*cupcakes_per_jar / cupcakes_per_pan",
+  "note": ""
+ },
+ {
+  "id": 1003,
+  "answer": 145548714,
+  "exact": 145548714,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "(rent + fee_per_student*students) * 3 sessions/week * 4 weeks",
+  "note": "weeks per month not stated, 4 assumed; the alt uses 52/12 weeks (13 sessions); alt=157677773.5"
+ },
+ {
+  "id": 294,
+  "answer": 3496744,
+  "exact": 3496744,
+  "flags": [],
+  "method": "oranges - oldest_age - oldest_age/2",
+  "note": ""
+ },
+ {
+  "id": 1292,
+  "answer": 18591907,
+  "exact": 18591907,
+  "flags": [],
+  "method": "2*albert - 2 - 3",
+  "note": "inches"
+ },
+ {
+  "id": 786,
+  "answer": 11969990,
+  "exact": 11969990,
+  "flags": [],
+  "method": "tomato_plants*22 + eggplant_plants*4",
+  "note": ""
+ },
+ {
+  "id": 324,
+  "answer": 17220228,
+  "exact": 17220228,
+  "flags": [],
+  "method": "new_records * old_per_new",
+  "note": ""
+ },
+ {
+  "id": 1020,
+  "answer": 4136021,
+  "exact": 4136021,
+  "flags": [],
+  "method": "wednesday + thursday + 3*wednesday",
+  "note": ""
+ },
+ {
+  "id": 741,
+  "answer": 2883128.6666666665,
+  "exact": 2883128.6666666665,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "birds - birds/3 + 20",
+  "note": "not whole: scared away, birds now"
+ },
+ {
+  "id": 700,
+  "answer": 31377231,
+  "exact": 31377231,
+  "flags": [],
+  "method": "0.40 * city_boxes*per_box + own_boxes*5",
+  "note": ""
+ },
+ {
+  "id": 281,
+  "answer": 332069185,
+  "exact": 332069185,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(40*cobra_spots + 60*cobra_spots/2) / 2",
+  "note": "not whole: spots per mamba; only the per-mamba count is fractional, the asked value is whole"
+ },
+ {
+  "id": 461,
+  "answer": 3829972.2,
+  "exact": 3829972.2,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "1.6*frederick - 7",
+  "note": "not whole: Toni, Shondra"
+ },
+ {
+  "id": 61,
+  "answer": 4795436.8,
+  "exact": 4795436.8,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "(material + jeweler) * (1 + 0.10)",
+  "note": "10% of that read as 10% of material + jeweler; the alt takes 10% of the jeweler fee only; alt=4795386.8"
+ },
+ {
+  "id": 378,
+  "answer": 7567745,
+  "exact": 7567745,
+  "flags": [],
+  "method": "socks - (10 pairs*2 + 15 loose)",
+  "note": ""
+ },
+ {
+  "id": 1318,
+  "answer": 12763525.25,
+  "exact": 12763525.25,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "pizzas*slices_per_pizza / (1 + 3 people)",
+  "note": "not whole: slices per person; equal share kept exact; whole slices only would be 12763525"
+ },
+ {
+  "id": 297,
+  "answer": 7635038,
+  "exact": 7635038,
+  "flags": [],
+  "method": "target - (weekend + tuesday + wednesday + thursday)",
+  "note": ""
+ },
+ {
+  "id": 148,
+  "answer": 645122,
+  "exact": 645122,
+  "flags": [],
+  "method": "adult_ticket + child_ticket + change",
+  "note": ""
+ },
+ {
+  "id": 455,
+  "answer": 1334349120,
+  "exact": 1334349120,
+  "flags": [],
+  "method": "beds * (2*8*2) / bag_volume * bag_price",
+  "note": ""
+ },
+ {
+  "id": 1150,
+  "answer": 2844764,
+  "exact": 2844764,
+  "flags": [],
+  "method": "roses - given + bought",
+  "note": ""
+ },
+ {
+  "id": 935,
+  "answer": 27147281760,
+  "exact": 27147281760,
+  "flags": [],
+  "method": "(widgeteer_per_hour - widgetmaster_per_hour) * price * 24 * 30",
+  "note": ""
+ },
+ {
+  "id": 578,
+  "answer": 9284017268534.4,
+  "exact": 9284017268534.4,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "((start + start/2) / 5) * (start - 12)",
+  "note": "multiplied by the starting value minus 12 read as * (start - 12); the alt is (.. * start) - 12; alt=9284037295264.8"
+ }
+]

@@ -31,6 +31,30 @@ class ChatResult:
     seconds: float
 
 
+# Chat formats, needed only to continue a half-written assistant turn through the raw
+# completion endpoint (calc_cot.py). The server adds the begin-of-text token itself.
+_LLAMA3_SYSTEM = "Cutting Knowledge Date: December 2023\nToday Date: 26 Jul 2024\n\n"
+_QWEN_SYSTEM = "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."
+
+
+def chat_prompt(model: str, messages: list[dict], prefix: str = "") -> str:
+    """The raw prompt a chat request would produce, ending inside the assistant turn."""
+    name = model.lower()
+    has_system = bool(messages) and messages[0]["role"] == "system"
+    if "llama-3" in name or "llama3" in name:
+        turns = [] if has_system else [("system", _LLAMA3_SYSTEM)]
+        turns += [(m["role"], m["content"]) for m in messages]
+        out = "".join(f"<|start_header_id|>{role}<|end_header_id|>\n\n{content}<|eot_id|>"
+                      for role, content in turns)
+        return out + "<|start_header_id|>assistant<|end_header_id|>\n\n" + prefix
+    if "qwen" in name:
+        turns = [] if has_system else [("system", _QWEN_SYSTEM)]
+        turns += [(m["role"], m["content"]) for m in messages]
+        out = "".join(f"<|im_start|>{role}\n{content}<|im_end|>\n" for role, content in turns)
+        return out + "<|im_start|>assistant\n" + prefix
+    raise LLMError(f"no chat format known for model '{model}'")
+
+
 class LocalLLM:
     def __init__(self, base_url: str | None = None, model: str | None = None,
                  embed_model: str | None = None, timeout: float = 600.0):
@@ -84,6 +108,25 @@ class LocalLLM:
         self.completion_tokens += ct
         self.calls += 1
         return ChatResult(data["choices"][0]["message"]["content"] or "", pt, ct, dt)
+
+    def complete(self, prompt: str, temperature: float = 0.0, max_tokens: int = 512,
+                 seed: int | None = 0, stop: list[str] | None = None) -> ChatResult:
+        """Raw text completion: continues ``prompt`` exactly as given (see ``chat_prompt``)."""
+        body = {"model": self.model, "prompt": prompt,
+                "temperature": temperature, "max_tokens": max_tokens}
+        if seed is not None:
+            body["seed"] = seed
+        if stop:
+            body["stop"] = stop
+        t0 = time.perf_counter()
+        data = self._post("/completions", body)
+        dt = time.perf_counter() - t0
+        usage = data.get("usage") or {}
+        pt, ct = usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0)
+        self.prompt_tokens += pt
+        self.completion_tokens += ct
+        self.calls += 1
+        return ChatResult(data["choices"][0].get("text") or "", pt, ct, dt)
 
     def embed(self, texts: list[str]) -> list[list[float]]:
         data = self._post("/embeddings", {"model": self.embed_model, "input": texts})

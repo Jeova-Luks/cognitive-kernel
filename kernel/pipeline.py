@@ -15,7 +15,10 @@ Switches, all on the constructor, so each design decision can be ablated:
 - ``self_checks``  require the program to carry its own assert / verify;
 - ``cross_check``  confirm the program's answer against plain CoT and
                    arbitrate on disagreement (arbiter.py);
-- ``referee``      "rule", "choose" or "resolve": who decides a disagreement.
+- ``referee``      "rule", "choose" or "resolve": who decides a disagreement;
+- ``audit``        confirm a program that matches the CoT once the machine has
+                   redone the CoT's arithmetic (audit.py);
+- ``plan_temperature``, ``plan_seed``  sample the plan, for a second reading.
 
 The stages are also exposed separately (``read``, ``solve_program``,
 ``cross_check``, ``commit``) so an eval harness can share one reading and one
@@ -42,10 +45,14 @@ SEMANTIC_BANKS = ("procedural", "factual", "causal")
 
 
 def normalize_answer(value: object) -> object:
+    """Whole floats become ints; other floats keep 12 significant digits (drops float noise).
+
+    It used to round to 6 decimals, which turned a correct answer such as 5.158e-07 into 1e-06.
+    """
     if is_number(value) and isinstance(value, float):
         if value.is_integer() and abs(value) < 1e15:
             return int(value)
-        return round(value, 6)
+        return float(f"{value:.12g}")
     return value
 
 
@@ -95,13 +102,15 @@ class CognitiveKernel:
                  episode_log: EpisodeLog | None = None, max_attempts: int = 3,
                  notes_k: int = 3, episodes_k: int = 1, tools: dict | None = None,
                  target: str = "cdsl", plan: bool = True, self_checks: bool = False,
-                 cross_check: bool = True, referee: str = "rule", audit: bool = False):
+                 cross_check: bool = True, referee: str = "rule", audit: bool = False,
+                 plan_temperature: float = 0.0, plan_seed: int | None = 0):
         self.llm = llm
         self.memory = memory if memory is not None else TypedMemory()
         self.episode_log = episode_log if episode_log is not None else EpisodeLog()
         tools = tools if tools is not None else available_tools()
         self.classifier = Classifier(llm)
-        self.planner = Planner(llm, EXAMPLE_PROBLEMS) if plan else None
+        self.planner = Planner(llm, EXAMPLE_PROBLEMS, temperature=plan_temperature,
+                               seed=plan_seed) if plan else None
         self.target = make_target(target, tools, self.memory, plan=plan, self_checks=self_checks)
         self.compiler = Compiler(llm, self.target)
         self.verifier = Verifier(self_checks=self_checks)

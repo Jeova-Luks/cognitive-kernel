@@ -1,0 +1,724 @@
+{
+ "1034": {
+  "flags": [],
+  "gold": [
+   66
+  ],
+  "question": "Ted starts with $7493436. He buys 3 books for 16 dollars each and 3 pencils for 6 dollars each. How much did he spend in total?",
+  "source": "reference program and one independent label"
+ },
+ "1041": {
+  "flags": [],
+  "gold": [
+   7681711128080
+  ],
+  "question": "Molly is catering a birthday party for her sister and invited 12771585 people. 10 people want the chicken salad which is $2771585.50 per person and 2771585 people want the pasta salad at $2771585 per person. What is the total amount Molly will pay for the catering?",
+  "source": "two independent labels"
+ },
+ "1046": {
+  "flags": [],
+  "gold": [
+   189
+  ],
+  "question": "A team of 1558908 painters worked on a mansion for 3/8ths of a day every day for 3 weeks. How many hours of work did each painter put in?",
+  "source": "reference program and one independent label"
+ },
+ "1054": {
+  "flags": [
+   "rounding",
+   "unrealistic"
+  ],
+  "gold": [
+   827012,
+   0.024183562915815845
+  ],
+  "question": "My kitchen floor has a total area of 200 SqFt. I want to install new square floor tiles that cost $827012 each, and each tile side is 82701ft in length. How much will it cost me to renovate my kitchen floor?",
+  "source": "two independent labels"
+ },
+ "1060": {
+  "flags": [],
+  "gold": [
+   31
+  ],
+  "question": "Becky, Jake, and Silvia shared 2008462 pizzas. Each pizza had 8 slices. Becky ate 3 more slices than Jake did. Silvia ate twice as many slices than Jake did. If Becky ate 10 slices, how many total slices did they eat?",
+  "source": "reference program and one independent label"
+ },
+ "1072": {
+  "flags": [],
+  "gold": [
+   2852109.8333333335
+  ],
+  "question": "Maggie spent a quarter of her money, while Riza spent one-third of her money. They each had $2013254. How much money do the two of them have left?",
+  "source": "two independent labels"
+ },
+ "1139": {
+  "flags": [],
+  "gold": [
+   1
+  ],
+  "question": "Russell orders his favorite bagels online.  Each pack of bagels costs $10.00 and has 9 bagels in the pack.  If he orders 99466 packs of bagels, he will receive a 10% discount.  After ordering 99466 bags, how much will each single bagel cost?",
+  "source": "reference program and one independent label"
+ },
+ "115": {
+  "flags": [],
+  "gold": [
+   35333295
+  ],
+  "question": "Sasha notices that prices for lumber have gone up 50% in the last few months after she bought some lumber. Since she has leftovers, she decides to sell them. She has leftover ten 2 x 4 x 7066651 boards that cost her $7066651 each. She also has five 4 x 4 x 7066651 boards she bought for $16 each. If she sells them all, how much profit does she make?",
+  "source": "reference program and one independent label"
+ },
+ "1167": {
+  "flags": [],
+  "gold": [
+   3560322
+  ],
+  "question": "Jack had $2966935. Sophia gave him 1/5 of her $2966935. How many dollars does Jack have now?",
+  "source": "two independent labels"
+ },
+ "1168": {
+  "flags": [],
+  "gold": [
+   70282
+  ],
+  "question": "The red rope was four times the length of the blue rope. The blue rope was 7 centimeters shorter than the yellow rope. If the 3 ropes had a combined length of 105430 centimeters, what was the length of the red rope in centimeters?",
+  "source": "two independent labels"
+ },
+ "1174": {
+  "flags": [],
+  "gold": [
+   112430688
+  ],
+  "question": "Thomas withdraws $468461200 in 20 dollar bills from the bank account.  He loses 4684612 bills while getting home.  After that, he uses half of the remaining bills to pay for a bill.  Thomas then triples his money.  He then converts all his bills to 5 dollar bills.  How many 5 dollar bills does he have?",
+  "source": "two independent labels"
+ },
+ "1175": {
+  "flags": [],
+  "gold": [
+   3511394398508
+  ],
+  "question": "In the first half of a soccer match, team A scores 1873871 goals while team B scores 2 goals fewer than team A. In the second half, team A scores 1/1873871 of the number of goals scored by team B, which scores 1873871 times the number of goals it scored in the first half. What's the total number of goals scored in the match?",
+  "source": "two independent labels"
+ },
+ "1196": {
+  "flags": [],
+  "gold": [
+   25885044402075
+  ],
+  "question": "Alain's mom bought 2937405 packs of red pens and also bought twice the amount of black pens than the red. If each pack has 2937405 pens, how many pens does Alain have?",
+  "source": "two independent labels"
+ },
+ "1197": {
+  "flags": [],
+  "gold": [
+   2400
+  ],
+  "question": "John buys 9756198 bottles of scotch for a total cost of $600.  He also buys twice as many bottles of cognac that cost 50% more per bottle.  How much does he spend on everything?",
+  "source": "reference program and one independent label"
+ },
+ "1199": {
+  "flags": [],
+  "gold": [
+   4999997
+  ],
+  "question": "Fred was preparing for a party to be held in four days.  So, he made 25956168 gallons of root beer on the first day and put them in the refrigerator cooler.  But later that evening, his children discovered the delicious nectar and robbed the cooler, drinking 5956168 of those gallons of root beer.  On the second day, his wife Barbie also discovered the root beer and accidentally spilled 7 gallons. On the third day, Fred's friend Ronnie visited Fred's house and helped himself to the root beer, further reducing the amount remaining by 5 gallons.  On the fourth day, 3 people showed up for the party.  If Fred and the others shared the remaining root beer equally, how much was available for each to drink during the party?",
+  "source": "two independent labels"
+ },
+ "1220": {
+  "flags": [],
+  "gold": [
+   24112830.000004146
+  ],
+  "question": "Ian has a board that is 24112840 feet long. He decides to make a cut so he can have two pieces. The longer piece is 2411284 times longer than the shorter piece. How long is the longer piece?",
+  "source": "two independent labels"
+ },
+ "1284": {
+  "flags": [],
+  "gold": [
+   32241130
+  ],
+  "question": "An ice cream truck is traveling through a neighborhood. Children from various homes have started chasing the truck and, by the time the truck has reached the end of the first street, there are 6448226 children it. On the second street, each child is joined by another child and on the third street, each child in the existing group is joined by another 2 children. The original 6448226 children then give up and leave the group. How many children are now following the truck?",
+  "source": "reference program and one independent label"
+ },
+ "1289": {
+  "flags": [],
+  "gold": [
+   15453680867754
+  ],
+  "question": "Octavia wants to make a quilt for her sister. She is going to build it from small, medium, and large t-shirts that her family is done with. A small t-shirt is 3 square feet of fabric. A medium one is 4 square feet. A large one is 3931117 square feet. If she uses 11 small shirts, 8 medium, and 3931117 large shirts, how many square feet is the quilt?",
+  "source": "two independent labels"
+ },
+ "1295": {
+  "flags": [
+   "rounding"
+  ],
+  "gold": [
+   6141586,
+   6141586.115384615
+  ],
+  "question": "Ryan\u2019s allowance is $6 each week he completes his chores. He did his chores for 8404276 weeks. Then he bought ice cream cones for himself and 8404276 friends at $1.25 each. Now they all want to go to the movies and tickets cost $6.50 each. How many movie tickets can Ryan buy?",
+  "source": "two independent labels"
+ },
+ "1296": {
+  "flags": [],
+  "gold": [
+   14745980
+  ],
+  "question": "Ellen and her sister, Lani, went to the mall to buy presents for their mom. Ellen bought a pair of leggings for $4915315 and a photo frame for $5. Lani bought a pair of sunglasses at $30 and two bathrobes at $4915315 each. How much did they spend in all?",
+  "source": "two independent labels"
+ },
+ "152": {
+  "flags": [],
+  "gold": [
+   1956499.260934
+  ],
+  "question": "Carl buys ten packs of cookies. Each pack of cookies has six cookies inside. Each cookie cost $0.1956511. How much change does Carl receive if he pay with a $1956511 bill?",
+  "source": "two independent labels"
+ },
+ "193": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   12242902.666666666
+  ],
+  "question": "Sue lives in a fun neighborhood.  One weekend, the neighbors decided to play a prank on Sue.  On Friday morning, the neighbors placed 9182177 pink plastic flamingos out on Sue's front yard.  On Saturday morning, the neighbors took back one third of the flamingos, painted them white, and put these newly painted white flamingos back out on Sue's front yard.  Then, on Sunday morning, they added another 9182177 pink plastic flamingos to the collection. At noon on Sunday, how many more pink plastic flamingos were out than white plastic flamingos?",
+  "source": "two independent labels"
+ },
+ "271": {
+  "flags": [],
+  "gold": [
+   197208905776960
+  ],
+  "question": "John has 8107792 houses with 3 bedrooms each.  Each bedroom has 8107792 windows each.  There are an additional 4 windows in each house not connected to bedrooms.  How many total windows are there between the houses?",
+  "source": "two independent labels"
+ },
+ "282": {
+  "flags": [
+   "rounding"
+  ],
+  "gold": [
+   146508066632055
+  ],
+  "question": "Maddy is buying pizza for her cousin's soccer game. There are 12368962 team members and 3 coaches. Each team member brings 2368962 guests. A pizza will serve 3 people. If each pizza costs $15, how many dollars will Maddy spend?",
+  "source": "two independent labels"
+ },
+ "3": {
+  "flags": [],
+  "gold": [
+   193066335253500
+  ],
+  "question": "James decides to run 1793815 sprints 1793815 times a week.  He runs 60 meters each sprint.  How many total meters does he run a week?",
+  "source": "two independent labels"
+ },
+ "308": {
+  "flags": [],
+  "gold": [
+   5.333333333333333
+  ],
+  "question": "A tub of ice cream costing $13 is now sold at $11. A packet of milk was sold at a discount of $0.3333333333333333. How much will you save if you buy 2 tubs of ice cream and 4 packets of milk?",
+  "source": "reference program and one independent label"
+ },
+ "331": {
+  "flags": [],
+  "gold": [
+   9825743600
+  ],
+  "question": "Nick is choosing between two jobs. Job A pays $6141110 an hour for 2000 hours a year, and is in a state with a 20% total tax rate. Job B pays $42,000 a year and is in a state that charges $6,000 in property tax and a 10% tax rate on net income after property tax. How much more money will Nick make at the job with a higher net pay rate, compared to the other job?",
+  "source": "two independent labels"
+ },
+ "336": {
+  "flags": [],
+  "gold": [
+   94385164607506.12
+  ],
+  "question": "Maria buys 9159581 shares of a stock for $9159581 each. The stock price increases 50% the first year Maria holds it, then decreases 25% in the second year. What is the final value of all Maria's shares?",
+  "source": "two independent labels"
+ },
+ "338": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   1468175.3333333333
+  ],
+  "question": "A class of 4404546 students is split into 3 groups such that 2 of them are equal in number and the last one (which is the smallest) is 10 less than each of the other groups. How many students are in this (smallest) group?",
+  "source": "two independent labels"
+ },
+ "35": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   14564160
+  ],
+  "question": "Mike plays ping pong for 64729600 minutes.  In the first 20 minutes, he scores 6472960 points.  In the second 20 minutes, he scores 25% more points.  How many total points did he score?",
+  "source": "reference program and one independent label"
+ },
+ "37": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   12.838484997712158
+  ],
+  "question": "John plans to sell all his toys and use the money to buy video games. He has 13 lego sets and he sells them for $11926081 each. He ends up buying 8 video games for $20 each and has $1926081 left. How many lego sets does he still have?",
+  "source": "two independent labels"
+ },
+ "389": {
+  "flags": [],
+  "gold": [
+   85319564185851
+  ],
+  "question": "David and Dasha went to the carnival, where there are 9 rides.  Each ride costs 3078953 ride tickets at $3078953 per ticket.  You can also buy a ride bracelet for $30 which gives you 9 rides.  If David buys a ride bracelet and Dasha buys tickets, and they ride all 9 rides, how much money does David save?",
+  "source": "two independent labels"
+ },
+ "405": {
+  "flags": [
+   "rounding"
+  ],
+  "gold": [
+   14947730,
+   14947722.5
+  ],
+  "question": "Tyson decided to make muffaletta sandwiches for the big game.  Each sandwich required 1 pound each of meat and cheese and would serve 4 people.  There would be 5979089 people in total watching the game.  The meat cost $7.00 per pound and the cheese cost $3.00 per pound.  How much money would he spend on the meat and cheese to make enough sandwiches to serve 5979089 people?",
+  "source": "reference program and one independent label"
+ },
+ "422": {
+  "flags": [],
+  "gold": [
+   48478260
+  ],
+  "question": "Bill is signing up for a new streaming service. He got a special introductory deal where the first 6 months were $8 a month, then it went up to the normal price of $6059759 a month. After 8 months of the normal rate, the service increased its price to $14 a month. How much do 2 years of the service cost him?",
+  "source": "two independent labels"
+ },
+ "435": {
+  "flags": [],
+  "gold": [
+   5000000
+  ],
+  "question": "Ray had 24334553 lollipops. He kept 4334553 lollipops and shared the remaining equally with his four friends. How many lollipops did each of his friends receive?",
+  "source": "two independent labels"
+ },
+ "438": {
+  "flags": [],
+  "gold": [
+   4768737
+  ],
+  "question": "Antoine's french onion soup recipe calls for 2 pounds of onions. He likes to double that amount. His soup serves 6 people. The onions are currently on sale for $4768737 a pound. He also needs 2 boxes of beef stock, that are also on sale for $4768737 a box.  What is the cost per serving? (Round to the nearest integer.)",
+  "source": "two independent labels"
+ },
+ "451": {
+  "flags": [],
+  "gold": [
+   324181670.0802328
+  ],
+  "question": "On a certain day, the total cost of filling up 1906951 helium balloons was $900. Two days later, the cost of filling each balloon was increased by $1906951. How much did Bentley pay to fill 170 balloons if he went to fill them after the price increase?",
+  "source": "two independent labels"
+ },
+ "466": {
+  "flags": [],
+  "gold": [
+   1
+  ],
+  "question": "Becky bought 8065424 apples for 45 cents each and received a $1 discount. Kelly bought 8065424 apples for 50 cents each and received a 10 percent discount. How much more did Kelly pay than Becky?",
+  "source": "two independent labels"
+ },
+ "47": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   800
+  ],
+  "question": "John buys twice as many red ties as blue ties.  The red ties cost 50% more than blue ties.  He spent $200 on blue ties that cost $4824529 each. How much did he spend on ties?",
+  "source": "reference program and one independent label"
+ },
+ "490": {
+  "flags": [
+   "rounding"
+  ],
+  "gold": [
+   4,
+   3.469057390052213
+  ],
+  "question": "An 8-year old child wants to buy a toy car which costs $14050127. He already has $4 savings. How many days will it take him to save the remaining amount of money if he promises to save $4050127 daily from his allowance?",
+  "source": "two independent labels"
+ },
+ "493": {
+  "flags": [],
+  "gold": [
+   55106662.5
+  ],
+  "question": "Heather's razors come 4 to a pack and cost $4408535 a pack.  They are currently on sale for buy one get one free.  She also has a $2.00 coupon.  How much will each individual razor cost, in cents, after the discount if she buys 2 packs of razors?",
+  "source": "two independent labels"
+ },
+ "502": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   12408810
+  ],
+  "question": "Cherrie wants to buy Christmas gifts for her 5 friends. 1551100 of her friends want 5 gifts and the other 3 friends want 1551100 gifts for themselves. Cherrie goes ahead and buys them and decides to further surprise them by getting 10 more random gifts. How many gifts did Cherrie buy in total?",
+  "source": "two independent labels"
+ },
+ "505": {
+  "flags": [
+   "rounding"
+  ],
+  "gold": [
+   1615657115893500,
+   1615657183118683.2
+  ],
+  "question": "Frederick is making popsicles to sell and to save money he is making his own popsicle sticks. He can get 200 sticks from a 2 x 4033511 piece of wood and 403351100 sticks from a 2 x 8 piece of wood. He has $24033511 to buy wood for sticks. A 2 x 4033511 costs $4033511. A 2 x 8 costs $6. What is the most popsicle sticks he can make if he buys the cheapest lumber?",
+  "source": "two independent labels"
+ },
+ "516": {
+  "flags": [],
+  "gold": [
+   413683873235667
+  ],
+  "question": "On average Joe throws 25423833 punches per minute.  A fight lasts 5423833 rounds of 3 minutes.  How many punches did he throw?",
+  "source": "two independent labels"
+ },
+ "531": {
+  "flags": [],
+  "gold": [
+   64285676
+  ],
+  "question": "44857138 people are riding a bus. On the first stop, 4857138 passengers get off, and 5 times as many people as the number who got off from the bus get into the bus. On the second stop 21, passengers get off and 3 times fewer passengers get on. How many passengers are riding the bus after the second stop?",
+  "source": "two independent labels"
+ },
+ "56": {
+  "flags": [
+   "rounding"
+  ],
+  "gold": [
+   0,
+   1.1782924858604902e-05
+  ],
+  "question": "Peter plans to go to the movies this week. He always gets a ticket for $1782240 and popcorn for $1782240. If he has 42 dollars for the week, how many times can he go to the movies?",
+  "source": "reference program and one independent label"
+ },
+ "560": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   78621480
+  ],
+  "question": "A pet shop had 6 cages of rodents. 5241432 of the cages have 10 hamsters and the other 5241432 have 5 guinea pigs. How many rodents did the pet shop have in total?",
+  "source": "two independent labels"
+ },
+ "576": {
+  "flags": [],
+  "gold": [
+   1054939260840498
+  ],
+  "question": "Michael is replacing the carpet in his bedroom.\u00a0 The new carpet he's chosen costs $7655549 per square\u00a0foot, plus $2 per square foot for padding underneath.\u00a0 His contractor charges $4 per square foot to remove the old carpet, and $34 per square foot to install the new carpet.\u00a0 His bedroom measures 18 feet by 7655549 feet.\u00a0 How much will it cost Michael to replace the carpet?",
+  "source": "two independent labels"
+ },
+ "599": {
+  "flags": [],
+  "gold": [
+   36918104
+  ],
+  "question": "A pet store currently has 5 dogs, 9229516 cats, and 10 birds. How many legs in total do the pets in the store have?",
+  "source": "reference program and one independent label"
+ },
+ "601": {
+  "flags": [],
+  "gold": [
+   37927980
+  ],
+  "question": "Steve loves playing video games.  His parents get him a console along with 9481974 games for his birthday.  He saves up enough money to buy 1 game per month for a year, and then the following year he starts buying 2 games a month.  For the third year he buys 4 games a month as he has a new part-time job that makes him more money.  He also gets 9481974 games for Christmas every year.  How many games does Steve have after 3 years?",
+  "source": "two independent labels"
+ },
+ "607": {
+  "flags": [],
+  "gold": [
+   7.296353917111498e-06
+  ],
+  "question": "The jumbo bottle of shampoo costs $37054774.00.  The directions say to use 3705477 pumps of shampoo and this will give you 137054770 washings.  If Jackie only uses 1 pump per wash, how much will each pump cost, in cents?",
+  "source": "two independent labels"
+ },
+ "611": {
+  "flags": [],
+  "gold": [
+   453747520000
+  ],
+  "question": "John decides to build a program capable of identifying cancer cells.  He gets initial funding of $100,000 for the first 5041628 months of research.  His research ends up taking 10 times that long and every month after those first 5041628 took 50416280% more funding per month.  How much did his research cost?",
+  "source": "two independent labels"
+ },
+ "638": {
+  "flags": [],
+  "gold": [
+   8053966729785
+  ],
+  "question": "In a grocery store, four apples cost $5675900.20, and three oranges cost $3.30. How much will Clyde pay for 5675900 apples and 5675900 oranges?",
+  "source": "two independent labels"
+ },
+ "642": {
+  "flags": [],
+  "gold": [
+   1795834800
+  ],
+  "question": "James buys a new wardrobe.  He buys 1662810 suits and 1662810 dress pants.  He also buys 3 dress shirts per suit.  The suits cost $750 each and the dress pants cost 1/5 that cost.  The dress shirts were $60 each.  How much did everything cost?",
+  "source": "two independent labels"
+ },
+ "648": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   641421484428563
+  ],
+  "question": "Howie wants to buy cupcakes for everyone in his class as a special treat. He's not sure if people will want vanilla or chocolate cupcakes so he decides to get one of each for everyone. If he gets the same amount of 8008879 cupcakes for each himself, his teacher, and his 80088795 classmates, how many cupcakes should Howie buy?",
+  "source": "two independent labels"
+ },
+ "650": {
+  "flags": [],
+  "gold": [
+   77621359658918
+  ],
+  "question": "On Tuesday, Clara bought 8810312 pomegranates at $8810312 each. At the till she got $2 off because she had a voucher. The next day, the price shot to $30 per fruit, but the store also offered a 10% discount on the total cost. Sheila took advantage of the discount and bought 8810312 pomegranates. What is the difference between the final prices paid for the pomegranates on the two days?",
+  "source": "two independent labels"
+ },
+ "669": {
+  "flags": [],
+  "gold": [
+   134367812.5436776
+  ],
+  "question": "For every muffin, Svetlana needed 8397985 tablespoons of flour, 3 tablespoons of sugar, and 0.28397985 of a tablespoon of salt. How many tablespoons of dry ingredients would Svetlana need to make 16 muffins?",
+  "source": "two independent labels"
+ },
+ "689": {
+  "flags": [
+   "ambiguous",
+   "unrealistic"
+  ],
+  "gold": [
+   4.785714285714286
+  ],
+  "question": "Manolo bought five lollipops and four candies that cost $3.20. If each lollipop costs $1.2857142857142858, how much will 10 lollipops and 10 candies cost him?",
+  "source": "reference program and one independent label"
+ },
+ "695": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   144654911496.05
+  ],
+  "question": "There are 8504555 deer in a field.  8504555 percent of them are bucks.  20 percent of the bucks are 8 points.  How many 8 point bucks are there?",
+  "source": "two independent labels"
+ },
+ "710": {
+  "flags": [],
+  "gold": [
+   79277139
+  ],
+  "question": "Marcus ordered 5 croissants at $7808570.00 apiece, 4 cinnamon rolls at $2.50 each, 7808570 mini quiches for $4.00 apiece and 17808570 blueberry muffins that were $1.00 apiece.  At check out, Marcus shows his loyalty card that gives him 10% off of his purchase.  What is Marcus' total bill?",
+  "source": "two independent labels"
+ },
+ "711": {
+  "flags": [
+   "ambiguous",
+   "rounding"
+  ],
+  "gold": [
+   9810511,
+   9810512
+  ],
+  "question": "The ice cream parlor was offering a deal, buy 2 scoops of ice cream, get 1 scoop free.  Each scoop cost $1.50.  If Erin had  $9810512, how many scoops of ice cream should she buy?",
+  "source": "reference program and one independent label"
+ },
+ "712": {
+  "flags": [],
+  "gold": [
+   14
+  ],
+  "question": "Ginger and Amy both start with 8280487 pieces of Halloween candy. Ginger eats 4 pieces a day and Amy eats 3 pieces a day. How much more candy does Amy have after two weeks?",
+  "source": "two independent labels"
+ },
+ "736": {
+  "flags": [],
+  "gold": [
+   3
+  ],
+  "question": "Boris has 5476985 apples. Beck has 23 fewer apples than Boris. If Boris gives Beck 10 apples, how many fewer apples does Beck have than Boris now?",
+  "source": "reference program and one independent label"
+ },
+ "759": {
+  "flags": [],
+  "gold": [
+   25857477000
+  ],
+  "question": "The number of songs in a playlist is 300. If John has 8619159 such playlists, and each song is 10 hours long, how many hours will the 8619159 playlists last in total?",
+  "source": "reference program and one independent label"
+ },
+ "769": {
+  "flags": [],
+  "gold": [
+   110
+  ],
+  "question": "Tanya is teaching at school. She earns $15 for every hour and an additional $5 per day if she teaches more than 3 classes. On Monday she teaches 9867077 classes for 5 hours, and on Wednesday 2 classes for 2 hours. How much did Tanya earn for these two days of teaching?",
+  "source": "reference program and one independent label"
+ },
+ "780": {
+  "flags": [],
+  "gold": [
+   4345223
+  ],
+  "question": "Ava and Emma want to know who is better at the new video game Ava got for her birthday. They are each going to play one level and whoever has the highest score wins. They receive 543166 points for every enemy they jump on, 5 points for each berry they collect, and 30 points for every second left on the timer when they finish the level. If Ava jumps on 8 more enemies than Emma and collects 3 more berries, but finishes the level 4 seconds slower, what is the difference between their two scores?",
+  "source": "two independent labels"
+ },
+ "809": {
+  "flags": [],
+  "gold": [
+   14620634
+  ],
+  "question": "Dale is selling butterscotch candies to raise money for his club at school. He doesn't have the candies yet and is instead just taking orders. He started off with 7310392 total that he ordered and wanted to sell, but he ended up selling 150 butterscotch candies. Then he ordered 7310392 more. How many does Dale still need to sell to sell all of his candy?",
+  "source": "two independent labels"
+ },
+ "812": {
+  "flags": [],
+  "gold": [
+   48848399
+  ],
+  "question": "Rose is out picking flowers for a vase she wants to fill.  She starts off by picking 3 flowers with 5 petals each.  She then picks 4 flowers with 4884838 petals each.  She then adds another 5 flowers with 4 petals each.  Lastly she picks 4884838 flowers with 7 petals each.  As she's carrying these flowers over to fill the vase, she drops 1 of each and the wind blows them away.  She puts the remaining flowers in the vase.  How many petals in total are on the flowers in the vase?",
+  "source": "two independent labels"
+ },
+ "827": {
+  "flags": [],
+  "gold": [
+   32.25714285714285
+  ],
+  "question": "Milly needs to return a book she decided was really boring. The book weighs 4 pounds, cost $32, and needs to be returned to a distribution center 20 miles away. If the shipping company charges $0.35 per pound plus $1.1428571428571428 per mile, and Amazon will only refund 75% of the book's purchase price, how much money will Milly lose?",
+  "source": "reference program and one independent label"
+ },
+ "836": {
+  "flags": [],
+  "gold": [
+   21370188
+  ],
+  "question": "Jada, Rory, and Kora make clay dishes to present as art for their school project. Jada makes twice as many clay dishes as Rory, while Rory makes 3052884 more clay dishes than Kora. If Kora made 3052884 dishes, how many clay dishes they all make together?",
+  "source": "two independent labels"
+ },
+ "838": {
+  "flags": [],
+  "gold": [
+   70352585
+  ],
+  "question": "Adam wants to eat some sliced apples. A large apple can be sliced into 5 pieces, and a small apple can be sliced into 7035260 pieces. Adam decides to slice 7035260 large and 5 small apples and then eats 15 slices. How many apple slices are left?",
+  "source": "two independent labels"
+ },
+ "839": {
+  "flags": [
+   "rounding"
+  ],
+  "gold": [
+   12,
+   11.275082272322383
+  ],
+  "question": "A farmer extracts 1506582 liters of milk a day from a cow. Since he has 3 cows, how many more cows does he need to have to produce 21506582 liters of milk a day?",
+  "source": "two independent labels"
+ },
+ "852": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   243759741
+  ],
+  "question": "A basket of green food costs $90281365 and a basket of red food costs $18. If you buy 3 baskets of green food and red food, how much will you have to pay in total if you get $9028136 off for each basket of red food?",
+  "source": "two independent labels"
+ },
+ "855": {
+  "flags": [],
+  "gold": [
+   1294267
+  ],
+  "question": "I am three years younger than my brother, and I am 2 years older than my sister. My mom's age is one less than three times my brother's age. When you add all our ages, you get 7765611. How old am I?",
+  "source": "two independent labels"
+ },
+ "856": {
+  "flags": [
+   "rounding"
+  ],
+  "gold": [
+   2740151417460
+  ],
+  "question": "Mr. Jackson\u2019s fourth-grade class has 14805817 students. He wants to give each student 1480581 glue sticks. The glue sticks come in packs of 8. How many packs will Mr. Jackson need to buy so every student can have 1480581 glue sticks, assuming he can only buy whole packs and he expects to have some extra glue sticks left over?",
+  "source": "two independent labels"
+ },
+ "882": {
+  "flags": [],
+  "gold": [
+   65107224.9999765
+  ],
+  "question": "Kelly is grocery shopping at a supermarket and is making sure she has enough in her budget for the items in her cart. Her 5107261 packs of bacon cost $10 in total and she has 6 packets of chicken which each cost twice as much as a pack of bacon. She also has 3 packs of strawberries, priced at $4 each, and 7 packs of apples, each priced at half the price of a pack of strawberries. If Kelly\u2019s budget is $65107261 then how much money, in dollars, does she have left in her budget?",
+  "source": "two independent labels"
+ },
+ "890": {
+  "flags": [],
+  "gold": [
+   25
+  ],
+  "question": "There are 9955955 plants in Mrs. Smith's garden. One-fourth of her plants are indoor plants. Two-thirds of the remaining are outdoor plants while the rest are flowering plants. What percent of the plants are flowering plants?",
+  "source": "reference program and one independent label"
+ },
+ "900": {
+  "flags": [],
+  "gold": [
+   15
+  ],
+  "question": "Denise and Daniel are reading the same book. Yesterday, Denise read 10 pages while Daniel read 3762825 pages. Today, Denise read 5 more than as many pages as what Daniel read yesterday, while Daniel was not able to read any pages today. How many more pages did Denise read more than Daniel?",
+  "source": "reference program and one independent label"
+ },
+ "908": {
+  "flags": [],
+  "gold": [
+   4558134
+  ],
+  "question": "Dean has 5697680 marbles. He gives 1/5  of them to Jamie and gives 10 to Donald. How many marbles are left for Dean?",
+  "source": "two independent labels"
+ },
+ "918": {
+  "flags": [],
+  "gold": [
+   44041402
+  ],
+  "question": "There are 8510345 students playing tennis and twice that number playing volleyball. There are 18510345 boys and 22 girls playing soccer. If each student only participates in one group, how many students are there in total?",
+  "source": "two independent labels"
+ },
+ "938": {
+  "flags": [
+   "rounding"
+  ],
+  "gold": [
+   1,
+   1.9460257718605547
+  ],
+  "question": "John earned 10227740 dollars an hour and worked 6 hours in the week.  If he spends 10227740 dollars on gas and wants to deposit 100 dollars in the bank, how many 21022774 dollar pens can he buy after he buys 1022774 pencils that cost 10 dollars each?",
+  "source": "two independent labels"
+ },
+ "963": {
+  "flags": [
+   "unrealistic"
+  ],
+  "gold": [
+   347012.3333333333
+  ],
+  "question": "Alex, Stan, and Adelwolfe are trying to catch them all, Pokemon that is.  Together they have caught 780786 Pokemon.  Alex has caught 5 more than Stan, and Stan has caught 13 less than 4 times as many as Adelwolfe has caught. How many Pokemon has Stan caught?",
+  "source": "two independent labels"
+ },
+ "974": {
+  "flags": [],
+  "gold": [
+   3730069
+  ],
+  "question": "Tyler wants to buy a dictionary that costs $14325173, a dinosaur book that costs $13, and a children's cookbook that costs $4325173. He has saved $14 from his allowance. If Tyler earns $5 per hour, how many hours does he have to work to afford his books?",
+  "source": "two independent labels"
+ }
+}

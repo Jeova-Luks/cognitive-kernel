@@ -135,13 +135,34 @@ def extract_final_number(text: str) -> float | None:
 
 
 def numbers_match(a: object, b: object) -> bool:
-    """Same number, allowing for float noise and for one side being rounded to cents."""
+    """Same number: equal up to float noise, or one is the other rounded to cents or finer.
+
+    "Rounded" means written with 2 to 6 decimals and within half a unit of the
+    last one, so 105953.08 matches 105953.075 and 2.42 matches 2.4166667. A
+    rounding that changes the value by more than 5% does not count, so 0.01 does
+    not match 0.0149 and nothing but zero matches zero.
+
+    Two earlier loopholes are closed. The relative tolerance was 1e-6, which for
+    answers in the tens of millions accepted values 10 or more apart: enough to
+    hide a misread small term of the problem. And an absolute tolerance of 1e-4,
+    with the old cents rule, made every answer below half a cent match every
+    other one, zero included.
+    """
     if not (is_number(a) and is_number(b)):
         return False
     a, b = float(a), float(b)
-    if abs(a - b) <= max(1e-4, 1e-6 * max(abs(a), abs(b))):
+    scale, diff = max(abs(a), abs(b)), abs(a - b)
+    if diff <= max(1e-12, 1e-9 * scale):
         return True
-    return (not a.is_integer() or not b.is_integer()) and round(a, 2) == round(b, 2)
+    if diff > 0.05 * scale:
+        return False
+    for decimals in range(2, 7):
+        unit = 10.0 ** -decimals
+        for x in (a, b):
+            written = abs(x / unit - round(x / unit)) <= 1e-6        # x has at most `decimals` decimals
+            if written and diff <= unit / 2 + 1e-9 * scale:
+                return True
+    return False
 
 
 answers_agree = numbers_match

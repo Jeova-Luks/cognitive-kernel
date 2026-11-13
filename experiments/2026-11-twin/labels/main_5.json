@@ -1,0 +1,432 @@
+[
+ {
+  "id": 1132,
+  "answer": 29415825,
+  "exact": 29415825,
+  "flags": [],
+  "method": "valerie + brother + mother; brother = valerie / (1/2); mother = 2 * (valerie + brother)",
+  "note": ""
+ },
+ {
+  "id": 555,
+  "answer": 5.158232655378219e-07,
+  "exact": 5.158232655378219e-07,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "goal / (pay_per_hour * hours_per_day * days_per_week)",
+  "note": "alt=1 (if only whole weeks count); the 80 dollars are earned in a tiny fraction of the first week; exact fraction 2/3877297"
+ },
+ {
+  "id": 1083,
+  "answer": 65934258,
+  "exact": 65934258,
+  "flags": [],
+  "method": "bunches * bananas_per_bunch * price_each - bunches * price_per_bunch",
+  "note": ""
+ },
+ {
+  "id": 101,
+  "answer": 101257.75,
+  "exact": 101257.75,
+  "flags": [],
+  "method": "(science + social + history + geography - read_monday) / days_left",
+  "note": ""
+ },
+ {
+  "id": 482,
+  "answer": 4633315,
+  "exact": 4633315,
+  "flags": [],
+  "method": "goal - (keegan_earned + tasha_earned)",
+  "note": ""
+ },
+ {
+  "id": 510,
+  "answer": 132079517.5,
+  "exact": 132079517.5,
+  "flags": [],
+  "method": "lbs * calories_per_lb / days_from_Dec31_to_Jul19 (= 200)",
+  "note": "200 days assumes a common year; a leap year (201 days) would give 131422405.47263682"
+ },
+ {
+  "id": 373,
+  "answer": 2595732.6,
+  "exact": 2595732.6,
+  "flags": [],
+  "method": "total_value * (1 - faulty_share)",
+  "note": ""
+ },
+ {
+  "id": 574,
+  "answer": 3052077,
+  "exact": 3052077,
+  "flags": [],
+  "method": "sold * price - (sold / sandwiches_per_loaf * loaf_cost + sold / 10 * cheese_cost_per_10)",
+  "note": ""
+ },
+ {
+  "id": 43,
+  "answer": 0.0016791647834367186,
+  "exact": 0.0016791647834367186,
+  "flags": [],
+  "method": "(target - consumed) / (calories_per_serving / (bag_grams / servings))",
+  "note": "exact fraction 1200/714641"
+ },
+ {
+  "id": 230,
+  "answer": 19164408,
+  "exact": 19164408,
+  "flags": [],
+  "method": "cars * price * (1 + tax) + cars * registration_each",
+  "note": ""
+ },
+ {
+  "id": 90,
+  "answer": 4767232.5,
+  "exact": 4767232.5,
+  "flags": [],
+  "method": "adults * adult_lbs + children * (adult_lbs / 2)",
+  "note": ""
+ },
+ {
+  "id": 746,
+  "answer": 13082700,
+  "exact": 13082700,
+  "flags": [],
+  "method": "(adults * adult_fee1 + children * child_fee1) - (adults * adult_fee2 + children * child_fee2)",
+  "note": ""
+ },
+ {
+  "id": 1313,
+  "answer": 154999.5,
+  "exact": 154999.5,
+  "flags": [],
+  "method": "total_cost * (1 + profit) / watermelons",
+  "note": ""
+ },
+ {
+  "id": 1081,
+  "answer": 11855233,
+  "exact": 11855233,
+  "flags": [],
+  "method": "2 * binkie_score + 15",
+  "note": ""
+ },
+ {
+  "id": 130,
+  "answer": 4358497.333333333,
+  "exact": 4358497.333333333,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "workers - workers / 3 - 10",
+  "note": "a third of the elves is not a whole number; exact fraction 13075492/3"
+ },
+ {
+  "id": 588,
+  "answer": 5845220.666666667,
+  "exact": 5845220.666666667,
+  "flags": [],
+  "method": "(first + second + (second + 5)) / 3",
+  "note": "exact fraction 17535662/3"
+ },
+ {
+  "id": 1316,
+  "answer": 240046.8,
+  "exact": 240046.8,
+  "flags": [],
+  "method": "radiator * (1 - 0.80) + hours * hourly_rate",
+  "note": ""
+ },
+ {
+  "id": 837,
+  "answer": 8660431,
+  "exact": 8660431,
+  "flags": [],
+  "method": "(price - trade_in) - still_needed - job_pay - mom_gift",
+  "note": "savings already in the purse; all her money including pay and gift would be 8660661"
+ },
+ {
+  "id": 63,
+  "answer": 108224794.2,
+  "exact": 108224794.2,
+  "flags": [],
+  "method": "6 * monthly + 6 * monthly * (1 - 0.10)",
+  "note": ""
+ },
+ {
+  "id": 751,
+  "answer": 4349512,
+  "exact": 4349512,
+  "flags": [],
+  "method": "start - start / 2 + 25 - 12 + 6",
+  "note": ""
+ },
+ {
+  "id": 958,
+  "answer": 4890307.5,
+  "exact": 4890307.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "reported / (1 + 0.20)",
+  "note": "fractional people; the 20% is on the true count (taking 20% off the reported figure would give 4694695.2)"
+ },
+ {
+  "id": 100,
+  "answer": 20695850.5,
+  "exact": 20695850.5,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "first + first * (1 + 1/4) + (fourth + 10) + fourth",
+  "note": "alt=20696380.5 (third = 10 * fourth; an 11x reading gives 20696440.5); primary reads 10 times more as 10 more presses; the count of the second friend is fractional"
+ },
+ {
+  "id": 1287,
+  "answer": 41920164,
+  "exact": 41920164,
+  "flags": [],
+  "method": "sisters * 16 + younger_brother + 2 * younger_brother",
+  "note": ""
+ },
+ {
+  "id": 948,
+  "answer": 5970093.4,
+  "exact": 5970093.4,
+  "flags": [],
+  "method": "nyt_copies * nyt_price * 0.10 + wsj_copies * wsj_price * 0.08",
+  "note": ""
+ },
+ {
+  "id": 454,
+  "answer": 13138980,
+  "exact": 13138980,
+  "flags": [],
+  "method": "2 people * apples_per_day_each * days",
+  "note": ""
+ },
+ {
+  "id": 112,
+  "answer": 57855762,
+  "exact": 57855762,
+  "flags": [],
+  "method": "teachers * lessons_per_teacher * cleanings_per_lesson",
+  "note": ""
+ },
+ {
+  "id": 1191,
+  "answer": 7525974,
+  "exact": 7525974,
+  "flags": [],
+  "method": "color + per_inch * (start_length - end_length)",
+  "note": ""
+ },
+ {
+  "id": 79,
+  "answer": 418826.8,
+  "exact": 418826.8,
+  "flags": [],
+  "method": "cost * (1 - 0.30)",
+  "note": ""
+ },
+ {
+  "id": 371,
+  "answer": 73917604,
+  "exact": 73917604,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "2 shoes * (friday_pairs + 2 * friday_pairs + (2 * friday_pairs) / 2 - 6 returned pairs)",
+  "note": "alt=36958802 (if counted in pairs); the question asks for shoes while the data are pairs"
+ },
+ {
+  "id": 268,
+  "answer": 28083565,
+  "exact": 28083565,
+  "flags": [],
+  "method": "newspaper_ads * newspaper_cost + tv_ads * tv_cost",
+  "note": ""
+ },
+ {
+  "id": 244,
+  "answer": 16127300,
+  "exact": 16127300,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "end - (start - kyle - 2 * kyle - (kyle - 3))",
+  "note": "Kyle alone takes far more fries than Griffin had"
+ },
+ {
+  "id": 975,
+  "answer": 25476182,
+  "exact": 25476182,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "robert - jerry; jerry = total - robert - (robert - 10)",
+  "note": "Robert holds more than the 60 cherries shared; Jerry comes out at -16984098"
+ },
+ {
+  "id": 195,
+  "answer": 23103210.4,
+  "exact": 23103210.4,
+  "flags": [],
+  "method": "pens * (pencil + eraser)",
+  "note": ""
+ },
+ {
+  "id": 188,
+  "answer": 684193.5,
+  "exact": 684193.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "total_profit / (sell_price - buy_price - transport_per_bag)",
+  "note": "fractional number of bags"
+ },
+ {
+  "id": 665,
+  "answer": 15383937.6,
+  "exact": 15383937.6,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "teachers * (1 - 0.60) * sleep_hours",
+  "note": "answer in hours; the number of math teachers is fractional (2563989.6)"
+ },
+ {
+  "id": 44,
+  "answer": 1080379,
+  "exact": 1080379,
+  "flags": [],
+  "method": "candles * price - (candles / candles_per_pound) * cost_per_pound",
+  "note": "supplies costed pro rata; buying only whole pounds would give 1080378"
+ },
+ {
+  "id": 137,
+  "answer": 13061161.4,
+  "exact": 13061161.4,
+  "flags": [],
+  "method": "(2 * sub + 2 * chips + 2 * cookie) * (1 + 0.20) + tip",
+  "note": ""
+ },
+ {
+  "id": 1233,
+  "answer": 12731554.35,
+  "exact": 12731554.35,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "apples * (1 - 2/5) * (1 - 0.25) * price",
+  "note": "fractional apples sold (4243851.45)"
+ },
+ {
+  "id": 767,
+  "answer": 37943430,
+  "exact": 37943430,
+  "flags": [],
+  "method": "liters * kg_per_liter * cost_per_kg",
+  "note": ""
+ },
+ {
+  "id": 158,
+  "answer": 441078,
+  "exact": 441078,
+  "flags": [],
+  "method": "pens * pen_price + notebooks * notebook_price + paper",
+  "note": ""
+ },
+ {
+  "id": 950,
+  "answer": 2174466.6666666665,
+  "exact": 2174466.6666666665,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "bahati = (team + 20 + dinar_gap) / 3; azibo = bahati - 20",
+  "note": "fractional points, and Dinar comes out negative (-4348908.333333333); exact fraction 6523400/3"
+ },
+ {
+  "id": 161,
+  "answer": 4736666,
+  "exact": 4736666,
+  "flags": [],
+  "method": "anakin (starfish + seahorses + clownfish) + locsin ((starfish - 5) + (seahorses - 3) + (clownfish + 2))",
+  "note": "every animal caught is counted as a fish, as the question does"
+ },
+ {
+  "id": 481,
+  "answer": 9177420,
+  "exact": 9177420,
+  "flags": [],
+  "method": "w1959 + (3/4) * w1959",
+  "note": ""
+ },
+ {
+  "id": 509,
+  "answer": 1550109.75,
+  "exact": 1550109.75,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(rose_onions + rose_potatoes) / 4",
+  "note": "fractional vegetables"
+ },
+ {
+  "id": 488,
+  "answer": 1516586.6666666667,
+  "exact": 1516586.6666666667,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "puppies * 2/3 * 1/3",
+  "note": "fractional puppies; exact fraction 4549760/3"
+ },
+ {
+  "id": 800,
+  "answer": 14234690,
+  "exact": 14234690,
+  "flags": [],
+  "method": "pierson + (pierson / 2 + 11)",
+  "note": ""
+ },
+ {
+  "id": 270,
+  "answer": 19827119.5,
+  "exact": 19827119.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "first + (first + 12) + first / 2",
+  "note": "half of the first bag is not a whole number"
+ },
+ {
+  "id": 232,
+  "answer": 4401531,
+  "exact": 4401531,
+  "flags": [],
+  "method": "ants + ants / 2 (bugs)",
+  "note": ""
+ },
+ {
+  "id": 822,
+  "answer": 336332346,
+  "exact": 336332346,
+  "flags": [],
+  "method": "cycles_per_day * tasks_per_cycle * pay_per_task * 7 days",
+  "note": ""
+ },
+ {
+  "id": 840,
+  "answer": 1474072,
+  "exact": 1474072,
+  "flags": [],
+  "method": "(1/6 + 2/3 + 1/2) * stick_length",
+  "note": ""
+ }
+]

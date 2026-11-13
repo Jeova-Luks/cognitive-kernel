@@ -1,0 +1,450 @@
+[
+ {
+  "id": 216,
+  "answer": -70145984,
+  "exact": -70145984,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "loan * (1 + 10%) - monthly_payment * 12",
+  "note": "payments far exceed the 2200 owed, so the remaining balance is negative (overpaid)"
+ },
+ {
+  "id": 926,
+  "answer": -4.999971839830589,
+  "exact": -4.999971839830589,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(budget - 5*fri_ticket - 8*other_ticket - 2*popcorn - 4*candy - (popcorn + candy)) / fri_ticket",
+  "note": "the 5 weekend tickets already cost far more than the $150, so the quotient is negative (floor=-5, trunc=-4); in practice he can see 0 movies [frac=-3551095/710223]"
+ },
+ {
+  "id": 723,
+  "answer": -7519415,
+  "exact": -7519415,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(normal - normal_sent) + (baby - baby_sent)",
+  "note": "more baby chairs sent away than exist (7519588 of 23), result negative"
+ },
+ {
+  "id": 1284,
+  "answer": 32241130,
+  "exact": 32241130,
+  "flags": [],
+  "method": "street2 = first + first; street3 = street2 + 2 * street2; answer = street3 - first"
+ },
+ {
+  "id": 523,
+  "answer": -4542758,
+  "exact": -4542758,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "baked - sold_morning - sold_afternoon + returned",
+  "note": "sold far more loaves than were baked, result negative"
+ },
+ {
+  "id": 799,
+  "answer": -2062664,
+  "exact": -2062664,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "3 * loaf_price - 2 * bagel_price",
+  "note": "negative: the 3 loaves cost less than the 2 bagels, so 'how much more' has no positive answer"
+ },
+ {
+  "id": 1056,
+  "answer": 156,
+  "exact": 156,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "(twin_beds / twin_sets_per_load + king_beds / king_sets_per_load) * 52 weeks",
+  "note": "twin and king sets go in separate loads; alt=104 if a single load can hold 2 twin sets together with the king sets"
+ },
+ {
+  "id": 1041,
+  "answer": 7681711128080,
+  "exact": 7681711128080,
+  "flags": [],
+  "method": "chicken_people * chicken_price + pasta_people * pasta_price",
+  "note": "the 12771585 invited is not needed (and is more than the 10 + 2771585 who order); only the people who order are paid for"
+ },
+ {
+  "id": 638,
+  "answer": 8053966729785,
+  "exact": 8053966729785,
+  "flags": [],
+  "method": "n_apples * (price_of_4_apples / 4) + n_oranges * (price_of_3_oranges / 3)"
+ },
+ {
+  "id": 438,
+  "answer": 4768737,
+  "exact": 4768737,
+  "flags": [],
+  "method": "(2 * recipe_onion_lb * price_per_lb + stock_boxes * price_per_box) / servings",
+  "note": "comes out whole, so the requested rounding changes nothing"
+ },
+ {
+  "id": 923,
+  "answer": -593135.8333333334,
+  "exact": -593135.8333333334,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "((cups - cinnamon_cups) / rows) / 2",
+  "note": "the cinnamon cups exceed the 27 cups available, result negative and fractional [frac=-3558815/6]"
+ },
+ {
+  "id": 1295,
+  "answer": 6141586,
+  "exact": 6141586.115384615,
+  "flags": [
+   "rounding"
+  ],
+  "method": "floor((allowance * weeks - (1 + friends) * cone_price) / ticket_price)",
+  "note": "only whole tickets can be bought [frac=159681239/26]"
+ },
+ {
+  "id": 775,
+  "answer": -452479632,
+  "exact": -452479632,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "box_wheels - (cars * wheels_per_car + motorcycles * wheels_per_motorcycle)",
+  "note": "needs far more wheels than the box holds, result negative (a shortage)"
+ },
+ {
+  "id": 422,
+  "answer": 48478260,
+  "exact": 48478260,
+  "flags": [],
+  "method": "intro_months * intro_price + normal_months * normal_price + (24 - intro_months - normal_months) * final_price",
+  "note": "the 'increase' to $14 is in fact a decrease from $6059759; computed as written"
+ },
+ {
+  "id": 882,
+  "answer": 65107224.9999765,
+  "exact": 65107224.9999765,
+  "flags": [],
+  "method": "budget - (bacon_total + 6 * 2 * (bacon_total / bacon_packs) + 3 * strawberry_price + 7 * strawberry_price / 2)",
+  "note": "one pack of bacon costs 10/5107261 dollars, so the chicken adds only a tiny fraction [frac=332519591060605/5107261]"
+ },
+ {
+  "id": 1139,
+  "answer": 1,
+  "exact": 1,
+  "flags": [],
+  "method": "pack_price * (1 - 10%) / bagels_per_pack",
+  "note": "99466 packs only triggers the discount; the cost per bagel does not depend on it"
+ },
+ {
+  "id": 745,
+  "answer": -4416673,
+  "exact": -4416673,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(card1 + card2 + 30 * avg_value) - packs * pack_price",
+  "note": "the 'profit' is negative, i.e. a loss"
+ },
+ {
+  "id": 410,
+  "answer": -5356149.5,
+  "exact": -5356149.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "money - (taffy_full + taffy_half_off + seashells + 4 * magnet_price)",
+  "note": "spends far more than the $10 she has, result negative [frac=-10712299/2]"
+ },
+ {
+  "id": 1268,
+  "answer": -21599617,
+  "exact": -21599617,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "total - blue - 2 * blue",
+  "note": "blue and yellow alone exceed the 32 blocks, result negative"
+ },
+ {
+  "id": 14,
+  "answer": -3556767,
+  "exact": -3556767,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(100% - contemporary%) * (1 - 25%)",
+  "note": "more than 100% enrolled in contemporary, so the hip-hop share is negative; class size not needed"
+ },
+ {
+  "id": 900,
+  "answer": 15,
+  "exact": 15,
+  "flags": [],
+  "method": "(denise_yesterday + (daniel_yesterday + 5)) - (daniel_yesterday + 0)",
+  "note": "totals over both days, so Daniel's count cancels out (counting today alone would give 3762830)"
+ },
+ {
+  "id": 45,
+  "answer": 82925928,
+  "exact": 82925928,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "hours_per_article * (mon + mon * (1 + 2/5182869) + 2 * tue)",
+  "note": "'2/5182869 times more' read as an increase (Tuesday = Monday + 2); alt=20731500 if read as '2/5182869 times as many' (Tuesday = 2)"
+ },
+ {
+  "id": 37,
+  "answer": 12.838484997712158,
+  "exact": 12.838484997712158,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "sets - (games * game_price + money_left) / price_per_set",
+  "note": "implies a fractional number of sets sold (less than one set) [frac=153112812/11926081]"
+ },
+ {
+  "id": 1205,
+  "answer": 5939112,
+  "exact": 5939112,
+  "flags": [
+   "ill_posed"
+  ],
+  "method": "average * dogs - (first + second + third)",
+  "note": "2969558 dogs but only three are described: the value is the combined miles of all 2969555 remaining dogs, the need of one single 'last dog' cannot be determined"
+ },
+ {
+  "id": 576,
+  "answer": 1054939260840498,
+  "exact": 1054939260840498,
+  "flags": [],
+  "method": "(carpet + padding + removal + install, per sq ft) * (length * width)"
+ },
+ {
+  "id": 219,
+  "answer": -4930258.5,
+  "exact": -4930258.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "total - naomi - (naomi / 2 + 10) - (naomi + 17)",
+  "note": "Naomi alone exceeds the 251 total; result negative, and Yuri's score is fractional [frac=-9860517/2]"
+ },
+ {
+  "id": 1034,
+  "answer": 66,
+  "exact": 66,
+  "flags": [],
+  "method": "books * book_price + pencils * pencil_price",
+  "note": "the starting amount is not needed for the amount spent"
+ },
+ {
+  "id": 435,
+  "answer": 5000000,
+  "exact": 5000000,
+  "flags": [],
+  "method": "(lollipops - kept) / friends"
+ },
+ {
+  "id": 502,
+  "answer": 12408810,
+  "exact": 12408810,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "group1_friends * 5 + 3 * gifts_each + extra",
+  "note": "story contradicts itself (1551100 of her 5 friends, plus 'the other 3'); computed from the group sizes as written, the total of 5 friends is not used"
+ },
+ {
+  "id": 783,
+  "answer": null,
+  "exact": null,
+  "flags": [
+   "ill_posed"
+  ],
+  "method": "none: the given numbers contradict each other",
+  "note": "7 fish cannot be 3 orange + 4335583 white, and the result depends on which number is dropped: -4335575 using total 7 and the white count, -2890382 using the two colour counts, 4 using total 7 and the orange count"
+ },
+ {
+  "id": 3,
+  "answer": 193066335253500,
+  "exact": 193066335253500,
+  "flags": [],
+  "method": "sprints_per_session * sessions_per_week * meters_per_sprint"
+ },
+ {
+  "id": 1052,
+  "answer": 13567230,
+  "exact": 13567230,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "start + boarded_stop1 - off_stop2 + 2 * off_stop2 - off_stop3",
+  "note": "the 11783630 people are taken as everyone on board at the start; alt=13567231 if Romeo himself is counted on top of them"
+ },
+ {
+  "id": 762,
+  "answer": -2678768,
+  "exact": -2678768,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "camera_price - (own_money + sister_allowance / 2)",
+  "note": "he already has far more than the camera costs, so the amount still needed is negative (in practice 0)"
+ },
+ {
+  "id": 695,
+  "answer": 144654911496.05,
+  "exact": 144654911496.05,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "deer * bucks% * 20%",
+  "note": "8504555 percent of the deer are bucks (more bucks than deer) and the count is fractional [frac=2893098229921/20]"
+ },
+ {
+  "id": 47,
+  "answer": 800,
+  "exact": 800,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "blue_spend + (2 * blue_spend / blue_price) * (1.5 * blue_price)",
+  "note": "the tie price cancels out, but $200 buys only 200/4824529 of one blue tie"
+ },
+ {
+  "id": 838,
+  "answer": 70352585,
+  "exact": 70352585,
+  "flags": [],
+  "method": "large_apples * pieces_per_large + small_apples * pieces_per_small - eaten"
+ },
+ {
+  "id": 213,
+  "answer": -3577710,
+  "exact": -3577710,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "total - day1 - (day1 + 50)",
+  "note": "the first two days already exceed the 500 total, result negative"
+ },
+ {
+  "id": 408,
+  "answer": -553954.6666666666,
+  "exact": -553954.6666666666,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "time_available - (pages * words_per_page / words_per_minute + travel_time)",
+  "note": "negative: he arrives late, not early [frac=-1661864/3]"
+ },
+ {
+  "id": 677,
+  "answer": -8264796,
+  "exact": -8264796,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "goal - (carol + jennifer)",
+  "note": "the goal of 100 is already far exceeded, so the number still needed is negative (in practice 0)"
+ },
+ {
+  "id": 1134,
+  "answer": -7.999915979919201,
+  "exact": -7.999915979919201,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(target - weekly * 8) / weekly",
+  "note": "she has already saved far more than $60, so the weeks still needed are negative (in practice 0) [frac=-1142572/142823]"
+ },
+ {
+  "id": 813,
+  "answer": -980589,
+  "exact": -980589,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(bag - john_smores - desean_smores - dropped) / 2 kids",
+  "note": "they used far more marshmallows than the bag holds, result negative (in practice 0)"
+ },
+ {
+  "id": 791,
+  "answer": -1594664,
+  "exact": -1594664,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "start - off_stop1 + on_stop1 - off_stop2",
+  "note": "more people get off than are on the train, result negative"
+ },
+ {
+  "id": 842,
+  "answer": -2184101,
+  "exact": -2184101,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "4 * bill_value - hat_price",
+  "note": "she handed over less than the price, so the 'change' is negative (she still owes)"
+ },
+ {
+  "id": 251,
+  "answer": -993656,
+  "exact": -993656,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "apps - deleted + downloaded",
+  "note": "deleted more apps than he had, result negative"
+ },
+ {
+  "id": 490,
+  "answer": 4,
+  "exact": 3.469057390052213,
+  "flags": [
+   "rounding"
+  ],
+  "method": "ceil((price - savings) / saved_per_day)",
+  "note": "he saves once a day, so the last partial day counts as a full day [frac=14050123/4050127]"
+ },
+ {
+  "id": 140,
+  "answer": -39785000,
+  "exact": -39785000,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(total - automatic - manual) / total * 100",
+  "note": "manual cars alone exceed the 20 cars, so the share is negative"
+ },
+ {
+  "id": 963,
+  "answer": 347012.3333333333,
+  "exact": 347012.3333333333,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "A = (total + 13 + 13 - 5) / 9; stan = 4 * A - 13",
+  "note": "no whole-number solution: all three counts come out fractional [frac=1041037/3]"
+ },
+ {
+  "id": 282,
+  "answer": 146508066632055,
+  "exact": 146508066632045,
+  "flags": [
+   "rounding"
+  ],
+  "method": "ceil((members + coaches + members * guests_each) / people_per_pizza) * pizza_price",
+  "note": "29301613326409 people is not a multiple of 3, so the number of pizzas is rounded up to whole pizzas"
+ }
+]

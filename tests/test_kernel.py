@@ -411,6 +411,13 @@ def test_numbers_match():
     assert numbers_match(18, 18.0) and numbers_match(3.33, 3.3333333)
     assert numbers_match(3244047.1, 3244047.0999999996)
     assert not numbers_match(1234500, 1234567.0) and not numbers_match(17, 18)
+    assert not numbers_match(14387068, 14387074.0)          # 6 apart in 14 million is not a match
+    assert numbers_match(105953.075, 105953.08) and numbers_match(2.4166667, 2.42)   # rounded to cents
+    assert not numbers_match(5.158e-07, 0) and not numbers_match(0.004, 0.001)       # tiny is not zero
+    assert not numbers_match(7773135, 7773134.6) and numbers_match(0, 0.0)
+    from kernel import normalize_answer
+    assert normalize_answer(5.158e-07) == 5.158e-07 and normalize_answer(0.1 + 0.2) == 0.3
+    assert normalize_answer(12.0) == 12 and isinstance(normalize_answer(12.0), int)
     assert not numbers_match(None, 5) and not numbers_match(True, 1)
 
 
@@ -524,3 +531,134 @@ def test_arbiter_audit_confirms_a_program_that_matches_the_recomputed_cot():
     other = CotResult("3 * 4 = 12\n#### 12", 12.0, 0.0, 1)             # a different reading
     assert Arbiter(RefereeLLM("unused"), audit=True).decide(
         problem, _kernel_result(GOOD), other).source == "rule:cdsl"
+
+
+# ------------------------------------------------------------------------- twin
+
+def test_twin_replaces_only_large_numbers_and_keeps_their_order():
+    from kernel import twin
+    q = "A stadium has 54,318 seats and 1,500 are reserved. Tickets cost $12. How many seats are free?"
+    made = {t.kind: t for t in twin.fabricate(q)}
+    assert set(made) == {"round", "odd"}
+    for t in made.values():
+        (old, new), = t.mapping.items()
+        assert old == 54318 and new > 2 * 1500              # still more seats than reserved seats
+        assert "1,500 are reserved" in t.text and "$12" in t.text and "54,318" not in t.text
+    assert made["round"].mapping[54318] % 60 == 0
+    assert made["odd"].mapping[54318] == 3100                # 31 * 100: the first prime-based value above 3000
+    assert twin.fabricate("Ana has 3 apples and buys 4 more.") == []
+
+
+def test_twin_avoids_numbers_in_the_text_and_implicit_constants():
+    from kernel import twin
+    small = {t.kind: t.mapping[4238123] for t in twin.fabricate("She packs 4238123 eggs in boxes of 13.")}
+    assert small == {"round": 120, "odd": 29}                # above 2 * 13, and 60 is never used
+    percent = {t.kind: t.mapping[4238123] for t in twin.fabricate("He saves 4238123% of 50 dollars.")}
+    assert percent == {"round": 20, "odd": 13}
+
+
+def test_twin_runs_a_program_with_the_small_numbers():
+    from kernel import CDSLTarget, twin
+    target = CDSLTarget(available_tools())
+    program = "(program :type t (let eggs 4238123) (let per 12) (let boxes (/ eggs per)) (return boxes))"
+    assert twin.run_with(target, program, {4238123.0: 120.0}) == 10
+    assert twin.run_with(target, program, {999.0: 120.0}) is None       # the number is not in the program
+    assert twin.run_with(target, None, {4238123.0: 120.0}) is None
+    py = PythonTarget()
+    assert twin.run_with(py, "eggs = 4238123\nanswer = eggs / 12", {4238123.0: 131.0}) == pytest.approx(131 / 12)
+
+
+# -------------------------------------------------------------- calculator cot
+
+class CompletionLLM:
+    """Scripted raw completions: returns the segments in order, cut at the stop string."""
+    model = "meta-llama-3.1-8b-instruct"
+
+    def __init__(self, segments):
+        self.segments, self.prompts = list(segments), []
+
+    def complete(self, prompt, temperature=0.0, max_tokens=512, seed=0, stop=None):
+        self.prompts.append(prompt)
+        return ChatResult(self.segments.pop(0), 1, 5, 0.0)
+
+
+def test_calculator_cot_overwrites_the_results_the_model_writes():
+    from kernel.calc_cot import evaluate, solve_calc_cot
+    llm = CompletionLLM(["She sells 4238123 * 3 = <<4238123*3=12714360",       # wrong product
+                         "12714369 eggs, then <<12714369 - 9",                  # no result written
+                         "12714360 are left.\n#### 12714360"])
+    res = solve_calc_cot(llm, "p")
+    assert res.answer == 12714360 and (res.rounds, res.calculations, res.corrected) == (3, 2, 1)
+    assert "<<4238123*3=12714369>>" in res.text and "<<12714369 - 9=12714360>>" in res.text
+    assert llm.prompts[1].endswith("<<4238123*3=12714369>>")                    # the model continues from the fix
+    assert evaluate("1,500 * 40%") == 600 and evaluate("3 x 4") == 12 and evaluate("a + 1") is None
+
+
+# -------------------------------------------------- conditions of the experiment
+
+def _piece(answer, text=None, tokens=10):
+    return {"answer": answer, "text": text if text is not None else f"#### {answer}", "completion_tokens": tokens}
+
+
+def _record(cot, first, second=None, twins=(), calc=None, question="She has 4238123 eggs."):
+    return {"question": question, "cot": _piece(cot), "read": {"completion_tokens": 5},
+            "first": {"answer": first, "completion_tokens": 20},
+            "second": {"answer": second, "completion_tokens": 30} if second is not None else None,
+            "calc": _piece(calc) if calc is not None else None,
+            "twins": [{"kind": k, "cot": _piece(c), "first": f, "second": s} for k, c, f, s in twins]}
+
+
+def test_conditions_today_audit_and_rival():
+    from eval import twin_experiment as tx
+    rec = _record(cot=8.0, first=7, calc=7.0)
+    rec["cot"]["text"] = "3 + 4 = 8\n#### 8"                                   # right reading, wrong sum
+    assert (tx.kernel_today(rec).answer, tx.kernel_today(rec).confirmed) == (7, None)   # the rule: large number
+    assert tx.kernel_audit(rec).confirmed == "audit"
+    assert tx.rival(rec).confirmed == "agree" and tx.rival(rec).tokens == 35
+    small = _record(cot=8.0, first=7, question="She has 3 eggs.")
+    assert tx.kernel_today(small).answer == 8.0                                 # small numbers: the reader wins
+    lost = _record(cot=8.0, first=7, calc=9.0)
+    assert tx.rival(lost, "program").answer == 7 and tx.rival(lost, "calc").answer == 9.0
+
+
+def test_condition_seven_twin_test_then_second_reading():
+    from eval import twin_experiment as tx
+    both = (("round", 10.0, 10.0, 99.0), ("odd", 2.5, 2.5, 99.0))
+    out = tx.verified(_record(cot=1.0, first=7, second=5, twins=both))
+    assert (out.answer, out.confirmed, out.tokens) == (7, "twin", 5 + 20 + 10 + 20)
+    one = (("round", 10.0, 10.0, 10.0), ("odd", 2.5, 3.0, 2.5))                 # first fails the odd twin
+    out = tx.verified(_record(cot=1.0, first=7, second=5, twins=one))
+    assert (out.answer, out.confirmed, out.tokens) == (5, "twin:second", 5 + 20 + 10 + 20 + 30)
+    assert tx.verified(_record(cot=1.0, first=7, second=5, twins=one), kinds=("round",)).answer == 7
+    none = (("round", 10.0, 1.0, 2.0), ("odd", 2.5, 1.0, 2.0))
+    out = tx.verified(_record(cot=1.0, first=7, second=5, twins=none))
+    assert (out.answer, out.confirmed) == (7, None)                             # falls back to today's rule
+    assert tx.verified(_record(cot=1.0, first=7, second=7, twins=none), programs_agree=True).confirmed == "programs"
+
+
+def test_condition_eight_checks_each_program_with_the_other_model():
+    from eval import twin_experiment as tx
+    twins_a = (("round", 10.0, 6.0, None), ("odd", 2.5, 4.0, None))             # a's cot on twins, a's program on twins
+    twins_b = (("round", 6.0, 10.0, None), ("odd", 4.0, 2.5, None))
+    a, b = _record(cot=1.0, first=7, twins=twins_a), _record(cot=2.0, first=9, twins=twins_b)
+    out = tx.verified(a, b)                                                     # a's program vs b's chains of thought
+    assert (out.answer, out.confirmed) == (7, "twin")
+    assert tx.verified(a).confirmed is None                                     # a alone cannot confirm it
+    b_only = _record(cot=2.0, first=9, twins=(("round", 6.0, 10.0, None), ("odd", 0.0, 2.5, None)))
+    out = tx.verified(a, b_only)                                                # b's odd chain of thought disagrees
+    assert (out.answer, out.confirmed) == (9, "twin:second")                    # b's program vs a's chains of thought
+    assert out.tokens == (5 + 20) + 10 + 20 + (5 + 20) + 10 + 20
+
+
+def test_experiment_split_is_fixed_and_the_reserve_is_locked():
+    from eval import gsm8k
+    idx = gsm8k.experiment_indices()
+    main, reserve = set(idx["main"]), set(idx["reserve"])
+    assert (len(main), len(idx["small"]), len(reserve)) == (250, 100, 95) and not main & reserve
+    assert idx["small"] == idx["main"][:100] and idx["main"][:5] == [634, 295, 50, 679, 659]
+    assert not (main | reserve) & gsm8k._used_before_experiment(1319)
+    with pytest.raises(PermissionError):
+        gsm8k.experiment_split("reserve")
+    assert gsm8k.label_safe("He has 5 pens and 15 cups.", "He has 3610160 pens and 15 cups.",
+                            'def solution():\n    """text 5 and 15"""\n    pens = 3610160\n    return pens * 15')
+    assert not gsm8k.label_safe("He has 5 pens and 15 cups.", "He has 3610160 pens and 13610160 cups.", "x = 1")

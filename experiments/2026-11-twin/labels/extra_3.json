@@ -1,0 +1,446 @@
+[
+ {
+  "id": 1305,
+  "answer": -8766330,
+  "exact": -8766330,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "chocolate_chip = total_cookies - rainbow - oatmeal",
+  "note": "oatmeal alone exceeds the total made, so the count is negative"
+ },
+ {
+  "id": 560,
+  "answer": 78621480,
+  "exact": 78621480,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "hamster_cages * 10 + guinea_pig_cages * 5",
+  "note": "the stated 6 cages contradict 5241432 + 5241432 cages; cage counts used as written"
+ },
+ {
+  "id": 648,
+  "answer": 641421484428563,
+  "exact": 641421484428563,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(himself + teacher + classmates) * cupcakes_each",
+  "note": "8008879 each contradicts the earlier one of each (2 per person); classmates 80088795 looks like the replacement landed inside another number; both used as written"
+ },
+ {
+  "id": 326,
+  "answer": -5279780,
+  "exact": -5279780,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "terminal = heading_to_third - first_stop_in + second_stop_out - second_stop_in",
+  "note": "5279802 people got in at the second stop but only 20 are on board afterwards, so the count at the terminal is negative"
+ },
+ {
+  "id": 984,
+  "answer": 0,
+  "exact": 0,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "max(0, bed_length / spacing - flowers_owned) * price_per_plant",
+  "note": "bed needs 74 plants (fewer under any other spacing reading) and Pat owns far more, so nothing is bought; alt=-28311378 is the plain formula (needed - owned) * price"
+ },
+ {
+  "id": 448,
+  "answer": -35558951,
+  "exact": -35558951,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "monday_sold * 20 + (case_size - monday_sold) * 25 - case_cost",
+  "note": "more sneakers sold on Monday than the 48 in the case, so the rest is negative; $20 read as the price of each"
+ },
+ {
+  "id": 22,
+  "answer": 475501268359,
+  "exact": 475501268359,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "first_customers * 1 + next_customers * dvds_each + last_customers * 0",
+  "note": "8 customers contradicts 3 + 689566 + 3; alt=1379135 if the middle group is 8 - 3 - 3 = 2 customers buying 689566 each"
+ },
+ {
+  "id": 660,
+  "answer": -3301131,
+  "exact": -3301131,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "sheep = (legs - 2 * heads) / 2   (4 legs per sheep, 2 per goose)",
+  "note": "fewer legs than heads, so the sheep count is negative"
+ },
+ {
+  "id": 908,
+  "answer": 4558134,
+  "exact": 4558134,
+  "flags": [],
+  "method": "marbles - marbles / 5 - 10"
+ },
+ {
+  "id": 795,
+  "answer": -5218728.25,
+  "exact": -5218728.25,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "bill - original_price * (1 - 25/100)",
+  "note": "the discounted jeans cost far more than the $50 bill, so the amount left is negative"
+ },
+ {
+  "id": 383,
+  "answer": -416761.22222222225,
+  "exact": -416761.22222222225,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(pitchers * cups_per_pitcher * cup_price - supplies) / (total_cups / cups_per_hour)",
+  "note": "supplies cost far more than the $36 of sales, so the profit per hour is a large loss"
+ },
+ {
+  "id": 736,
+  "answer": 3,
+  "exact": 3,
+  "flags": [],
+  "method": "(boris - 10) - (boris - 23 + 10)"
+ },
+ {
+  "id": 491,
+  "answer": 0,
+  "exact": 0,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "max(0, eggs - trays * tray_capacity)",
+  "note": "the 2 trays hold 704784 eggs, so all 64 fit and none is left out; alt=-704720 is the plain formula eggs - trays * capacity"
+ },
+ {
+  "id": 165,
+  "answer": -8657649,
+  "exact": -8657649,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "budget - computer - scanner - cd_burner - printer",
+  "note": "the CD burner alone exceeds the budget, so the amount left is negative (euros)"
+ },
+ {
+  "id": 812,
+  "answer": 48848399,
+  "exact": 48848399,
+  "flags": [],
+  "method": "(3-1)*5 + (4-1)*petals_b + (5-1)*4 + (flowers_d-1)*7, one flower of each kind dropped"
+ },
+ {
+  "id": 118,
+  "answer": -6721339,
+  "exact": -6721339,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "total_vehicles / vehicles_per_container - first_day_containers",
+  "note": "the final total of 30 vehicles is below the first day's count, so the result is negative"
+ },
+ {
+  "id": 1297,
+  "answer": -980253416296,
+  "exact": -980253416296,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(jar_price - (2*passion_price + 1.5*jackfruit_price + 2*honey_price)) * jars",
+  "note": "the honey in one jar costs far more than the $50 selling price, so the profit is a loss"
+ },
+ {
+  "id": 601,
+  "answer": 37927980,
+  "exact": 37927980,
+  "flags": [],
+  "method": "birthday_games + 12*1 + 12*2 + 12*4 + 3 * christmas_games"
+ },
+ {
+  "id": 1028,
+  "answer": 0,
+  "exact": 0,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "max(0, set_price - old_bedroom_sale) * 10/100",
+  "note": "the old bedroom sells for more than the whole set, so nothing is left to pay, although the text says it covers only part; alt=-899901.7 is the plain formula (set_price - sale) * 10/100"
+ },
+ {
+  "id": 78,
+  "answer": 50627678,
+  "exact": 50627678.99999787,
+  "flags": [
+   "rounding",
+   "unrealistic"
+  ],
+  "method": "(18 / 3) * price_3pack - ceil(18 / big_pack_size) * 1",
+  "note": "packages are bought whole, so 18 flowers need 1 package of 8437946 ($1); exact is the per-flower price reading; $8437946.50 looks like the replacement landed inside $x.50"
+ },
+ {
+  "id": 938,
+  "answer": 1,
+  "exact": 1.9460257718605547,
+  "flags": [
+   "rounding"
+  ],
+  "method": "floor((wage * hours - gas - deposit - pencils * pencil_price) / pen_price)",
+  "note": "only whole pens can be bought; several numbers look like the replacement landed inside them, all used as written"
+ },
+ {
+  "id": 663,
+  "answer": -3056417,
+  "exact": -3056417,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "district_b = total - district_a - district_c",
+  "note": "District A alone exceeds the daily total, so the count is negative"
+ },
+ {
+  "id": 611,
+  "answer": 453747520000,
+  "exact": 453747520000,
+  "flags": [],
+  "method": "initial + (10*first_months - first_months) * (initial / first_months) * (1 + pct_more/100)",
+  "note": "50416280% looks like the replacement landed inside another number; used as written"
+ },
+ {
+  "id": 1199,
+  "answer": 4999997,
+  "exact": 4999997,
+  "flags": [],
+  "method": "(made - drunk_by_children - spilled - taken_by_ronnie) / (fred + 3 guests)",
+  "note": "25956168 looks like the replacement landed inside another number; used as written"
+ },
+ {
+  "id": 642,
+  "answer": 1795834800,
+  "exact": 1795834800,
+  "flags": [],
+  "method": "suits * 750 + pants * (750 / 5) + 3 * suits * 60"
+ },
+ {
+  "id": 1054,
+  "answer": 827012,
+  "exact": 0.024183562915815845,
+  "flags": [
+   "rounding",
+   "unrealistic"
+  ],
+  "method": "ceil(floor_area / tile_side**2) * tile_price",
+  "note": "one tile is millions of times larger than the floor, so 1 whole tile is needed; exact is the proportional cost; $827012 looks like the replacement (82701) landed inside another number; used as written"
+ },
+ {
+  "id": 505,
+  "answer": 1615657115893500,
+  "exact": 1615657183118683.2,
+  "flags": [
+   "rounding"
+  ],
+  "method": "floor(budget / price_2x8) * sticks_per_2x8",
+  "note": "as written the 2 x 8 at $6 is the cheapest lumber, whole pieces only; buying the 2 x 4033511 instead would give 1000 sticks; several numbers look damaged, used as written"
+ },
+ {
+  "id": 356,
+  "answer": -11297185,
+  "exact": -11297185,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "given - (cars * 2 + bears * 1) + extra",
+  "note": "the toys cost far more than the money he has, so the amount left is negative"
+ },
+ {
+  "id": 186,
+  "answer": -425561.94444444444,
+  "exact": -425561.94444444444,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "(total_straw - hamsters * 5 - rabbit_straw) / 6 / rat_cages",
+  "note": "rabbit straw alone exceeds the 160 total, result negative and fractional; alt=6.111111111111111 if the 160 pieces cover only rats and hamsters"
+ },
+ {
+  "id": 918,
+  "answer": 44041402,
+  "exact": 44041402,
+  "flags": [],
+  "method": "tennis + 2 * tennis + soccer_boys + soccer_girls",
+  "note": "18510345 looks like the replacement landed inside another number; used as written"
+ },
+ {
+  "id": 1228,
+  "answer": -352886,
+  "exact": -352886,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "kim = samantha + 12 - 352925",
+  "note": "Shelley has fewer paintings than her lead over Kim, so Kim's count is negative"
+ },
+ {
+  "id": 712,
+  "answer": 14,
+  "exact": 14,
+  "flags": [],
+  "method": "(ginger_per_day - amy_per_day) * 14 days"
+ },
+ {
+  "id": 466,
+  "answer": 1,
+  "exact": 1,
+  "flags": [],
+  "method": "apples * 0.50 * (1 - 10/100) - (apples * 0.45 - 1), in dollars",
+  "note": "answer in dollars (the same amount is 100 cents)"
+ },
+ {
+  "id": 827,
+  "answer": 32.25714285714285,
+  "exact": 32.25714285714285,
+  "flags": [],
+  "method": "book_price - 75/100 * book_price + (0.35 * pounds + rate_per_mile * miles)",
+  "note": "exact decimal value is 32.257142857142856 (the JSON float is the nearest double)"
+ },
+ {
+  "id": 52,
+  "answer": 0,
+  "exact": 0,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "max(0, (pounds_to_remove - comics * 1/4) / (1/2))",
+  "note": "the comics removed already weigh 2179498 lb, more than the 15 needed, so no toy has to go; alt=-4358966 is the plain formula (15 - comics / 4) / (1/2)"
+ },
+ {
+  "id": 699,
+  "answer": -1346810.5,
+  "exact": -1346810.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(space - missing) / 2",
+  "note": "more pencils missing than the box holds, so the number of pairs is negative and fractional"
+ },
+ {
+  "id": 890,
+  "answer": 25,
+  "exact": 25,
+  "flags": [],
+  "method": "(1 - 1/4) * (1 - 2/3) * 100",
+  "note": "the plant counts themselves are fractional, the percentage is exact"
+ },
+ {
+  "id": 848,
+  "answer": -1080486.5,
+  "exact": -1080486.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(floral - floral_with_buttons) - white / 2",
+  "note": "half of an odd number of white shirts is fractional, and the difference is negative"
+ },
+ {
+  "id": 516,
+  "answer": 413683873235667,
+  "exact": 413683873235667,
+  "flags": [],
+  "method": "punches_per_minute * rounds * 3 minutes",
+  "note": "25423833 looks like the replacement landed inside another number; used as written"
+ },
+ {
+  "id": 542,
+  "answer": -4487772.5,
+  "exact": -4487772.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "paid - (3 * apple_price + 5 * 0.80 + 6 * 0.75)",
+  "note": "the fruit costs far more than the $20 given, so the change is negative"
+ },
+ {
+  "id": 366,
+  "answer": 0,
+  "exact": 0,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "max(0, required_total - first_test - second_test)",
+  "note": "the first two tests already exceed the 42 points, so 0 more points are needed; alt=-9912047 is the plain formula required - first - second"
+ },
+ {
+  "id": 855,
+  "answer": 1294267,
+  "exact": 1294267,
+  "flags": [],
+  "method": "me + (me + 3) + (me - 2) + (3 * (me + 3) - 1) = total  ->  me = (total - 9) / 6"
+ },
+ {
+  "id": 1072,
+  "answer": 2852109.8333333335,
+  "exact": 2852109.8333333335,
+  "flags": [],
+  "method": "money * (1 - 1/4) + money * (1 - 1/3)"
+ },
+ {
+  "id": 852,
+  "answer": 243759741,
+  "exact": 243759741,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "3 * green_price + 3 * (red_price - discount_per_red)",
+  "note": "3 baskets of each; the discount is larger than the $18 red basket (negative net price); 90281365 looks like the replacement landed inside another number; used as written"
+ },
+ {
+  "id": 607,
+  "answer": 7.296353917111498e-06,
+  "exact": 7.296353917111498e-06,
+  "flags": [],
+  "method": "bottle_price * 100 / (pumps_per_wash_in_directions * washings)",
+  "note": "a tiny fraction of a cent per pump; $37054774.00 and 137054770 look like the replacement (3705477) landed inside other numbers; used as written"
+ },
+ {
+  "id": 1296,
+  "answer": 14745980,
+  "exact": 14745980,
+  "flags": [],
+  "method": "leggings + frame + sunglasses + 2 * bathrobe"
+ },
+ {
+  "id": 531,
+  "answer": 64285676,
+  "exact": 64285676,
+  "flags": [],
+  "method": "start - off1 + 5 * off1 - 21 + 21 / 3",
+  "note": "44857138 looks like the replacement landed inside another number; used as written"
+ },
+ {
+  "id": 358,
+  "answer": -143650,
+  "exact": -143650,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(pocket_money - lollipops * 0.25) * days",
+  "note": "the lollipops cost far more than the $5, so the daily change is negative (dollars)"
+ }
+]
