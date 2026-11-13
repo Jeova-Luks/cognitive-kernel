@@ -95,7 +95,7 @@ class CognitiveKernel:
                  episode_log: EpisodeLog | None = None, max_attempts: int = 3,
                  notes_k: int = 3, episodes_k: int = 1, tools: dict | None = None,
                  target: str = "cdsl", plan: bool = True, self_checks: bool = False,
-                 cross_check: bool = True, referee: str = "rule"):
+                 cross_check: bool = True, referee: str = "rule", audit: bool = False):
         self.llm = llm
         self.memory = memory if memory is not None else TypedMemory()
         self.episode_log = episode_log if episode_log is not None else EpisodeLog()
@@ -106,7 +106,7 @@ class CognitiveKernel:
         self.compiler = Compiler(llm, self.target)
         self.verifier = Verifier(self_checks=self_checks)
         self.reviser = Reviser(self.compiler, self.verifier, max_attempts)
-        self.arbiter = Arbiter(llm, referee) if cross_check else None
+        self.arbiter = Arbiter(llm, referee, audit) if cross_check else None
         self.notes_k = notes_k
         self.episodes_k = episodes_k
 
