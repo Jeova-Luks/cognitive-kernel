@@ -378,7 +378,7 @@ def process_category(category: str, force: bool = False, dry_run: bool = False) 
 
     Each category becomes its own dataset (ck-stage-1-raw-{category}).
     This way Kaggle killing the session at 12h only loses the in-progress
-    category — completed ones stay safe.
+    category - completed ones stay safe.
     """
     repo = stage_repo(1, f"raw-{category}")
 

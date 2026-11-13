@@ -1,6 +1,6 @@
 """Generate tiny synthetic training shards for smoke-testing the full pipeline.
 
-These shards are random tokens — not meaningful for actual training. Their sole
+These shards are random tokens - not meaningful for actual training. Their sole
 purpose is to verify the trainer pipeline runs end-to-end (data → forward →
 loss → backward → checkpoint → resume). For real training data, see Phase 2.
 """

@@ -1,4 +1,4 @@
-"""Base CognitiveUnit — preserved from the user's original cognitive_20.py.
+"""Base CognitiveUnit - preserved from the user's original cognitive_20.py.
 
 This is the user's original architecture. The MVP extends this via subclass
 (LearnableCognitiveUnit) so the original API stays untouched.

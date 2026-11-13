@@ -20,7 +20,7 @@ class RuleProposalError(Exception):
 
 
 SYSTEM_PROMPT = """You are helping a small symbolic system LEARN classification rules \
-from a dataset. The system is composed of "cognitive units" — each unit owns a \
+from a dataset. The system is composed of "cognitive units" - each unit owns a \
 list of Python lambdas as rules. A rule fires when its condition lambda \
 returns True; the rule with the highest weight wins.
 

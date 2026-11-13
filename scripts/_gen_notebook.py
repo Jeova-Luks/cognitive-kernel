@@ -8,7 +8,7 @@ from pathlib import Path
 
 CELLS = [
     ("md", [
-        "# Cognitive Kernel v0.1 — Training Notebook\n",
+        "# Cognitive Kernel v0.1 - Training Notebook\n",
         "\n",
         "Run this in Google Colab. Resumes automatically if a checkpoint exists in `OUTPUT_DIR`.\n"
     ]),

@@ -1,11 +1,11 @@
-"""LearnableCognitiveUnit — subclass of CognitiveUnit that can learn rules.
+"""LearnableCognitiveUnit - subclass of CognitiveUnit that can learn rules.
 
 Preserves the entire base API. Adds:
-- predict(text) — returns the unit's output label on an unlabelled input
-- accuracy(dataset) — computes accuracy on a labelled (input, expected) dataset
-- learn_from_dataset(...) — runs the LLM distillation loop until convergence
+- predict(text) - returns the unit's output label on an unlabelled input
+- accuracy(dataset) - computes accuracy on a labelled (input, expected) dataset
+- learn_from_dataset(...) - runs the LLM distillation loop until convergence
 
-The distillation loop itself lives in distillation.py — this class only
+The distillation loop itself lives in distillation.py - this class only
 exposes the entry point so callers don't need to wire the Claude client.
 """
 from __future__ import annotations

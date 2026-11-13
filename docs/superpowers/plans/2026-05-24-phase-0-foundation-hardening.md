@@ -1,6 +1,4 @@
-# Phase 0 — Foundation Hardening Implementation Plan
-
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+# Phase 0 - Foundation Hardening Implementation Plan
 
 **Goal:** Make the existing trainer survive Colab Free's session disconnects, enable training a ~100M-parameter model on a single T4 GPU via mixed precision + gradient checkpointing + 8-bit AdamW, and prove bit-identical checkpoint/resume across simulated session breaks.
 
@@ -8,7 +6,7 @@
 
 **Tech Stack:** Python 3.10+, PyTorch 2.1+, `torch.amp`, `torch.utils.checkpoint`, `bitsandbytes` (8-bit AdamW), `wandb`, `PyYAML`, `pytest`, `numpy`.
 
-**Spec reference:** [docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md](../specs/2026-05-24-cognitive-kernel-v0.1-design.md) — Phase 0 in §9.
+**Spec reference:** [docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md](../specs/2026-05-24-cognitive-kernel-v0.1-design.md) - Phase 0 in §9.
 
 ---
 
@@ -46,7 +44,7 @@ This is the only task without TDD steps because it sets up the environment in wh
 
 - [ ] **Step 0.1: Decide where Python runs**
 
-Local C: drive has ~228 MB free — not enough for PyTorch (~500 MB installed). Pick one option and proceed:
+Local C: drive has ~228 MB free - not enough for PyTorch (~500 MB installed). Pick one option and proceed:
 - **Option A (recommended): GitHub Codespaces.** 60 free hours/month, full Linux + VS Code in browser, pre-installed Python. After Step 0.2 pushes the repo, create a Codespace from it.
 - **Option B: Google Colab.** Run all tests inside Colab notebooks (slower iteration; mount the repo via `git clone` per session).
 - **Option C: External drive.** If you have a D: or USB drive with space, install Python there and use `pip install --target=D:\python-libs ...`.
@@ -196,7 +194,7 @@ def test_flash_attention_parity_with_manual():
 
 Run: `pytest tests/test_model.py::test_flash_attention_parity_with_manual -v`
 
-Expected: PASS (the existing implementation IS the manual implementation, so the test passes against it). This is the baseline — we want the test to still pass *after* swapping to SDPA. Record this as the regression-prevention test.
+Expected: PASS (the existing implementation IS the manual implementation, so the test passes against it). This is the baseline - we want the test to still pass *after* swapping to SDPA. Record this as the regression-prevention test.
 
 - [ ] **Step 1.3: Modify `CausalSelfAttention.forward` to use SDPA**
 
@@ -315,7 +313,7 @@ In `model.py`, replace the `__init__` of `CausalSelfAttention` (around line 72-9
         self.rope = RotaryEmbedding(dim=self.head_dim, max_seq_len=max_seq_len)
 ```
 
-(Remove the `self.register_buffer("bias", ...)` line — the SDPA call handles causal masking.)
+(Remove the `self.register_buffer("bias", ...)` line - the SDPA call handles causal masking.)
 
 - [ ] **Step 2.4: Modify `CausalSelfAttention.forward` to repeat K/V across query groups**
 
@@ -413,7 +411,7 @@ git commit -m "feat(model): support Grouped-Query Attention (n_kv_head parameter
 
 ## Task 3: Add gradient-checkpointing hook to `model.py`
 
-Wrap each `TransformerBlock`'s forward in `torch.utils.checkpoint.checkpoint` when `grad_checkpoint=True`. Trades ~30% compute for ~60% activation memory savings — required for fitting the 100M model in a T4's 16 GB.
+Wrap each `TransformerBlock`'s forward in `torch.utils.checkpoint.checkpoint` when `grad_checkpoint=True`. Trades ~30% compute for ~60% activation memory savings - required for fitting the 100M model in a T4's 16 GB.
 
 **Files:**
 - Modify: `model.py` (`GPTModel.__init__`, `GPTModel.forward`)
@@ -509,7 +507,7 @@ git commit -m "feat(model): add gradient checkpointing hook (~60% activation mem
 
 ## Task 4: Reserve CDSL special tokens in `tokenizer.py`
 
-The base tokenizer currently produces token IDs 0–255 from raw bytes plus BPE merges starting at 256. Reserve a fixed band of token IDs for CDSL boundary and tool-call markers so the model can emit them as single tokens later.
+The base tokenizer currently produces token IDs 0-255 from raw bytes plus BPE merges starting at 256. Reserve a fixed band of token IDs for CDSL boundary and tool-call markers so the model can emit them as single tokens later.
 
 **Files:**
 - Modify: `tokenizer.py` (`BPETokenizer.__init__`, add `SPECIAL_TOKENS`)
@@ -704,7 +702,7 @@ class Config:
 
 
 def load_config(path: Path) -> Config:
-    """Load a YAML config into nested dataclasses. Strict — missing required fields raise."""
+    """Load a YAML config into nested dataclasses. Strict - missing required fields raise."""
     with open(path, "r", encoding="utf-8") as f:
         raw = yaml.safe_load(f)
     return Config(
@@ -816,7 +814,7 @@ git commit -m "feat(config): YAML-backed configuration for trainer and model"
 
 ## Task 6: Create streaming `dataset.py`
 
-Reads pre-tokenized `.bin` shards (uint16, 2 bytes/token — nanoGPT format) from a glob, yields random training batches with deterministic seeding. Designed for Drive: streams sequentially in large chunks, never does small random reads against Drive.
+Reads pre-tokenized `.bin` shards (uint16, 2 bytes/token - nanoGPT format) from a glob, yields random training batches with deterministic seeding. Designed for Drive: streams sequentially in large chunks, never does small random reads against Drive.
 
 **Files:**
 - Create: `dataset.py`
@@ -857,7 +855,7 @@ def test_dataset_yields_correct_shapes(toy_shards):
     x, y = ds.get_batch(batch_size=4)
     assert x.shape == (4, 16)
     assert y.shape == (4, 16)
-    # y is x shifted by 1 — verify with a known seed
+    # y is x shifted by 1 - verify with a known seed
     assert x.dtype == np.dtype("int64") or hasattr(x, "long")  # torch tensor
 
 
@@ -976,7 +974,7 @@ git commit -m "feat(dataset): streaming sharded token dataset with deterministic
 
 ## Task 7: Refactor `trainer.py` to use the new model/config/dataset
 
-The old trainer hardcodes things and reads a text file. Replace its data path with `ShardedTokenDataset`, take a `Config` instead of kwargs, and prepare it for the mixed-precision / 8-bit-optimizer additions in Tasks 8 and 9. **No test gating in this task** — it's a structural refactor; the tests in Tasks 8-12 will cover the new behaviors.
+The old trainer hardcodes things and reads a text file. Replace its data path with `ShardedTokenDataset`, take a `Config` instead of kwargs, and prepare it for the mixed-precision / 8-bit-optimizer additions in Tasks 8 and 9. **No test gating in this task** - it's a structural refactor; the tests in Tasks 8-12 will cover the new behaviors.
 
 **Files:**
 - Modify: `trainer.py`
@@ -1156,7 +1154,7 @@ def test_trainer_runs_two_steps_on_toy(toy_shards, tmp_path):
 
 Run: `pytest tests/test_trainer.py::test_trainer_runs_two_steps_on_toy -v`
 
-Expected: PASS. Loss values printed are not checked for magnitude — just that the loop runs and completes two steps.
+Expected: PASS. Loss values printed are not checked for magnitude - just that the loop runs and completes two steps.
 
 - [ ] **Step 7.4: Commit**
 
@@ -1169,7 +1167,7 @@ git commit -m "refactor(trainer): rebuild trainer on Config + ShardedTokenDatase
 
 ## Task 8: Add BF16 mixed precision to `trainer.py`
 
-Wrap forward/backward in `torch.amp.autocast(device_type="cuda", dtype=torch.bfloat16)`. BF16 (not FP16) — no GradScaler needed; BF16 has the same exponent range as FP32 and is stable on Ampere+ GPUs (T4 has it via emulation, A100 native).
+Wrap forward/backward in `torch.amp.autocast(device_type="cuda", dtype=torch.bfloat16)`. BF16 (not FP16) - no GradScaler needed; BF16 has the same exponent range as FP32 and is stable on Ampere+ GPUs (T4 has it via emulation, A100 native).
 
 **Files:**
 - Modify: `trainer.py` (`Trainer.train_step` and `Trainer.evaluate`)
@@ -1248,7 +1246,7 @@ git commit -m "feat(trainer): wrap forward in torch.amp.autocast (BF16 on GPU)"
 
 ## Task 9: Add 8-bit AdamW via `bitsandbytes`
 
-Optimizer states for AdamW are 2× model size in FP32 — for 100 M that's 800 MB just for optimizer. 8-bit AdamW shrinks this 4×.
+Optimizer states for AdamW are 2× model size in FP32 - for 100 M that's 800 MB just for optimizer. 8-bit AdamW shrinks this 4×.
 
 **Files:**
 - Modify: `trainer.py` (`_build_optimizer`)
@@ -1588,7 +1586,7 @@ def test_wandb_disabled_mode_does_not_call_init(tmp_path, toy_shards, monkeypatc
 
 Run: `pytest tests/test_trainer.py::test_wandb_disabled_mode_does_not_call_init -v`
 
-Expected: FAIL (Trainer is silent and never tried to log). The test "passes" trivially right now — we need a *different* failure mode to trigger development. Adjust:
+Expected: FAIL (Trainer is silent and never tried to log). The test "passes" trivially right now - we need a *different* failure mode to trigger development. Adjust:
 
 Replace the test with one that confirms logging IS attempted in online mode:
 
@@ -1697,7 +1695,7 @@ from pathlib import Path
 
 CELLS = [
     ("md", [
-        "# Cognitive Kernel v0.1 — Training Notebook\n",
+        "# Cognitive Kernel v0.1 - Training Notebook\n",
         "\n",
         "Run this in Google Colab. Resumes automatically if a checkpoint exists in `OUTPUT_DIR`.\n"
     ]),
@@ -1895,7 +1893,7 @@ git commit -m "chore: remove trainer_legacy.py after successful refactor"
 
 Replace or create `README.md`:
 ```markdown
-# Cognitive Kernel — Phase 0
+# Cognitive Kernel - Phase 0
 
 First subproject of a multi-year research program (see [design spec](docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md)).
 
@@ -1945,7 +1943,7 @@ Final gate.
 pytest -v
 ```
 
-Expected: All tests in `tests/test_model.py`, `tests/test_tokenizer.py`, `tests/test_config.py`, `tests/test_dataset.py`, `tests/test_trainer.py` pass. **In particular, `test_resume_is_bit_identical` MUST pass — that's the Phase 0 definition of done.**
+Expected: All tests in `tests/test_model.py`, `tests/test_tokenizer.py`, `tests/test_config.py`, `tests/test_dataset.py`, `tests/test_trainer.py` pass. **In particular, `test_resume_is_bit_identical` MUST pass - that's the Phase 0 definition of done.**
 
 - [ ] **Step 15.2: Tag the Phase 0 release**
 
@@ -1971,7 +1969,7 @@ When all 15 tasks are complete and all tests pass, you have:
 9. ✅ Smoke-tested end-to-end on Colab with simulated disconnect
 10. ✅ Foundation for Phase 1 (pre-train base 100 M) to plug into
 
-**Next:** Phase 1 plan — pre-training the 100 M base model on the curated data mix. To be written when Phase 0 is complete.
+**Next:** Phase 1 plan - pre-training the 100 M base model on the curated data mix. To be written when Phase 0 is complete.
 
 ---
 
