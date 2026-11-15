@@ -1,5 +1,8 @@
 # Cognitive Kernel
 
+**Status:** Phase 2 is the current phase. Phase 0 is done, and pre-training
+of the 100M base model (Phase 1) is still in progress.
+
 This is the first project of a personal research program I plan to work on
 for several years. The full design and the thesis behind it are in
 [docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md](docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md).
@@ -50,7 +53,7 @@ and trains the other N/2. The two loss curves must be identical bit for bit.
 5. Disconnect the Colab runtime on purpose, reconnect and run all cells again.
    Training should print `Resuming from ckpt_step_NNNNN.pt` and continue.
 
-## Phase 2 - Vertical slice with a local LLM as stand-in
+## Phase 2 - Vertical slice with a local LLM as stand-in (current)
 
 All 7 components exist in a minimal form. The pipeline is in `kernel/`
 (classifier, typed memory, reader/planner, compiler, verifier, reviser,
@@ -187,7 +190,7 @@ and a `summary.json`.
 
 - Phase 0: foundation hardening (done)
 - Phase 1: pre-train the 100M base on curated data (in progress)
-- Phase 2: the 7-component pipeline in minimal form (runs end to end with a stand-in LLM)
+- Phase 2: the 7-component pipeline in minimal form (current; runs end to end with a stand-in LLM)
 - Phase 3: compiler from natural language to CDSL, supervised bootstrap
 - Phase 4: compiler self-bootstrap from execution feedback
 - Phase 5: DSL expressiveness ablation
