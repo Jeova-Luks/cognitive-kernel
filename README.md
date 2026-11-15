@@ -3,6 +3,25 @@
 **Status:** Phase 2 is the current phase. Phase 0 is done, and pre-training
 of the 100M base model (Phase 1) is still in progress.
 
+## Key findings (Phase 2)
+
+Llama 3.1 8B Instruct as a stand-in model, 200 held-out GSM8K problems, each
+also run as its GSM-Hard twin (the same text with one number made large).
+Details and caveats are in [Phase 2 results](#phase-2-results-with-the-stand-in-llm-2026-11-11).
+
+- Plain chain-of-thought (CoT) gets 86.5% on GSM8K but only 26.0% on GSM-Hard.
+  Executed programs hold up better: plan to Python gets 75.0% and 63.0%.
+- On the 159 twins whose GSM-Hard label is certainly correct, the program
+  systems score about the same at both sizes (Python 73.0% and 74.2%, CDSL
+  70.4% and 70.4%), while CoT falls from 86.8% to 31.4%.
+- The full kernel, where the program is cross-checked against CoT, is the only
+  system that does well on both: 86.5% and 60.0% (73.2% over all 400). Part of
+  this is by construction, since its referee uses number size to decide.
+- When the program and CoT agree, the answer is right 97% of the time (175 of
+  181).
+- CDSL and Python give statistically the same results (p = 0.23 and 0.18).
+  With a compiler never trained on CDSL, the DSL adds nothing over Python yet.
+
 This is the first project of a personal research program I plan to work on
 for several years. The full design and the thesis behind it are in
 [docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md](docs/superpowers/specs/2026-05-24-cognitive-kernel-v0.1-design.md).
