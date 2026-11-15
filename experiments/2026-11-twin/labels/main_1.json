@@ -1,0 +1,399 @@
+[
+ {
+  "id": 634,
+  "answer": 1850572,
+  "exact": 1850572,
+  "flags": [],
+  "method": "tommy = (naomi - 6) + 3"
+ },
+ {
+  "id": 295,
+  "answer": 14597880,
+  "exact": 14597880,
+  "flags": [],
+  "method": "(pushups + squats + presses) + (pushups+20 + squats-10 + presses*2)"
+ },
+ {
+  "id": 50,
+  "answer": 10074005.666666666,
+  "exact": 10074005.666666666,
+  "flags": [],
+  "method": "eggs_per_day * 7 days / 12 per dozen * price_per_dozen",
+  "note": "dozens are not whole; all eggs sold, price applied pro rata, not rounded (10074004 if only full dozens were paid for); exact frac=30222017/3"
+ },
+ {
+  "id": 679,
+  "answer": 53374240,
+  "exact": 53374240,
+  "flags": [],
+  "method": "potatoes / potatoes_per_batch * hash_browns_per_batch"
+ },
+ {
+  "id": 659,
+  "answer": 2390629.2,
+  "exact": 2390629.2,
+  "flags": [],
+  "method": "(1/2*almond + 1/3*walnut) - (1/5*almond + 1/3*walnut)",
+  "note": "exact frac=11953146/5"
+ },
+ {
+  "id": 441,
+  "answer": 28937992,
+  "exact": 28937992,
+  "flags": [],
+  "method": "(3 + 4)*per_pack - (1 + 2)*per_pack"
+ },
+ {
+  "id": 276,
+  "answer": 167524.425,
+  "exact": 167524.425,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "cards * (1 - 2/5) * (1 - 1/2) * (1 - 5/8)",
+  "note": "fractional number of cards; exact frac=6700977/40"
+ },
+ {
+  "id": 1298,
+  "answer": 898609.5,
+  "exact": 898609.5,
+  "flags": [],
+  "method": "quarters*0.25 + dimes*0.10 + nickels*0.05 + pennies*0.01",
+  "note": "exact frac=1797219/2"
+ },
+ {
+  "id": 21,
+  "answer": 3473609,
+  "exact": 3473609,
+  "flags": [],
+  "method": "(samantha_age + 6) - 23"
+ },
+ {
+  "id": 315,
+  "answer": 10454012,
+  "exact": 10454012,
+  "flags": [],
+  "method": "families_a*6 + families_b*4 - ill - ill/4"
+ },
+ {
+  "id": 540,
+  "answer": 5742539,
+  "exact": 5742539,
+  "flags": [],
+  "method": "3 * (total/3 + 5 + 10 - 8)",
+  "note": "assumes the three shares are equal"
+ },
+ {
+  "id": 1236,
+  "answer": 55801500,
+  "exact": 55801500,
+  "flags": [],
+  "method": "madeline + 5*madeline + 4 pies * 12"
+ },
+ {
+  "id": 1213,
+  "answer": 7217941.66,
+  "exact": 7217941.66,
+  "flags": [],
+  "method": "borrowed * 1.02 - 11 * 25",
+  "note": "exact frac=360897083/50"
+ },
+ {
+  "id": 641,
+  "answer": 45726003.75,
+  "exact": 45726003.75,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "12 * salary*1.05 + 0.5 * salary*1.05",
+  "note": "bonus taken as half the raised monthly salary; alt=45638906.6 if half the old salary; exact frac=182904015/4"
+ },
+ {
+  "id": 968,
+  "answer": 114167603,
+  "exact": 114167603,
+  "flags": [
+   "ill_posed",
+   "ambiguous"
+  ],
+  "method": "synthetic*15 + polyester*22 + hybrid*18 (minutes)",
+  "note": "text contradicts itself: 12 racquets in total but 3 + 5 + 6342636 listed; counts per type used as written; alt=227 if hybrid = 12 - 3 - 5"
+ },
+ {
+  "id": 5,
+  "answer": 21459061,
+  "exact": 21459060,
+  "flags": [
+   "rounding"
+  ],
+  "method": "ceil(glasses/2)*price + floor(glasses/2)*0.60*price",
+  "note": "odd count, so only floor(glasses/2) glasses get the reduced price; alt=21459060 if exactly half the glasses are discounted"
+ },
+ {
+  "id": 1124,
+  "answer": 26073328,
+  "exact": 26073328,
+  "flags": [],
+  "method": "(kept + 7) * 2 * 2"
+ },
+ {
+  "id": 955,
+  "answer": 1667667.2,
+  "exact": 1667667.2,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "beds - beds/5 - 50 * 14",
+  "note": "1/5 of the beds is not a whole number; exact frac=8338336/5"
+ },
+ {
+  "id": 1271,
+  "answer": 8580402,
+  "exact": 8580402,
+  "flags": [],
+  "method": "total - red - 2*red - red/2"
+ },
+ {
+  "id": 1064,
+  "answer": 8917597,
+  "exact": 8917597,
+  "flags": [],
+  "method": "mon + 2*mon + 3*mon + 30 + 25",
+  "note": "Tuesday and Wednesday both compared with Monday (13376368 if Wednesday were three times Tuesday)"
+ },
+ {
+  "id": 92,
+  "answer": 1726970,
+  "exact": 1726970,
+  "flags": [],
+  "method": "((james + 1) - 2) - 5"
+ },
+ {
+  "id": 1216,
+  "answer": 7199289,
+  "exact": 7199289,
+  "flags": [],
+  "method": "capacity - 2 * (20 + 40 + 3/4*40)"
+ },
+ {
+  "id": 335,
+  "answer": 267950830,
+  "exact": 267950830,
+  "flags": [],
+  "method": "30*sucker_batches + 70*fudge_batches (ounces)"
+ },
+ {
+  "id": 26,
+  "answer": 25124292,
+  "exact": 25124292,
+  "flags": [],
+  "method": "3*shorts + 3*pants + 3*shoes"
+ },
+ {
+  "id": 1265,
+  "answer": 17208936,
+  "exact": 17208936,
+  "flags": [],
+  "method": "(4 gallons * 1 cup + 1 gallon * 2 cups) * lemons_per_cup"
+ },
+ {
+  "id": 517,
+  "answer": 1410035,
+  "exact": 1410035,
+  "flags": [
+   "ambiguous",
+   "unrealistic"
+  ],
+  "method": "2 * (suzanne / 4)",
+  "note": "'two times more' read as twice as many; alt=2115052.5 if read as 3x; unrealistic because the count for Josh (705017.5) is fractional, the answer itself is whole"
+ },
+ {
+  "id": 871,
+  "answer": 2040087.3384615385,
+  "exact": 2040087.3384615385,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "2/5*pieces + 10 + 7/13*(pieces - 2/5*pieces - 10)",
+  "note": "fractional pieces; exact frac=132605677/65"
+ },
+ {
+  "id": 1149,
+  "answer": 132103989,
+  "exact": 132103989,
+  "flags": [],
+  "method": "fish * $1 * 31 days in May"
+ },
+ {
+  "id": 223,
+  "answer": 36640,
+  "exact": 36640,
+  "flags": [],
+  "method": "year1 + year1/3"
+ },
+ {
+  "id": 508,
+  "answer": 8089491,
+  "exact": 8089491,
+  "flags": [],
+  "method": "farm_cows + 2*farm_cows + zoo_sheep + zoo_sheep/2"
+ },
+ {
+  "id": 376,
+  "answer": 3328769.25,
+  "exact": 3328769.25,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "pupils/2 * (1 - 1/4)",
+  "note": "fractional pupils; exact frac=13315077/4"
+ },
+ {
+  "id": 756,
+  "answer": 2946716.6666666665,
+  "exact": 2946716.6666666665,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "2/3 * council  (favor = 2*against, favor + against = council)",
+  "note": "fractional votes; assumes every member voted; exact frac=8840150/3"
+ },
+ {
+  "id": 937,
+  "answer": 17212291,
+  "exact": 17212291,
+  "flags": [],
+  "method": "goats*5 + sheep*(2*5 - 3)"
+ },
+ {
+  "id": 841,
+  "answer": 1419161,
+  "exact": 1419161,
+  "flags": [],
+  "method": "car + phone - savings - gift"
+ },
+ {
+  "id": 138,
+  "answer": 4865122,
+  "exact": 4865122,
+  "flags": [],
+  "method": "(75 - 5*8) + (questions2 - 5*6)"
+ },
+ {
+  "id": 866,
+  "answer": 1086021.6666666667,
+  "exact": 1086021.6666666667,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(total + 12 - (25 - 12)) / 3",
+  "note": "fractional books; exact frac=3258065/3"
+ },
+ {
+  "id": 1302,
+  "answer": 12174024,
+  "exact": 12174024,
+  "flags": [],
+  "method": "soldiers/2 * 5 + soldiers/2 * 7"
+ },
+ {
+  "id": 752,
+  "answer": 1168833.6,
+  "exact": 1168833.6,
+  "flags": [],
+  "method": "monthly_bill * 12 / (4 roommates + Jenna)",
+  "note": "bill split among 5 people, Jenna included (1461042 if split 4 ways); exact frac=5844168/5"
+ },
+ {
+  "id": 694,
+  "answer": 6742816,
+  "exact": 6742816,
+  "flags": [],
+  "method": "(adults - 5*high_chairs) + (babies - high_chairs)"
+ },
+ {
+  "id": 612,
+  "answer": 8286943,
+  "exact": 8286943,
+  "flags": [],
+  "method": "6 + beef_tips*1 + 16 (ounces)"
+ },
+ {
+  "id": 1249,
+  "answer": 36889246,
+  "exact": 36889246,
+  "flags": [],
+  "method": "people + 2*rooms + 4*rooms/2 + 5*rooms/2"
+ },
+ {
+  "id": 625,
+  "answer": 117011232,
+  "exact": 117011232,
+  "flags": [],
+  "method": "rows * 20 * 4/5"
+ },
+ {
+  "id": 1104,
+  "answer": 50332236,
+  "exact": 50332236,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "3 * (2 * chris)",
+  "note": "'N times older' read as N times as old; alt=100664472 if read literally as (1+3)*(1+2)*chris"
+ },
+ {
+  "id": 1294,
+  "answer": 1554736.5,
+  "exact": 1554736.5,
+  "flags": [],
+  "method": "tshirt + 0.50*tshirt + 40*(1 - 0.40)",
+  "note": "exact frac=3109473/2"
+ },
+ {
+  "id": 1076,
+  "answer": 96013532,
+  "exact": 96013532,
+  "flags": [],
+  "method": "6*5.50 + 9*11 + 20*soda_price"
+ },
+ {
+  "id": 290,
+  "answer": 35061370,
+  "exact": 35061370,
+  "flags": [],
+  "method": "10 * (ali + (ali - 5))"
+ },
+ {
+  "id": 1308,
+  "answer": 1973643,
+  "exact": 1973643,
+  "flags": [],
+  "method": "basket1 + 2*basket1"
+ },
+ {
+  "id": 392,
+  "answer": 9202335,
+  "exact": 9202335,
+  "flags": [],
+  "method": "cable - (netflix + (hulu + disney)*(1 - 0.20))",
+  "note": "monthly saving"
+ },
+ {
+  "id": 476,
+  "answer": 3.3365302854351613e-06,
+  "exact": 3.3365302854351613e-06,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(300 / 15) / kids",
+  "note": "20 books for 5994251 kids: a tiny fraction of a book each; exact frac=20/5994251"
+ },
+ {
+  "id": 32,
+  "answer": 4649302,
+  "exact": 4649302,
+  "flags": [],
+  "method": "dogs * 0.5 hours * 7 days"
+ }
+]

@@ -74,10 +74,14 @@ class Plan:
 
 
 class Planner:
-    def __init__(self, llm, example_problems: list[str], max_tokens: int = 450):
+    def __init__(self, llm, example_problems: list[str], max_tokens: int = 450,
+                 temperature: float = 0.0, seed: int | None = 0):
+        """``temperature`` above 0 gives a second, different reading of the same problem."""
         self.llm = llm
         self.examples = list(zip(example_problems, EXAMPLE_PLANS))
         self.max_tokens = max_tokens
+        self.temperature = temperature
+        self.seed = seed
 
     def plan(self, problem: str, memory_notes: list[str] | None = None) -> Plan:
         msgs = [{"role": "system", "content": _SYSTEM}]
@@ -90,5 +94,6 @@ class Planner:
                          "\n".join(f"- {n}" for n in memory_notes))
         parts.append(f"Problem:\n{problem}")
         msgs.append({"role": "user", "content": "\n\n".join(parts)})
-        res = self.llm.chat(msgs, temperature=0.0, max_tokens=self.max_tokens, seed=0)
+        res = self.llm.chat(msgs, temperature=self.temperature, max_tokens=self.max_tokens,
+                            seed=self.seed)
         return Plan(res.text.strip(), res.seconds, res.completion_tokens)

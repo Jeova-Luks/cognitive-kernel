@@ -8,8 +8,8 @@ Datasets
                rows by text. Dropped: twins with a negative target (the
                substitution made the problem meaningless) and twins whose target
                equals the original (unchanged copies, or a changed number with
-               the old label). 764 usable twins. GSM-Hard is known to contain
-               further label noise; it affects every system equally.
+               the old label). 764 usable twins. GSM-Hard has further label
+               noise, which ``label_safe`` filters out (see below).
 
 Splits (GSM8K test row indices; a GSM-Hard split is the twins of those rows):
 
@@ -24,6 +24,15 @@ Splits (GSM8K test row indices; a GSM-Hard split is the twins of those rows):
 - ``paired``   200 problems drawn with seed 2027 from rows that are in neither
                dev nor heldout and that have a GSM-Hard twin. Evaluated in both
                datasets, so every problem is seen with small and large numbers.
+
+Experiment split (2026-11, twin test and second model). The pool is every
+GSM-Hard twin that no earlier split used and whose label is safe: exactly one
+number changed, and that value occurs once in the original text and once in
+the reference program, so the GSM-Hard target is the reference function
+applied to the text. 345 problems. ``experiment_indices`` draws 250 of them
+with seed 2028 (``main``; its first 100 are also run in their GSM8K version,
+``small``) and keeps the other 95 locked (``reserve``) for a later
+confirmation: nothing may be run or looked at there before that.
 
 Caveat for every number produced here: GSM8K test has been public since 2021,
 so any modern open-weights LLM may have seen it during training. That inflates
@@ -53,6 +62,7 @@ DEV_SEED, DEV_N = 0, 50
 HELDOUT_SEED, HELDOUT_N = 2026, 200
 PAIRED_SEED, PAIRED_N = 2027, 200
 SMOKE_ROWS = {0}
+EXPERIMENT_SEED, EXPERIMENT_N, EXPERIMENT_SMALL_N = 2028, 250, 100
 DATASETS = ("gsm8k", "gsmhard")
 SPLITS = ("dev", "heldout", "paired")
 
@@ -104,8 +114,81 @@ def load_hard() -> dict[int, dict]:
         # some changed a number but kept the old target (a wrong label).
         if gold >= 0 and abs(gold - row["gold"]) > 1e-9:
             twins[row["idx"]] = {"idx": row["idx"], "question": matches[0]["input"],
-                                 "gold": float(matches[0]["target"])}
+                                 "gold": float(matches[0]["target"]), "code": matches[0].get("code", "")}
     return twins
+
+
+_TEXT_NUMBER = re.compile(r"(?<![\w.])\d[\d,]*(?:\.\d+)?")
+_CODE_LITERAL = re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)(?![\w]|\.\d)")
+
+
+def text_numbers(text: str) -> list[float]:
+    """Every number written in a problem text, in order ("1,500" -> 1500.0)."""
+    out = []
+    for m in _TEXT_NUMBER.finditer(text):
+        try:
+            out.append(float(m.group().rstrip(",").replace(",", "")))
+        except ValueError:
+            pass
+    return out
+
+
+def changed_number(original: str, twin: str) -> tuple[float, float] | None:
+    """(old value, new value) when exactly one value differs between the two texts."""
+    a, b = text_numbers(original), text_numbers(twin)
+    if len(a) != len(b):
+        return None
+    pairs = {(x, y) for x, y in zip(a, b) if abs(x - y) > 1e-9}
+    return next(iter(pairs)) if len(pairs) == 1 else None
+
+
+def label_safe(original: str, twin: str, reference_code: str) -> bool:
+    """True when the GSM-Hard target is certainly the answer to the twin text.
+
+    GSM-Hard was built by text replacement, which fails in two ways: the new
+    number can land inside another number of the text, and a reference program
+    that uses the old number twice may have only one use replaced. Neither can
+    happen when one value changed and that value occurs once in the original
+    text and once in the body of the reference program.
+    """
+    change = changed_number(original, twin)
+    if change is None or not reference_code:
+        return False
+    old, new = change
+    body = [float(x) for x in _CODE_LITERAL.findall(reference_code.split('"""')[-1])]
+    uses = sum(abs(v - old) < 1e-9 or abs(v - new) <= 1e-9 * max(1.0, abs(new)) for v in body)
+    return text_numbers(original).count(old) == 1 and uses == 1
+
+
+def _used_before_experiment(n_rows: int) -> set[int]:
+    base = split_indices(n_rows)
+    return set(base["dev"]) | set(base["heldout"]) | set(paired_indices()) | SMOKE_ROWS
+
+
+def experiment_pool() -> list[int]:
+    """GSM8K rows never used by dev, heldout or paired whose GSM-Hard twin has a safe label."""
+    rows = load()
+    used = _used_before_experiment(len(rows))
+    twins = load_hard()
+    return sorted(i for i, t in twins.items()
+                  if i not in used and label_safe(rows[i]["question"], t["question"], t["code"]))
+
+
+def experiment_indices() -> dict[str, list[int]]:
+    pool = experiment_pool()
+    main = random.Random(EXPERIMENT_SEED).sample(pool, EXPERIMENT_N)
+    return {"main": main, "small": main[:EXPERIMENT_SMALL_N], "reserve": sorted(set(pool) - set(main))}
+
+
+def experiment_split(part: str = "main", dataset: str = "gsmhard", unlock_reserve: bool = False) -> list[dict]:
+    """Problems of the 2026-11 experiment. ``part``: main (250), small (100) or reserve (95, locked)."""
+    indices = experiment_indices()
+    if part not in indices or dataset not in DATASETS:
+        raise ValueError(f"part must be one of {sorted(indices)} and dataset one of {DATASETS}")
+    if part == "reserve" and not unlock_reserve:
+        raise PermissionError("the reserve is locked until the confirmation run")
+    source = load() if dataset == "gsm8k" else load_hard()
+    return [source[i] for i in indices[part]]
 
 
 def paired_indices() -> list[int]:
@@ -137,10 +220,9 @@ def split(name: str, dataset: str = "gsm8k") -> list[dict]:
 
 
 def fresh_split(n: int, seed: int) -> list[dict]:
-    """A new GSM8K sample that avoids dev, heldout, paired and the smoke-test row."""
+    """A new GSM8K sample that avoids dev, heldout, paired, the experiment pool and the smoke-test row."""
     rows = load()
-    indices = split_indices(len(rows))
-    used = set(indices["dev"]) | set(indices["heldout"]) | set(paired_indices()) | SMOKE_ROWS
+    used = _used_before_experiment(len(rows)) | set(experiment_pool())
     rest = [i for i in range(len(rows)) if i not in used]
     return [rows[i] for i in random.Random(seed).sample(rest, n)]
 

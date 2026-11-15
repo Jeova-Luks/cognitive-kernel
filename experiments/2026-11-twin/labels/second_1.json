@@ -1,0 +1,122 @@
+[
+ {
+  "id": 866,
+  "answer": 1086021.6666666667,
+  "exact": 1086021.6666666667,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "fawn = (total + 2*anne_fewer_than_fawn - sofie_more_than_anne) / 3 = 3258065/3",
+  "note": "'25 more than Anne' and 'Anne has 12 fewer than Fawn' give Sofie = Fawn+13 and Anne = Fawn-12, so total = 3*Fawn + 1; 3258065 is not divisible by 3, kept exact (fractional books)",
+  "alternatives": []
+ },
+ {
+  "id": 897,
+  "answer": -8280345,
+  "exact": -8280345,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "martha_now - 3 * (martha_now - bought)",
+  "note": "'bought 5 more for a total of 4140180' makes 4140180 Martha's own count after buying; 'Joseph had 3 times as many' refers to her earlier count (4140175), so Joseph has 12420525 and she has fewer: 'how many more' comes out negative",
+  "alternatives": [
+   {
+    "value": 8280345,
+    "reading": "(weak) size of the gap given without sign: she has 8280345 fewer than Joseph, the direction the question presupposes is reversed"
+   }
+  ]
+ },
+ {
+  "id": 357,
+  "answer": -1,
+  "exact": -0.9999911116308063,
+  "flags": [
+   "rounding",
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "floor(budget / (golf_round + tokens + 2*kart_ride)) - 1   [cost per head = 10125592]",
+  "note": "'she and her friends all' puts Morgan in the head count, each head costs 5 + 5 + 2 rides; 'how many friends can she invite' on a budget needs whole heads (floor); the budget covers 0 heads, so minus Morgan gives -1; alt=0 (plain-sense answer: she can invite nobody)",
+  "alternatives": [
+   {
+    "value": 0,
+    "reading": "she can invite no friends at all: the $90 does not even cover Morgan and a number of friends cannot go below zero"
+   },
+   {
+    "value": -0.9999911116308063,
+    "reading": "same formula with no rounding to whole heads: budget/cost_per_head - 1"
+   }
+  ]
+ },
+ {
+  "id": 952,
+  "answer": 522296640,
+  "exact": 522296640,
+  "flags": [],
+  "method": "reports_per_15min * (minutes from 8:00 AM to 11:00 PM / 15)   [900 min = 60 intervals]",
+  "note": "'from 8:00 AM until 11:00 PM' runs from morning to night: 15 hours = 900 minutes = 60 quarter-hours (it is not a 3-hour span)",
+  "alternatives": []
+ },
+ {
+  "id": 279,
+  "answer": 2.026568082385847e-06,
+  "exact": 2.026568082385847e-06,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "sam = 9*(3 - 1) / (k - 3), from k*sam + 9 = 3*(sam + 9); = 18/8882011 years",
+  "note": "'8882014 times older than' read as '8882014 times as old as', the usual word-problem sense, next to '3 times as old as'; answer in years, the unit of 'in 9 years' (about 64 seconds old)",
+  "alternatives": [
+   {
+    "value": 2.0265678542204177e-06,
+    "reading": "(weak) literal 'N times older' = (N+1) times as old: Ruby = 8882015 * Sam, Sam = 9/4441006 years"
+   }
+  ]
+ },
+ {
+  "id": 130,
+  "answer": 4358497.333333333,
+  "exact": 4358497.333333333,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "hired - hired/3 - 10 = 13075492/3",
+  "note": "'a third of the elves quit ... then 10 of the remaining elves quit' is hired*2/3, then minus 10; 6537761 is not divisible by 3, kept exact as instructed (rounding to whole elves would give 4358497 or 4358498 depending on where one rounds, the text does not say)",
+  "alternatives": []
+ },
+ {
+  "id": 371,
+  "answer": 36958802,
+  "exact": 36958802,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "pairs = friday + 2*friday + (2*friday)/2 - 6 returned",
+  "note": "the text counts by the pair and itself calls Friday's pair count 'that number of shoes', so 'tennis shoes' in the question is read as pairs; returns subtracted because of 'but six people returned their pairs'; alt=73917604 (individual shoes, 2 per pair)",
+  "alternatives": [
+   {
+    "value": 73917604,
+    "reading": "question says 'tennis shoes' while the data say 'pairs of tennis shoes': individual shoes = 2 * net pairs"
+   },
+   {
+    "value": 36958808,
+    "reading": "(weak) a returned pair was still sold: pairs sold with the 6 returns not subtracted"
+   },
+   {
+    "value": 73917616,
+    "reading": "(weak) returns not subtracted and counted as individual shoes"
+   }
+  ]
+ },
+ {
+  "id": 950,
+  "answer": 2174466.6666666665,
+  "exact": 2174466.6666666665,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "azibo = (team_points + 20 + 6523395)/3 - 20 = 6523400/3",
+  "note": "'each contributed to their team's 45 points' read as the three scores adding to 45; 'it was 20 more than Azibo ... and 6523395 more ... than Dinar' are both gaps measured from Bahati; kept exact (fractional points, Dinar comes out at -13046725/3)",
+  "alternatives": []
+ }
+]

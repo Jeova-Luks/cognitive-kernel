@@ -1,0 +1,397 @@
+[
+ {
+  "id": 556,
+  "answer": 7283032,
+  "exact": 7283032,
+  "flags": [],
+  "method": "fish_sub + 3 * fish_sub"
+ },
+ {
+  "id": 662,
+  "answer": 5220928,
+  "exact": 5220928,
+  "flags": [],
+  "method": "total_spent - (2 * chips_price + chicken + soda)"
+ },
+ {
+  "id": 944,
+  "answer": 43203205,
+  "exact": 43203205,
+  "flags": [],
+  "method": "6 * yam_price + 10 * 2 + 4 * 1.25"
+ },
+ {
+  "id": 810,
+  "answer": 27445602,
+  "exact": 27445602,
+  "flags": [],
+  "method": "start * 2**5 - start",
+  "note": "5 doublings: end of January through end of May"
+ },
+ {
+  "id": 284,
+  "answer": 16280562,
+  "exact": 16280562,
+  "flags": [],
+  "method": "(alani + braylen + margot) + 2 * (alani + braylen + margot)",
+  "note": "week 2 output is twice week 1 output for each child"
+ },
+ {
+  "id": 657,
+  "answer": 308966856,
+  "exact": 308966856,
+  "flags": [],
+  "method": "plane + 12 * (hangar + 2 * hangar)"
+ },
+ {
+  "id": 541,
+  "answer": 183931.46666666667,
+  "exact": 183931.46666666667,
+  "flags": [],
+  "method": "2 * target / (15 + 2 * 15)",
+  "note": "April = 30 days; 15 days at x plus 15 days at 2x"
+ },
+ {
+  "id": 792,
+  "answer": 56437687.5,
+  "exact": 56437687.5,
+  "flags": [],
+  "method": "caps_per_day * 0.25 * 30"
+ },
+ {
+  "id": 720,
+  "answer": 7590579,
+  "exact": 7590579,
+  "flags": [],
+  "method": "(coco_crunch + fruit_loops) - last_week"
+ },
+ {
+  "id": 693,
+  "answer": 13389596,
+  "exact": 13389596,
+  "flags": [],
+  "method": "red + (red+4) + (red+4+6) + (red+4+6-12), 1 sq ft each"
+ },
+ {
+  "id": 1267,
+  "answer": 17531620,
+  "exact": 17531620,
+  "flags": [],
+  "method": "(10 * 2 + four_legged * 4) / 2"
+ },
+ {
+  "id": 879,
+  "answer": 11656320.9375,
+  "exact": 11656320.9375,
+  "flags": [],
+  "method": "hair + hair/4 + (3/4) * (hair/4)"
+ },
+ {
+  "id": 217,
+  "answer": 16087561,
+  "exact": 16087561,
+  "flags": [],
+  "method": "roses + (roses + 7)"
+ },
+ {
+  "id": 351,
+  "answer": 310506,
+  "exact": 310506,
+  "flags": [],
+  "method": "bought - (30 + 2 * 30)"
+ },
+ {
+  "id": 166,
+  "answer": 13032459,
+  "exact": 13032458.333333334,
+  "flags": [
+   "rounding"
+  ],
+  "method": "ceil(15 * eggs_per_flan / 9)",
+  "note": "whole babysitting sessions needed to have enough eggs"
+ },
+ {
+  "id": 416,
+  "answer": 2215500,
+  "exact": 2215500,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "2 * heads - humps  (camels = humps - heads)",
+  "note": "fewer humps than heads: camels = -1107598, dromedaries exceed heads"
+ },
+ {
+  "id": 778,
+  "answer": 31375514,
+  "exact": 31375514,
+  "flags": [],
+  "method": "6 * peach_price + 8 * 1 + 6 * 3"
+ },
+ {
+  "id": 163,
+  "answer": 19992825,
+  "exact": 19992825,
+  "flags": [],
+  "method": "5 * red_car + 3 * figure + (3 * figure)"
+ },
+ {
+  "id": 205,
+  "answer": 44653683,
+  "exact": 44653683,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "5 * target_avg - (89 + 92 + 100 + 86)",
+  "note": "lowest score 71 dropped, 5 scores averaged; required score far above any real test maximum"
+ },
+ {
+  "id": 924,
+  "answer": 1526449,
+  "exact": 1526448.5,
+  "flags": [
+   "rounding"
+  ],
+  "method": "ceil(berries / (8 hours / 4 hours per trip))",
+  "note": "least whole number per trip so that 2 equal trips reach the target"
+ },
+ {
+  "id": 24,
+  "answer": 9555861.333333334,
+  "exact": 9555861.333333334,
+  "flags": [],
+  "method": "paid / (1 - 0.25)"
+ },
+ {
+  "id": 18,
+  "answer": 14053029.666666666,
+  "exact": 14053029.666666666,
+  "flags": [],
+  "method": "eggs_per_day * 28 / 12"
+ },
+ {
+  "id": 630,
+  "answer": 561161.7,
+  "exact": 561161.7,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "riders * 0.25 * (1 - 0.60)",
+  "note": "fractional number of men"
+ },
+ {
+  "id": 239,
+  "answer": 778670.2,
+  "exact": 778670.2,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "students * (1 - 0.30) * (1 - 3/5)",
+  "note": "fractional number of students"
+ },
+ {
+  "id": 134,
+  "answer": 426697344,
+  "exact": 426697344,
+  "flags": [],
+  "method": "4 washes * 12 months * price"
+ },
+ {
+  "id": 761,
+  "answer": 1103589,
+  "exact": 1103589,
+  "flags": [],
+  "method": "pom_girls / (1/3) / (2/3)"
+ },
+ {
+  "id": 1237,
+  "answer": 2655254,
+  "exact": 2655254,
+  "flags": [],
+  "method": "(teachers - sick) + substitutes"
+ },
+ {
+  "id": 117,
+  "answer": 51318000,
+  "exact": 51318000,
+  "flags": [],
+  "method": "2 pairs * 3 children * price_per_pair"
+ },
+ {
+  "id": 33,
+  "answer": 3532208,
+  "exact": 3532208,
+  "flags": [],
+  "method": "(coins + 30) / 2"
+ },
+ {
+  "id": 916,
+  "answer": 1595303,
+  "exact": 1595303,
+  "flags": [],
+  "method": "(cake + (12/2) * 0.5 + 2 * 7) / 2"
+ },
+ {
+  "id": 1184,
+  "answer": 785790,
+  "exact": 785784.96,
+  "flags": [
+   "rounding"
+  ],
+  "method": "ceil(kilos / 50) * 18",
+  "note": "order is not a whole number of 50 kg bags (43654.72); whole bags needed -> 43655 bags"
+ },
+ {
+  "id": 215,
+  "answer": 377712.375,
+  "exact": 377712.375,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "(shoes + belt) / hourly_wage",
+  "note": "alt=377713 if only whole hours count"
+ },
+ {
+  "id": 1304,
+  "answer": 2070518,
+  "exact": 2070518,
+  "flags": [],
+  "method": "norman - (3/4) * norman"
+ },
+ {
+  "id": 784,
+  "answer": 4.46751934733712e-05,
+  "exact": 4.46751934733712e-05,
+  "flags": [],
+  "method": "(5 days * 2 * 5 miles) / mpg * 3",
+  "note": "round trip each working day; dollars per week"
+ },
+ {
+  "id": 382,
+  "answer": 16989220,
+  "exact": 16989220,
+  "flags": [],
+  "method": "(silver + gold) + (2 * silver) + (gold + 40)"
+ },
+ {
+  "id": 478,
+  "answer": 10943892,
+  "exact": 10943892,
+  "flags": [],
+  "method": "3 * 200 employees + 3 * guides_per_group"
+ },
+ {
+  "id": 121,
+  "answer": 2991216,
+  "exact": 2991216,
+  "flags": [],
+  "method": "(5 + oranges) + (2 * 5 + oranges / 2)"
+ },
+ {
+  "id": 1187,
+  "answer": 763646.6666666666,
+  "exact": 763646.6666666666,
+  "flags": [],
+  "method": "target / (20 - 2 * 4) hours",
+  "note": "answer in hours"
+ },
+ {
+  "id": 396,
+  "answer": 3734959.6666666665,
+  "exact": 3734959.6666666665,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "slices * (1 - 1/3 - 1/4) - 2",
+  "note": "fractional slices"
+ },
+ {
+  "id": 727,
+  "answer": 3977439,
+  "exact": 3977439,
+  "flags": [],
+  "method": "(1/4) * student_cars * 4 + (3/4) * 32 * 2"
+ },
+ {
+  "id": 942,
+  "answer": 3235390,
+  "exact": 2426567.5,
+  "flags": [
+   "rounding"
+  ],
+  "method": "visit + ceil(2.25) * hourly + parts",
+  "note": "text says per hour or part thereof: 2.25 h billed as 3 h"
+ },
+ {
+  "id": 790,
+  "answer": 2047414.8,
+  "exact": 2047414.8,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "(3/5) * (people / 9) * 9 members * 2",
+  "note": "people not divisible by 9; alt=2047410 if only the 189575 complete groups count"
+ },
+ {
+  "id": 824,
+  "answer": 103273332,
+  "exact": 103273332,
+  "flags": [],
+  "method": "cat_packages * 11 - 6 * 6"
+ },
+ {
+  "id": 587,
+  "answer": 36976,
+  "exact": 36976,
+  "flags": [],
+  "method": "blue = total / (0.99 + 1 + 1.01); 1.01 * blue - 0.99 * blue"
+ },
+ {
+  "id": 287,
+  "answer": 1880890.6,
+  "exact": 1880890.6,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(stars - 3 * 8 - 2 * 6) / 5",
+  "note": "fractional number of rows"
+ },
+ {
+  "id": 346,
+  "answer": 9264234,
+  "exact": 9264234,
+  "flags": [],
+  "method": "bag - 4 * 5 - 1 * 7"
+ },
+ {
+  "id": 36,
+  "answer": 73692615,
+  "exact": 73692615,
+  "flags": [],
+  "method": "(2 * 30 / 4) * price_per_4"
+ },
+ {
+  "id": 939,
+  "answer": 153957440,
+  "exact": 153957440,
+  "flags": [],
+  "method": "words * 15 + (words * 15 + 50)"
+ },
+ {
+  "id": 247,
+  "answer": 474031.3333333333,
+  "exact": 474031.3333333333,
+  "flags": [],
+  "method": "(cake + 43 + 15 + 4 + 22) / 3"
+ },
+ {
+  "id": 763,
+  "answer": 91716.8,
+  "exact": 91716.8,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "2 * total / (1 + 2 + 2)",
+  "note": "fractional cases"
+ }
+]

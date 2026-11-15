@@ -1,0 +1,450 @@
+[
+ {
+  "id": 897,
+  "answer": -8280345,
+  "exact": -8280345,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "martha_now - 3*(martha_now - bought)",
+  "note": "negative: Martha still has 8280345 fewer notebooks than Joseph"
+ },
+ {
+  "id": 978,
+  "answer": 13919358.4,
+  "exact": 13919358.4,
+  "flags": [],
+  "method": "blue + blue*(1 - 40%)",
+  "note": ""
+ },
+ {
+  "id": 875,
+  "answer": 1107638.25,
+  "exact": 1107638.25,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(had + given) * (1 - 1/4)",
+  "note": "fractional marbles: 1476851 is not divisible by 4"
+ },
+ {
+  "id": 506,
+  "answer": 200987640,
+  "exact": 200987640,
+  "flags": [],
+  "method": "dogs * (legs_per_dog / 2) * price_per_pair",
+  "note": ""
+ },
+ {
+  "id": 357,
+  "answer": -1,
+  "exact": -0.9999911116308063,
+  "flags": [
+   "rounding",
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "floor(budget / (golf + tokens + 2*kart_ride)) - 1 (Morgan herself)",
+  "note": "the budget does not cover even Morgan herself (0 whole people), so the formula goes negative; alt=0 if read as 'she can invite nobody'"
+ },
+ {
+  "id": 631,
+  "answer": 23249283.6,
+  "exact": 23249283.6,
+  "flags": [],
+  "method": "diamond + gold + silver, gold = 4/5*diamond, silver = gold - 400",
+  "note": ""
+ },
+ {
+  "id": 907,
+  "answer": 10944466,
+  "exact": 10944466,
+  "flags": [],
+  "method": "2*sarah - lost",
+  "note": ""
+ },
+ {
+  "id": 298,
+  "answer": 4364332,
+  "exact": 4364332,
+  "flags": [],
+  "method": "opening + (rival_bids + carmen_bids) * step, 3 bids each",
+  "note": ""
+ },
+ {
+  "id": 835,
+  "answer": 1.6972575735699278e-05,
+  "exact": 1.6972575735699278e-05,
+  "flags": [
+   "ambiguous",
+   "unrealistic"
+  ],
+  "method": "turtles * 2 * (total_hours / kangaroos)",
+  "note": "'a total of 18 hours' read as the sum of the kangaroos' crossing times (exact 144/8484275 h; one kangaroo would cross in 0.0076 s); alt=36 if the group simply crosses in 18 h and turtles take twice as long"
+ },
+ {
+  "id": 952,
+  "answer": 522296640,
+  "exact": 522296640,
+  "flags": [],
+  "method": "reports_per_15min * (hours_8am_to_11pm * 60 / 15)",
+  "note": ""
+ },
+ {
+  "id": 1021,
+  "answer": 1147260,
+  "exact": 1147260,
+  "flags": [],
+  "method": "75% * easy + 1/2 * (average + difficult), easy = 40%*items, average = difficult = 30%*items",
+  "note": ""
+ },
+ {
+  "id": 1118,
+  "answer": 1278902,
+  "exact": 1278902,
+  "flags": [],
+  "method": "(female guppies + female goldfish, incl. bought) - (male guppies + male goldfish, incl. bought)",
+  "note": ""
+ },
+ {
+  "id": 142,
+  "answer": 94796016,
+  "exact": 94796016,
+  "flags": [],
+  "method": "hours_per_day * 7 days * hourly_wage",
+  "note": ""
+ },
+ {
+  "id": 94,
+  "answer": 51204384,
+  "exact": 51204384,
+  "flags": [],
+  "method": "dogs + cats + rabbits, cats = 2*dogs, rabbits = dogs + cats - 12",
+  "note": ""
+ },
+ {
+  "id": 1170,
+  "answer": 45916,
+  "exact": 45916,
+  "flags": [],
+  "method": "(total - total/2) / 3",
+  "note": ""
+ },
+ {
+  "id": 345,
+  "answer": 16909429,
+  "exact": 16909429,
+  "flags": [],
+  "method": "four_leg_tables*4 + three_leg_tables*3",
+  "note": ""
+ },
+ {
+  "id": 427,
+  "answer": 385671,
+  "exact": 385671,
+  "flags": [],
+  "method": "((ticket + spending_cash) / price_per_card) / (1 - 1/3)",
+  "note": ""
+ },
+ {
+  "id": 719,
+  "answer": 225514250,
+  "exact": 225514250,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(sacks_to_cousin + sacks_to_brother) * kg_per_sack",
+  "note": "she gives away 9020570 sacks but bought only 20"
+ },
+ {
+  "id": 796,
+  "answer": 75455064000,
+  "exact": 75455064000,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "sum for month m = 1..3 of salary * (initial + hires*m)",
+  "note": "each month's hires are paid from that same month; alt=75454824000 if they are first paid the following month; alt=25151768000 if only the payroll of one month after three months is meant"
+ },
+ {
+  "id": 668,
+  "answer": 84784.26,
+  "exact": 84784.26,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "employees * 20% * 30%",
+  "note": "fractional employees"
+ },
+ {
+  "id": 237,
+  "answer": 10663305,
+  "exact": 10663305,
+  "flags": [],
+  "method": "(allowance + 10) * 3",
+  "note": ""
+ },
+ {
+  "id": 980,
+  "answer": 38765694,
+  "exact": 38765694,
+  "flags": [],
+  "method": "mother + (mother + 10) + 2*mother",
+  "note": ""
+ },
+ {
+  "id": 1145,
+  "answer": 39.00023942893349,
+  "exact": 39.00023942893349,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "days * (earned_single/price_single + per_bouquet * earned_bouquet/price_bouquet)",
+  "note": "$56 a day is a tiny fraction of one bouquet, so the count is fractional (exact 328383381/8420035)"
+ },
+ {
+  "id": 1261,
+  "answer": 269055875,
+  "exact": 269055875,
+  "flags": [],
+  "method": "weeks * (blouses*5.00 + pants*8.00 + skirts*6.00)",
+  "note": ""
+ },
+ {
+  "id": 325,
+  "answer": 6387351040,
+  "exact": 6387351040,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "juniors*junior_pay + seniors*(junior_pay + 400), juniors = 2/5*staff, seniors = staff - juniors",
+  "note": "assumes all other employees are senior programmers; head counts are fractional (1140598.4 juniors) but the total is whole"
+ },
+ {
+  "id": 748,
+  "answer": 5023266,
+  "exact": 5023266,
+  "flags": [],
+  "method": "carl + cal, carl = 4*sean, cal = 2*sean",
+  "note": ""
+ },
+ {
+  "id": 766,
+  "answer": 0,
+  "exact": 2.05152472736946e-05,
+  "flags": [
+   "rounding",
+   "unrealistic"
+  ],
+  "method": "floor((had - ball) / price_per_bar)",
+  "note": "the remaining $60 does not pay for even one candy bar; only whole bars can be bought"
+ },
+ {
+  "id": 208,
+  "answer": 126647407,
+  "exact": 126647407,
+  "flags": [],
+  "method": "mon + tue + wed, tue = 3*mon, wed = 5*tue",
+  "note": ""
+ },
+ {
+  "id": 731,
+  "answer": 1,
+  "exact": 1.1972812138196584e-06,
+  "flags": [
+   "rounding"
+  ],
+  "method": "ceil((kids*2 + adults*1) / smores_per_sleeve / sleeves_per_box)",
+  "note": "3 sleeves are needed, a small part of one box; whole boxes needed"
+ },
+ {
+  "id": 84,
+  "answer": 4665278.5,
+  "exact": 4665278.5,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(games + margin) / 2, from wins + losses = games and wins - losses = margin",
+  "note": "wins exceed the 22 games played and losses come out negative (-4665256.5); assumes no draws"
+ },
+ {
+  "id": 105,
+  "answer": 19776716,
+  "exact": 19776716,
+  "flags": [],
+  "method": "amir + 3*amir",
+  "note": ""
+ },
+ {
+  "id": 1182,
+  "answer": 156155,
+  "exact": 156155.93333333332,
+  "flags": [
+   "rounding",
+   "ambiguous"
+  ],
+  "method": "floor((spent / schools) / (lot_price / lot_books))",
+  "note": "whole books one school's share can buy at the unit price; alt=156100 if books only come in lots of 100"
+ },
+ {
+  "id": 484,
+  "answer": 39741412,
+  "exact": 39741412,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "2/5 * picked * dollars_per_orange",
+  "note": "oranges eaten come out fractional (3974141.2) but the money is whole"
+ },
+ {
+  "id": 1063,
+  "answer": 34796720,
+  "exact": 34796720,
+  "flags": [],
+  "method": "emails * (1 - 20%) * 5 days",
+  "note": ""
+ },
+ {
+  "id": 9,
+  "answer": 74363508,
+  "exact": 74363508,
+  "flags": [],
+  "method": "regular_hours*rate + (worked - regular_hours)*1.2*rate",
+  "note": ""
+ },
+ {
+  "id": 849,
+  "answer": 0.0008106057494644598,
+  "exact": 0.0008106057494644598,
+  "flags": [
+   "unrealistic",
+   "ambiguous"
+  ],
+  "method": "(eggs / eggs_per_tray) * price_per_tray",
+  "note": "the eggs fill a tiny fraction of one tray; alt=2.5 if the one partly filled tray is sold at full price; alt=0 if only full trays count"
+ },
+ {
+  "id": 962,
+  "answer": 3319635,
+  "exact": 3319635,
+  "flags": [
+   "ambiguous"
+  ],
+  "method": "supplies + tickets, tickets = supplies*(1 + 50%)",
+  "note": "'travel' read as the whole trip (supplies + tickets); alt=1991781 if only the tickets are meant"
+ },
+ {
+  "id": 377,
+  "answer": 36.00001020164833,
+  "exact": 36.00001020164833,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "monday_money/price_per_apple + tuesday + 2*tuesday",
+  "note": "$56 is a tiny fraction of one apple's price, so Monday's count is fractional (exact 28230740/784187)"
+ },
+ {
+  "id": 75,
+  "answer": 24833958.75,
+  "exact": 24833958.75,
+  "flags": [],
+  "method": "(top + 2*top + 4*top + 8*top) / levels",
+  "note": ""
+ },
+ {
+  "id": 10,
+  "answer": 3244047.1,
+  "exact": 3244047.1,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "m1 + m2 + m3, m2 = 3*m1, m3 = m2*(1 - 30%)",
+  "note": "third month comes out as 1116803.1 downloads"
+ },
+ {
+  "id": 365,
+  "answer": 29506470,
+  "exact": 29506470,
+  "flags": [],
+  "method": "girls + 2*girls",
+  "note": ""
+ },
+ {
+  "id": 805,
+  "answer": 3841739.2,
+  "exact": 3841739.2,
+  "flags": [],
+  "method": "(diamond + gold) * (1 + 30%)",
+  "note": ""
+ },
+ {
+  "id": 369,
+  "answer": 165762163,
+  "exact": 165762163,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "seniors*frame*(1 + 20%) + pins*pin_price + (seniors/4)*cord_price",
+  "note": "officers come out fractional (1534834.75) but the total is whole"
+ },
+ {
+  "id": 87,
+  "answer": 39672687.6,
+  "exact": 39672687.6,
+  "flags": [],
+  "method": "12*monthly + years * 10% * (12*monthly), years = 3",
+  "note": "simple (not compound) raise of 10% of the initial salary, applied three times"
+ },
+ {
+  "id": 74,
+  "answer": 9439740,
+  "exact": 9439740,
+  "flags": [],
+  "method": "marigolds*round(2.74) + petunias*round(1.87) + begonias*round(2.12)",
+  "note": ""
+ },
+ {
+  "id": 744,
+  "answer": 342250.28571428574,
+  "exact": 342250.28571428574,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "(dogs + cats + birds + horses) / 7 days",
+  "note": "2395752 animals do not split evenly over 7 days (exact 2395752/7)"
+ },
+ {
+  "id": 1178,
+  "answer": 22418168,
+  "exact": 22418168,
+  "flags": [],
+  "method": "3*mike + 2",
+  "note": ""
+ },
+ {
+  "id": 1158,
+  "answer": 5881075,
+  "exact": 5881075,
+  "flags": [],
+  "method": "people * (100% / 20%) - current_daily_output",
+  "note": ""
+ },
+ {
+  "id": 279,
+  "answer": 2.026568082385847e-06,
+  "exact": 2.026568082385847e-06,
+  "flags": [
+   "unrealistic"
+  ],
+  "method": "S = years*(later_ratio - 1) / (ratio - later_ratio), from ratio*S + 9 = 3*(S + 9)",
+  "note": "Sam would be about 63.9 seconds old (exact 18/8882011 years); 'N times older' read as 'N times as old' (reading it as N+1 times gives 2.0265678542204177e-06)"
+ },
+ {
+  "id": 755,
+  "answer": 3684139,
+  "exact": 3684139,
+  "flags": [],
+  "method": "monday + friday + 2*monday",
+  "note": ""
+ }
+]

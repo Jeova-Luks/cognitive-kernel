@@ -6,7 +6,7 @@ from .arbiter import Arbiter, Arbitration, CotResult, answers_agree, numbers_mat
 from .classifier import CATEGORIES, Classifier
 from .compiler import Compiler, CompileOutput
 from .episode_log import EpisodeLog
-from .llm import LLMError, LocalLLM
+from .llm import LLMError, LocalLLM, chat_prompt
 from .memory import BANKS, TypedMemory
 from .pipeline import CognitiveKernel, KernelResult, Reading, format_trace, normalize_answer
 from .planner import Planner
@@ -19,6 +19,6 @@ __all__ = [
     "Planner", "Reading",
     "CDSLTarget", "PythonTarget",
     "CATEGORIES", "Classifier", "Compiler", "CompileOutput", "EpisodeLog",
-    "LLMError", "LocalLLM", "BANKS", "TypedMemory", "CognitiveKernel", "KernelResult",
+    "LLMError", "LocalLLM", "chat_prompt", "BANKS", "TypedMemory", "CognitiveKernel", "KernelResult",
     "format_trace", "normalize_answer", "Attempt", "Reviser", "Verdict", "Verifier",
 ]
